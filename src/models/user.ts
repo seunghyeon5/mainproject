@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 //import logging from '../config/logging';
-import IUser from "../interfaces/IUser";
+import { IUser } from "../interfaces/IUser";
 import bcrypt from "bcrypt";
 
 const saltRounds = 8;
@@ -39,6 +39,13 @@ UserSchema.pre("save", function (next) {
 
 UserSchema.post<IUser>("save", function () {
     //logging.info('Mongo', 'Checkout the book we just saved: ', this);
+});
+
+UserSchema.virtual("userId").get(function () {
+    return this._id.toHexString();
+});
+UserSchema.set("toJSON", {
+    virtuals: true
 });
 
 export default mongoose.model<IUser & Document>("User", UserSchema);

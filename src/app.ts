@@ -2,9 +2,11 @@ import express, { Application, Request, Response, NextFunction } from "express";
 //import bodyParser from 'body-parser';
 //import logging from './config/logging';
 import config from "./config/config";
+import passport from "passport";
+
 import productRoutes from "./routes/product";
 import userRoutes from "./routes/user";
-import { connect } from "./schemas";
+import { connect } from "./models";
 
 const router = express();
 
