@@ -17,9 +17,9 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         return;
     }
     try {
-        const email: Object = jwt.verify(tokenvalue, "main-secret-key");
+        const user = jwt.verify(tokenvalue, "main-secret-key");
         //이메일 array안에 email이라는 오브젝트를 꺼내와서 verify를 진행
-        User.findOne({ email: Object.values(email)[0] }).then((user) => {
+        User.findById(user).then((user) => {
             res.locals.user = user;
             next();
         });

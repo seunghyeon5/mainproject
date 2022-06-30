@@ -7,10 +7,21 @@ const saltRounds = 8;
 
 const UserSchema: Schema = new Schema(
     {
-        email: { type: String, required: true, unique: true },
-        nickname: { type: String, required: true, unique: true },
-        password: { type: String, required: true }
+        email: {
+            type: String,
+            required: true,
+            unique: true
+        },
+        nickname: {
+            type: String,
+            required: true,
+            unique: true
+        },
+        password: {
+            type: String
+        }
     },
+
     {
         timestamps: true
     }
@@ -35,6 +46,13 @@ UserSchema.pre("save", function (next) {
             });
         });
     }
+});
+
+UserSchema.virtual("userId").get(function () {
+    return this._id.toHexString();
+});
+UserSchema.set("toJSON", {
+    virtuals: true
 });
 
 UserSchema.post<IUser>("save", function () {
