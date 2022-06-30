@@ -4,6 +4,7 @@ import express, { Application, Request, Response, NextFunction } from "express";
 
 //importing InitRouters
 import { initCategoryRouter } from "./initData/category";
+import { initDrinksRouter } from "./initData/drinks";
 
 import config from "./config/config";
 import productRoutes from "./routes/product";
@@ -43,6 +44,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 //Initializing DBdata
 app.use("/api/init/category", [initCategoryRouter]);
+app.use("/api/init/drinks", [initDrinksRouter]);
 
 /** Rules of our API */
 router.use((req, res, next) => {
