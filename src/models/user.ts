@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 //import logging from '../config/logging';
-import { IUser } from "../interfaces/IUser";
+import IUser from "../interfaces/user";
 import bcrypt from "bcrypt";
 
 const saltRounds = 8;
