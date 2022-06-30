@@ -1,6 +1,10 @@
 import express, { Application, Request, Response, NextFunction } from "express";
 //import bodyParser from 'body-parser';
 //import logging from './config/logging';
+
+//importing InitRouters
+import { initCategoryRouter } from "./initData/category";
+
 import config from "./config/config";
 import productRoutes from "./routes/product";
 import userRoutes from "./routes/user";
@@ -37,6 +41,8 @@ const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+//Initializing DBdata
+app.use("/api/init/category", [initCategoryRouter]);
 
 /** Rules of our API */
 router.use((req, res, next) => {
