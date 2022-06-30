@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import Joi from "joi";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import passport from "passport";
 
 import User from "../models/user";
 
@@ -72,4 +73,24 @@ const checkuser = async (req: Request, res: Response) => {
     res.send({ email: user.email, nickName: user.nickname });
 };
 
-export default { signup, login, checkuser };
+const withdrawal = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { user } = res.locals;
+        await User.deleteOne({ email: user.email });
+        res.json({ msg: "success" });
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+const kakaoCallback = (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate("kakao", { failureRedirect: "/" }, (err, profile) => {
+        if (err) return next(err);
+        const { email, nickname } = profile;
+        const token = jwt.sign({ email }, "main-secret-key");
+        console.log(profile);
+        res.send({ token, email, nickname });
+    })(req, res, next);
+};
+
+export default { signup, login, checkuser, kakaoCallback, withdrawal };

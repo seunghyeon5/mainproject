@@ -41,11 +41,4 @@ UserSchema.post<IUser>("save", function () {
     //logging.info('Mongo', 'Checkout the book we just saved: ', this);
 });
 
-UserSchema.virtual("userId").get(function () {
-    return this._id.toHexString();
-});
-UserSchema.set("toJSON", {
-    virtuals: true
-});
-
 export default mongoose.model<IUser & Document>("User", UserSchema);
