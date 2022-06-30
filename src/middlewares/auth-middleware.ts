@@ -3,34 +3,31 @@ import User from "../models/user";
 import jwt from "jsonwebtoken";
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-    const authorization = String(req.headers);
-    const [tokenType, tokenValue] = authorization.split(" ");
-    if (tokenValue == "null") {
+    const authorization = String(req.headers.authorization);
+    const [tokentype, tokenvalue] = authorization.split(" ");
+    if (tokenvalue == "null") {
         res.locals.users = null;
         next();
         return;
     }
-
-    if (tokenType !== "Bearer") {
+    if (tokentype !== "Bearer") {
         res.status(401).send({
             errorMessage: "로그인 후 사용하세요 🙄"
         });
         return;
     }
     try {
-        const user = jwt.verify(tokenValue, "main-secret-key");
-        // console.log(userId);
-        //decoded가 제대로된 값
-
-        User.findById(user).then((user) => {
+        const email: Object = jwt.verify(tokenvalue, "main-secret-key");
+        //이메일 array안에 email이라는 오브젝트를 꺼내와서 verify를 진행
+        User.findOne({ email: Object.values(email)[0] }).then((user) => {
             res.locals.user = user;
             next();
         });
-    } catch (error) {
-        //제대로 안된 값
+    } catch (err) {
         res.status(401).send({
             errorMessage: "로그인 후 사용하세요"
         });
+        console.log(err);
         return;
     }
 };

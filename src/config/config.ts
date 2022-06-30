@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -6,7 +6,6 @@ dotenv.config();
 // const MYSQL_DATABASE = process.env.MYSQL_DATABASE || 'supercooldb';
 // const MYSQL_USER = process.env.MYSQL_HOST || 'superuser';
 // const MYSQL_PASS = process.env.MYSQL_HOST || 'roseville';
-
 
 /*
 const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || 'localhost';
@@ -17,8 +16,9 @@ const SERVER = {
     port: SERVER_PORT
 };
 */
+
+const kakao_id = "dac164a59bbf862e7c931178d30c3f85";
 const config = {
-    
     //server: SERVER
 };
 

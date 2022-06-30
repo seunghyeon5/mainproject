@@ -4,12 +4,18 @@ import express, { Application, Request, Response, NextFunction } from "express";
 import config from "./config/config";
 import productRoutes from "./routes/product";
 import userRoutes from "./routes/user";
-import { connect } from "./schemas";
+import { connect } from "./models";
+// import passport from 'passport';
+// import kakaoPassport from "./passport";
 
 const router = express();
 
 // DB
 connect();
+
+//passport
+import { kakaoPassport } from "./passport/kakao";
+kakaoPassport();
 
 /** Log the request */
 router.use((req, res, next) => {

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import Joi from "joi";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import passport from "passport";
 
 import User from "../models/user";
 
@@ -42,7 +43,7 @@ const signup = async (req: Request, res: Response) => {
         console.log(err);
     }
 };
-
+//로그인
 const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     try {
@@ -58,17 +59,38 @@ const login = async (req: Request, res: Response) => {
             return;
         }
         //토큰 발급
-        const token = jwt.sign({ email: email }, "main-secret-key");
+        const token = jwt.sign({ email }, "main-secret-key");
+        console.log(email);
         res.status(200).send({ msg: "success", token });
     } catch (err) {
         res.json({ result: false });
         console.log(err);
     }
 };
-
+//로그인한 유저에 대한 정보 가져오기
 const checkuser = async (req: Request, res: Response) => {
-    const user = res.locals;
-    res.send({ userId: user.email, nickName: user.nickname });
+    const { user } = res.locals;
+    res.send({ email: user.email, nickName: user.nickname });
 };
 
-export default { signup, login, checkuser };
+const withdrawal = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { user } = res.locals;
+        await User.deleteOne({ email: user.email });
+        res.json({ msg: "success" });
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+const kakaoCallback = (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate("kakao", { failureRedirect: "/" }, (err, profile) => {
+        if (err) return next(err);
+        const { email, nickname } = profile;
+        const token = jwt.sign({ email }, "main-secret-key");
+        console.log(profile);
+        res.send({ token, email, nickname });
+    })(req, res, next);
+};
+
+export default { signup, login, checkuser, kakaoCallback, withdrawal };
