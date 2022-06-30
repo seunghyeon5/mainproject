@@ -1,7 +1,7 @@
 import KakaoRouter from "passport";
 const KakaoStrategy = require("passport-kakao").Strategy;
 import User from "../models/user";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
 
 const kakaoPassport = () => {
     KakaoRouter.serializeUser((user, done) => {
@@ -22,7 +22,7 @@ const kakaoPassport = () => {
                 try {
                     const existUser = await User.findOne({
                         // 카카오 플랫폼에서 로그인 했고 이메일이 일치하는경우
-                        where: { email: profile._json.kakao_account_email }
+                        email: profile._json.kakao_account_email
                     });
                     // 이미 가입된 카카오 프로필이면 성공
                     if (existUser) {

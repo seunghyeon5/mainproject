@@ -6,19 +6,19 @@ import passport from "passport";
 
 import User from "../models/user";
 
-const postUsersSchema = Joi.object({
-    email: Joi.string()
-        .required()
-        .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }), //이메일 형식 'com','net'만 허용
-    password: Joi.string().required().pattern(new RegExp("^[0-9a-z]{6,}$")), //최소 하나의 문자, 숫자 6글자 이상
-    confirmpassword: Joi.string().required(),
-    nickname: Joi.string().required()
-});
+// const postUsersSchema = Joi.object({
+//     email: Joi.string()
+//         .required()
+//         .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }), //이메일 형식 'com','net'만 허용
+//     password: Joi.string().required().pattern(new RegExp("^[0-9a-z]{6,}$")), //최소 하나의 문자, 숫자 6글자 이상
+//     confirmpassword: Joi.string().required(),
+//     nickname: Joi.string().required()
+// });
 
 //회원가입
 const signup = async (req: Request, res: Response) => {
     const { email, nickname, password, confirmpassword } = req.body;
-    await postUsersSchema.validateAsync(req.body);
+    // await postUsersSchema.validateAsync(req.body);
     try {
         if (password !== confirmpassword) {
             res.status(400).json({
@@ -47,19 +47,18 @@ const signup = async (req: Request, res: Response) => {
 const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     try {
-        const user = await User.find({
-            email: email // 데이터베이스에 이메일이 존재하는지 확인
-        });
+        const user = await User.findOne({ email: email });
+        console.log(user);
         if (!user) {
             res.json({ result: false });
         }
-        const check = await bcrypt.compare(password, user[0].password);
+        const check = await bcrypt.compare(password, user!.password);
         if (!check) {
             res.json({ result: false });
             return;
         }
         //토큰 발급
-        const token = jwt.sign({ email }, "main-secret-key");
+        const token = jwt.sign({ user: user!._id }, "main-secret-key");
         console.log(email);
         res.status(200).send({ msg: "success", token });
     } catch (err) {
@@ -76,7 +75,7 @@ const checkuser = async (req: Request, res: Response) => {
 const withdrawal = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { user } = res.locals;
-        await User.deleteOne({ email: user.email });
+        await User.deleteOne({ user: user._id });
         res.json({ msg: "success" });
     } catch (err) {
         console.log(err);
