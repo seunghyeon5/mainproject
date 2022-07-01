@@ -4,19 +4,9 @@ import jwt from "jsonwebtoken";
 import passport from "passport";
 import User from "../models/user";
 
-// const postUsersSchema = Joi.object({
-//     email: Joi.string()
-//         .required()
-//         .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }), //이메일 형식 'com','net'만 허용
-//     password: Joi.string().required().pattern(new RegExp("^[0-9a-z]{6,}$")), //최소 하나의 문자, 숫자 6글자 이상
-//     confirmpassword: Joi.string().required(),
-//     nickname: Joi.string().required()
-// });
-
 //회원가입
 const signup = async (req: Request, res: Response) => {
     const { email, nickname, password, confirmpassword } = req.body;
-    // await postUsersSchema.validateAsync(req.body);
     try {
         if (password !== confirmpassword) {
             res.status(400).json({
