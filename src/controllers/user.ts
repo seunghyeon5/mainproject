@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import Joi from "joi";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import passport from "passport";
-
 import User from "../models/user";
 
 // const postUsersSchema = Joi.object({
