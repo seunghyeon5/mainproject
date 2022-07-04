@@ -13,6 +13,7 @@ import { connect } from "./models";
 import { userRouter } from "./routes/user";
 import { categoryRouter } from "./routes/category";
 import { myrecipeRouter } from "./routes/myrecipe";
+import { drinkRouter } from "./routes/drink";
 
 const router = express();
 
@@ -79,6 +80,7 @@ app.use("/api/product", [productRoutes]);
 app.use("/api/user", [userRouter]);
 app.use("/api/category", [categoryRouter]);
 app.use("/api/myrecipe", [myrecipeRouter]);
+app.use("/api/drink",[drinkRouter]);
 app.get("/", (req, res) => {
     res.send("This is a test page");
 });
