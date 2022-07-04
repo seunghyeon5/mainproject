@@ -10,8 +10,8 @@ myrecipeRouter.get("/post/list", authMiddleware, myrecipeController.getAllrecipe
 //레시피 상세조회
 myrecipeRouter.get("/post/:myrecipeId", authMiddleware, myrecipeController.detailrecipe);
 //레시피 삭제
-myrecipeRouter.delete("/post/:myrecipeId/delete", authMiddleware, myrecipeController.deleterecipe);
+myrecipeRouter.delete("/:myrecipeId/delete", authMiddleware, myrecipeController.deleterecipe);
 //레시피 수정
-myrecipeRouter.put("/post/:myrecipeId/modify", authMiddleware, myrecipeController.modifyrecipe);
+myrecipeRouter.put("/:myrecipeId/modify", authMiddleware, myrecipeController.modifyrecipe);
 
 export { myrecipeRouter };
