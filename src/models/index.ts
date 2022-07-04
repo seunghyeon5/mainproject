@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const url = "mongodb://localhost:27017/TS";
+const url = "mongodb+srv://test:sparta@cluster0.l2ux3.mongodb.net/FIRST_HTTPS_PRAC?retryWrites=true&w=majority";
 
 const connect = (): void => {
     mongoose
