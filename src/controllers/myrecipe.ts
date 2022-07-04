@@ -19,11 +19,23 @@ const postrecipe = async (req: Request, res: Response) => {
         console.log(err);
     }
 };
-
-const checkrecipe = async (req: Request, res: Response) => {
+//레시피 전체목록조회
+const getAllrecipe = async (req: Request, res: Response) => {
     try {
         const myrecipe = await MyRecipe.find().sort({ createdAt: "desc" });
         res.json({ result: true, myrecipe });
+    } catch (err) {
+        res.json({ result: false });
+        console.log(err);
+    }
+};
+//레시피상세조회
+const detailrecipe = async (req: Request, res: Response) => {
+    try {
+        const userId = String(res.locals.user.userId);
+        const { myrecipeId } = req.params;
+        const existsRecipe: any = await MyRecipe.findById(myrecipeId);
+        res.json({ result: true, existsRecipe, userId });
     } catch (err) {
         res.json({ result: false });
         console.log(err);
@@ -68,4 +80,4 @@ const modifyrecipe = async (req: Request, res: Response) => {
     }
 };
 
-export default { postrecipe, checkrecipe, deleterecipe, modifyrecipe };
+export default { postrecipe, getAllrecipe, deleterecipe, modifyrecipe, detailrecipe };
