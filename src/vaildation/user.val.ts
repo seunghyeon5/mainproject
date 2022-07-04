@@ -17,11 +17,11 @@ const user_validation = {
         try {
             // 검사시작
             await postUsersSchema.validateAsync(body);
-        } catch (e) {
+        } catch (err) {
             // 유효성 검사 에러
-            console.log(e);
+            console.log(err);
             return res.status(400).json({
-                message: "유저정보작성이 잘못되었습니다! 확인해주세요!"
+                result: false
             });
         }
         next();
