@@ -14,6 +14,7 @@ import { connect } from "./models";
 // import passport from 'passport';
 // import kakaoPassport from "./passport";
 import { categoryRouter } from "./routes/category";
+import { drinkRouter } from "./routes/drink";
 
 const router = express();
 
@@ -79,6 +80,7 @@ router.use((req, res, next) => {
 app.use("/api/product", [productRoutes]);
 app.use("/api/user", [userRoutes]);
 app.use("/api/category", [categoryRouter]);
+app.use("/api/drink",[drinkRouter]);
 app.get("/", (req, res) => {
     res.send("This is a test page");
 });
