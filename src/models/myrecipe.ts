@@ -20,7 +20,7 @@ const MyrecipeSchema: Schema = new Schema(
             type: mongoose.Types.ObjectId
         },
         userId: {
-            type: mongoose.Types.ObjectId
+            type: String
         },
         nickname: {
             type: String

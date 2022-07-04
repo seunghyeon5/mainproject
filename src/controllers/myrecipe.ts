@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { IUser } from "../interfaces/user";
 import MyRecipe from "../models/myrecipe";
 
 const postrecipe = async (req: Request, res: Response) => {
@@ -32,12 +31,12 @@ const checkrecipe = async (req: Request, res: Response) => {
 };
 
 const deleterecipe = async (req: Request, res: Response) => {
-    const UserId = res.locals.user;
+    const userId = String(res.locals.user.userId);
     const { myrecipeId } = req.params;
     const existsRecipe: any = await MyRecipe.findById(myrecipeId);
 
     try {
-        if (existsRecipe.userId !== UserId) {
+        if (existsRecipe.userId !== userId) {
             throw new Error("Error");
         } else {
             await MyRecipe.findByIdAndDelete(myrecipeId);
@@ -51,7 +50,6 @@ const deleterecipe = async (req: Request, res: Response) => {
 
 const modifyrecipe = async (req: Request, res: Response) => {
     const userId = String(res.locals.user.userId);
-    console.log({ userId });
     const { myrecipeId } = req.params;
     const { title, image, ingredients, brief_description } = req.body;
     const existsRecipe: any = await MyRecipe.findById(myrecipeId);

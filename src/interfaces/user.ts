@@ -5,5 +5,5 @@ export interface IUser {
     nickname: string;
     password: string;
     _id?: Types.ObjectId;
-    userId: string;
+    userId: Types.ObjectId;
 }
