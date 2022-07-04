@@ -1,19 +1,19 @@
 import express, { Request, Response, NextFunction, Router } from "express";
-import controller from "../controllers/user";
+import userController from "../controllers/user";
 import passport from "passport";
 import user_validation from "../vaildation/user.val";
 import { authMiddleware } from "../middlewares/auth-middleware";
 
-const router = express.Router();
+const userRouter = express.Router();
 
-router.post("/signup", user_validation.user_signUp, controller.signup);
-router.post("/login", controller.login);
-router.get("/me", authMiddleware, controller.checkuser);
-router.delete("/", authMiddleware, controller.withdrawal);
+userRouter.post("/signup", user_validation.user_signUp, userController.signup);
+userRouter.post("/login", userController.login);
+userRouter.get("/me", authMiddleware, userController.checkuser);
+userRouter.delete("/", authMiddleware, userController.withdrawal);
 
 //kakao login
-router.get("/kakao", passport.authenticate("kakao"));
+userRouter.get("/kakao", passport.authenticate("kakao"));
 //kakao login callback
-router.get("/kakao/callback", controller.kakaoCallback);
+userRouter.get("/kakao/callback", userController.kakaoCallback);
 
-export = router;
+export { userRouter };
