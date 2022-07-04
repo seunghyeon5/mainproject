@@ -13,6 +13,7 @@ import userRoutes from "./routes/user";
 import { connect } from "./models";
 // import passport from 'passport';
 // import kakaoPassport from "./passport";
+import { categoryRouter } from "./routes/category";
 
 const router = express();
 
@@ -77,6 +78,7 @@ router.use((req, res, next) => {
 // APIs
 app.use("/api/product", [productRoutes]);
 app.use("/api/user", [userRoutes]);
+app.use("/api/category", [categoryRouter]);
 app.get("/", (req, res) => {
     res.send("This is a test page");
 });
