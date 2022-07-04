@@ -29,6 +29,7 @@ const kakaoPassport = () => {
                         done(null, existUser); // 로그인 인증 완료
                     } else {
                         const newUser = await User.create({
+                            snsId: profile.id,
                             email: String(profile._json.kakao_account_email),
                             nickname: profile.username,
                             provider: profile.provider

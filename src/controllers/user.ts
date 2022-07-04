@@ -71,11 +71,11 @@ const withdrawal = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const kakaoCallback = (req: Request, res: Response, next: NextFunction) => {
-    passport.authenticate("kakao", { failureRedirect: "/" }, (err, profile) => {
+    passport.authenticate("kakao", { failureRedirect: "/" }, (err, user) => {
         if (err) return next(err);
-        const { email, nickname } = profile;
+        const { email, nickname } = user;
         const token = jwt.sign({ email }, "main-secret-key");
-        console.log(profile);
+        console.log(user);
         res.send({ token, email, nickname });
     })(req, res, next);
 };
