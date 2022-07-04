@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const authorization = String(req.headers.authorization);
+    // console.log(authorization);
     const [tokentype, tokenvalue] = authorization.split(" ");
     if (tokenvalue == "null") {
         res.locals.users = null;
@@ -18,9 +19,9 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     }
     try {
         const user = jwt.verify(tokenvalue, "main-secret-key");
-        console.log(user);
+        // console.log(user);
         User.findById(Object.values(user)[0]).then((user) => {
-            console.log(user);
+            // console.log(user);
             res.locals.user = user;
             next();
         });
