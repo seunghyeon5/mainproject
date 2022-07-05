@@ -1,5 +1,4 @@
 import KakaoRouter from "passport";
-import user from "../models/user";
 const KakaoStrategy = require("passport-kakao").Strategy;
 import User from "../models/user";
 // import jwt from "jsonwebtoken";
