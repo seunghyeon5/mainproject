@@ -8,12 +8,10 @@ const saltRounds = 8;
 const UserSchema: Schema = new Schema({
     email: {
         type: String,
-        required: true,
         unique: true
     },
     nickname: {
         type: String,
-        required: true,
         unique: true
     },
     password: {

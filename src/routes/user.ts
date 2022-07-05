@@ -11,6 +11,9 @@ userRouter.post("/login", userController.login);
 userRouter.get("/me", authMiddleware, userController.checkuser);
 userRouter.delete("/", authMiddleware, userController.withdrawal);
 
+//마이페이지
+userRouter.get("/mypage", authMiddleware, userController.getmypage);
+
 //kakao login
 userRouter.get("/kakao", passport.authenticate("kakao"));
 //kakao login callback
