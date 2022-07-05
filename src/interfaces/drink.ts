@@ -6,7 +6,7 @@ export interface IDrink {
   title_eng: string;
   flavour: string;
   alc: number;
-  country: string; 
-  image: string;  
-  categoryId: Types.ObjectId; 
+  country: string;
+  image: string;
+  categoryId: string;
 }
