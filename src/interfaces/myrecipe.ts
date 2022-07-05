@@ -6,5 +6,4 @@ export interface IMyrecipe {
     image: string;
     ingredients: Array<string>;
     brief_description: string;
-    myrecipeId: Types.ObjectId;
 }
