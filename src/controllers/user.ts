@@ -70,14 +70,16 @@ const withdrawal = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-const kakaoCallback = (req: Request, res: Response, next: NextFunction) => {
+const kakaoCallback = async (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate("kakao", { failureRedirect: "/" }, (err, user) => {
         if (err) return next(err);
         const { email, nickname } = user;
-        const token = jwt.sign({ email }, "main-secret-key");
+        const token = jwt.sign({ userId: user._id }, "main-secret-key");
         console.log(user);
-        res.send({ token, email, nickname });
+        res.send({ email, nickname, token });
     })(req, res, next);
 };
 
-export default { signup, login, checkuser, kakaoCallback, withdrawal };
+const getmypage = async (req: Request, res: Response) => {};
+
+export default { signup, login, checkuser, kakaoCallback, withdrawal, getmypage };
