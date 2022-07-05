@@ -16,9 +16,6 @@ const MyrecipeSchema: Schema = new Schema(
         brief_description: {
             type: String
         },
-        myrecipeId: {
-            type: mongoose.Types.ObjectId
-        },
         userId: {
             type: String
         },
