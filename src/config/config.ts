@@ -1,25 +1,32 @@
 import dotenv from "dotenv";
 
 dotenv.config();
+const MONGO_USERNAME = process.env.MONGO_USERNAME;
+const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
+const MONGO_HOST = process.env.MONGO_URL;
+const MONGO_DB = process.env.MONGO_DB;
 
-// const MYSQL_HOST = process.env.MYSQL_HOST || 'localhost';
-// const MYSQL_DATABASE = process.env.MYSQL_DATABASE || 'supercooldb';
-// const MYSQL_USER = process.env.MYSQL_HOST || 'superuser';
-// const MYSQL_PASS = process.env.MYSQL_HOST || 'roseville';
-
-/*
-const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || 'localhost';
-const SERVER_PORT = process.env.SERVER_PORT || 1337;
-
-const SERVER = {
-    hostname: SERVER_HOSTNAME,
-    port: SERVER_PORT
+const MONGO = {
+  url: `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}/${MONGO_DB}?retryWrites=true&w=majority`,
 };
-*/
 
-const kakao_id = "dac164a59bbf862e7c931178d30c3f85";
+const kakao_id = process.env.KAKAO_ID;
+//const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || 'localhost';
+const SERVER_PORT = process.env.SERVER_PORT || 3000;
+const SERVER = {
+  // hostname: SERVER_HOSTNAME,
+  port: SERVER_PORT,
+};
+const AWS = {
+  access_key_id: process.env.AWS_ACCESS_KEY_ID,
+  access_secret: process.env.AWS_ACCESS_SECRET,
+  region: process.env.AWS_REGION,
+  bucket: process.env.AWS_BUCKET,
+};
 const config = {
-    //server: SERVER
+  mongo: MONGO,
+  server: SERVER,
+  aws: AWS,
 };
 
 export default config;
