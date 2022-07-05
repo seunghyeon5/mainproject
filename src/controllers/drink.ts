@@ -1,12 +1,7 @@
 import { Request, Response } from "express";
-
 //import moment from "moment";
-
 import Drinks from "../models/drink";
-//import Categories from "../models/category";
-
 import { IDrink } from "../interfaces/drink";
-//import { ICategory } from "../interfaces/category";
 
 // 전체 리스트 출력하기
 const getDrinks = async (req: Request, res: Response) => {
@@ -34,8 +29,24 @@ const getDrink = async (req: Request, res: Response) => {
     res.status(400).send({ message: "fail", error });
   }
 };
+const getDrinksByCategory = async (req: Request, res: Response) => {
+  try {
+    const { categoryId } = req.params;
+
+    const drink: IDrink = await Drinks.find({ categoryId: categoryId }).lean();
+
+    if (drink) {
+      res.json({ message: "success", drink });
+    } else {
+      res.status(406).send({ message: "fail", error: "no exist drink" });
+    }
+  } catch (error) {
+    res.status(400).send({ message: "fail", error });
+  }
+};
 
 export default {
   getDrinks,
   getDrink,
+  getDrinksByCategory,
 };
