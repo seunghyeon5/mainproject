@@ -1,11 +1,14 @@
 import mongoose from "mongoose";
+import config from "../config/config";
 
-const url = "mongodb+srv://test:sparta@cluster0.l2ux3.mongodb.net/FIRST_HTTPS_PRAC?retryWrites=true&w=majority";
-
+/** Connect to Mongo */
 const connect = (): void => {
     mongoose
-        .connect(url, {
+        .connect(config.mongo.url, {
             ignoreUndefined: true
+        })
+        .then((result) => {
+            console.log('Mongo Connected');
         })
         .catch((err) => {
             console.log(err);
@@ -17,3 +20,6 @@ mongoose.connection.on("error", (err): void => {
 });
 
 export { connect };
+
+
+
