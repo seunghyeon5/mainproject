@@ -6,7 +6,7 @@ import User from "../models/user";
 
 //회원가입
 const signup = async (req: Request, res: Response) => {
-    const { email, nickname, password, confirmpassword } = req.body;
+    let { email, nickname, password, confirmpassword } = req.body;
     try {
         if (password !== confirmpassword) {
             res.status(400).json({
@@ -24,6 +24,7 @@ const signup = async (req: Request, res: Response) => {
         if (existnicName) {
             return res.status(400).json({ errorMessage: "중복된 닉네임이 존재합니다." });
         }
+        password = bcrypt.hashSync(password, 10); //비밀번호 해싱
         await User.create({ email, nickname, password });
         return res.status(200).json({ msg: "success" });
     } catch (err) {
@@ -80,6 +81,14 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
     })(req, res, next);
 };
 
-const getmypage = async (req: Request, res: Response) => {};
+const logout = async (req: Request, res: Response) => {
+    try {
+        const userId = res.locals.user._id;
+        const user = await User.findOneAndUpdate({ _id: userId }, {});
+    } catch (err) {
+        console.log(err);
+        res.json({ result: false });
+    }
+};
 
-export default { signup, login, checkuser, kakaoCallback, withdrawal, getmypage };
+export default { signup, login, checkuser, kakaoCallback, withdrawal, logout };
