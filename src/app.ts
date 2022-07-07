@@ -14,6 +14,7 @@ import { userRouter } from "./routes/user";
 import { categoryRouter } from "./routes/category";
 import { myrecipeRouter } from "./routes/myrecipe";
 import { drinkRouter } from "./routes/drink";
+import cors from "cors";
 
 const router = express();
 
@@ -22,7 +23,10 @@ connect();
 
 //passport
 import { kakaoPassport } from "./passport/kakao";
+
 kakaoPassport();
+
+
 
 /** Log the request */
 router.use((req, res, next) => {
@@ -38,11 +42,19 @@ router.use((req, res, next) => {
 
     next();
 });
-const port = 8080;
+
+const port = config.server.port;
 
 const app = express();
 
+app.use(cors({ // CORS 모듈 실행
+    //origin : "we need frontsever address",  
+    origin : "*", // 출처 허용 옵션 (전부 허용) must be changed 
+    //credential: 'true' // 사용자 인증이 필요한 리소스(쿠키 ..등) 접근
+}));
+
 app.use(express.urlencoded({ extended: false }));
+
 app.use(express.json());
 //Initializing DBdata
 app.use("/api/init/category", [initCategoryRouter]);
@@ -81,6 +93,7 @@ app.use("/api/user", [userRouter]);
 app.use("/api/category", [categoryRouter]);
 app.use("/api/myrecipe", [myrecipeRouter]);
 app.use("/api/drink",[drinkRouter]);
+
 app.get("/", (req, res) => {
     res.send("This is a test page");
 });
