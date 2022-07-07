@@ -1,9 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 //import logging from '../config/logging';
 import { IUser } from "../interfaces/user";
-import bcrypt from "bcrypt";
-
-const saltRounds = 8;
 
 const UserSchema: Schema = new Schema({
     email: {
@@ -15,6 +12,9 @@ const UserSchema: Schema = new Schema({
         unique: true
     },
     password: {
+        type: String
+    },
+    token: {
         type: String
     }
 });
