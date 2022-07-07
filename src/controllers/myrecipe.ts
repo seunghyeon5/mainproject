@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import MyRecipe from "../models/myrecipe";
 
+//레시피 작성
 const postrecipe = async (req: Request, res: Response) => {
     const { title, image, ingredients, brief_description } = req.body;
     const { nickname, userId } = res.locals.user;
@@ -29,7 +30,7 @@ const getAllrecipe = async (req: Request, res: Response) => {
         console.log(err);
     }
 };
-//레시피상세조회
+//레시피 상세조회
 const detailrecipe = async (req: Request, res: Response) => {
     try {
         const userId = String(res.locals.user.userId);
@@ -41,7 +42,19 @@ const detailrecipe = async (req: Request, res: Response) => {
         console.log(err);
     }
 };
-
+//내가 쓴 레시피 조회
+const getAllmyrecipe = async (req: Request, res: Response) => {
+    try {
+        const { userId } = res.locals.user;
+        const Myrecipe = await MyRecipe.find({ userId });
+        console.log(userId);
+        res.json({ result: true, Myrecipe });
+    } catch (err) {
+        res.json({ result: false });
+        console.log(err);
+    }
+};
+//내가 쓴 레시피 삭제
 const deleterecipe = async (req: Request, res: Response) => {
     const userId = String(res.locals.user.userId);
     const { myrecipeId } = req.params;
@@ -59,7 +72,7 @@ const deleterecipe = async (req: Request, res: Response) => {
         console.log(err);
     }
 };
-
+//내가 쓴 레시피 수정
 const modifyrecipe = async (req: Request, res: Response) => {
     const userId = String(res.locals.user.userId);
     const { myrecipeId } = req.params;
@@ -80,4 +93,4 @@ const modifyrecipe = async (req: Request, res: Response) => {
     }
 };
 
-export default { postrecipe, getAllrecipe, deleterecipe, modifyrecipe, detailrecipe };
+export default { postrecipe, getAllrecipe, deleterecipe, modifyrecipe, detailrecipe, getAllmyrecipe };
