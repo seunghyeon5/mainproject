@@ -48,7 +48,7 @@ const login = async (req: Request, res: Response) => {
         }
         //토큰 발급
         const token = jwt.sign({ user: user!._id }, "main-secret-key");
-        console.log(email);
+        await User.findByIdAndUpdate(user, { $set: { token } });
         res.status(200).send({ msg: "success", token });
     } catch (err) {
         res.json({ result: false });
@@ -80,11 +80,18 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
         res.send({ email, nickname, token });
     })(req, res, next);
 };
-
+//로그아웃
 const logout = async (req: Request, res: Response) => {
     try {
         const userId = res.locals.user._id;
-        const user = await User.findOneAndUpdate({ _id: userId }, {});
+        const user = await User.findByIdAndUpdate(userId, { token: "" });
+        if (!user) {
+            res.status(401).json({ message: "fail" });
+            return;
+        } else {
+            res.json({ message: "success", user });
+            return;
+        }
     } catch (err) {
         console.log(err);
         res.json({ result: false });
