@@ -47,8 +47,7 @@ const login = async (req: Request, res: Response) => {
             return;
         }
         //토큰 발급
-        const token = jwt.sign({ user: user!._id }, "main-secret-key");
-        await User.findByIdAndUpdate(user, { $set: { token } });
+        const token = jwt.sign({ user: user!._id }, "main-secret-key", { expiresIn: "1d" });
         res.status(200).send({ msg: "success", token });
     } catch (err) {
         res.json({ result: false });
@@ -60,7 +59,7 @@ const checkuser = async (req: Request, res: Response) => {
     const { user } = res.locals;
     res.send({ email: user.email, nickName: user.nickname });
 };
-
+//회원탈퇴
 const withdrawal = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { user } = res.locals;
@@ -70,32 +69,18 @@ const withdrawal = async (req: Request, res: Response, next: NextFunction) => {
         console.log(err);
     }
 };
-
+//카카오 콜백
 const kakaoCallback = async (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate("kakao", { failureRedirect: "/" }, (err, user) => {
         if (err) return next(err);
         const { email, nickname } = user;
-        const token = jwt.sign({ userId: user._id }, "main-secret-key");
+        const token = jwt.sign({ user: user._id }, "main-secret-key", { expiresIn: "1d" });
         console.log(user);
         res.send({ email, nickname, token });
     })(req, res, next);
 };
 //로그아웃
-const logout = async (req: Request, res: Response) => {
-    try {
-        const userId = res.locals.user._id;
-        const user = await User.findByIdAndUpdate(userId, { token: "" });
-        if (!user) {
-            res.status(401).json({ message: "fail" });
-            return;
-        } else {
-            res.json({ message: "success", user });
-            return;
-        }
-    } catch (err) {
-        console.log(err);
-        res.json({ result: false });
-    }
-};
+//비밀번호 변경하기
+//닉네임 변경하기
 
-export default { signup, login, checkuser, kakaoCallback, withdrawal, logout };
+export default { signup, login, checkuser, kakaoCallback, withdrawal };
