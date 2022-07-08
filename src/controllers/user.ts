@@ -80,6 +80,24 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
         res.send({ email, nickname, token });
     })(req, res, next);
 };
+
+const googleCallback = (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate(
+      "google",
+      {
+        successRedirect: "/",
+        failureRedirect: "/login",
+      },
+      (err, profile, info) => {
+        if (err) return next(err);
+        const { email, nickname } = profile;
+        const token = jwt.sign({ email }, "main-secret-key");
+        console.log(profile);
+        res.send({ token, email, nickname });
+      }
+    )(req, res, next);
+  };
+
 //로그아웃
 const logout = async (req: Request, res: Response) => {
     try {
@@ -98,4 +116,4 @@ const logout = async (req: Request, res: Response) => {
     }
 };
 
-export default { signup, login, checkuser, kakaoCallback, withdrawal, logout };
+export default { signup, login, checkuser, kakaoCallback, googleCallback, withdrawal, logout };
