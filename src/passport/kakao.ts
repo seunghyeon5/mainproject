@@ -6,8 +6,8 @@ const kakaoPassport = () => {
     KakaoRouter.use(
         new KakaoStrategy(
             {
-                clientID: "10b945943bd00635bf591e2b64df6c61", // 카카오 로그인에서 발급받은 REST API 키
-                callbackURL: "http://localhost:8080/api/user/kakao/callback" // 카카오 로그인 Redirect URI 경로
+                clientID: process.env.KAKAO_ID, // 카카오 로그인에서 발급받은 REST API 키
+                callbackURL: process.env.KAKAO_URL // 카카오 로그인 Redirect URI 경로
             },
             async (accessToken: any, refreshToken: any, profile: any, done: any) => {
                 let email: string;
