@@ -10,7 +10,6 @@ userRouter.post("/signup", user_validation.user_signUp, userController.signup);
 userRouter.post("/login", userController.login);
 userRouter.get("/me", authMiddleware, userController.checkuser);
 userRouter.delete("/", authMiddleware, userController.withdrawal);
-userRouter.post("/logout", authMiddleware, userController.logout);
 
 //마이페이지
 // userRouter.get("/mypage", authMiddleware, userController.getmypage);
