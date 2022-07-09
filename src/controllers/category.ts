@@ -16,7 +16,7 @@ const getCategories = async (req: Request, res: Response) => {
 const getCategory = async (req: Request, res: Response) => {
   try {
     const { categoryId } = req.params;
-    console.log(categoryId);
+    //console.log(categoryId);
     const drinkCategory: ICategory | null = await Categories.findById(
       categoryId
     ).lean();

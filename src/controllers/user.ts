@@ -79,6 +79,24 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
         res.send({ email, nickname, token });
     })(req, res, next);
 };
+//구글 콜백
+const googleCallback = (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate(
+      "google",
+      {
+        successRedirect: "/",
+        failureRedirect: "/login",
+      },
+      (err, profile, info) => {
+        if (err) return next(err);
+        const { email, nickname } = profile;
+        const token = jwt.sign({ email }, "main-secret-key");
+        console.log(profile);
+        res.send({ token, email, nickname });
+      }
+    )(req, res, next);
+  };
+
 //닉네임 변경하기
 const changeNickname = async (req: Request, res: Response) => {
     const { nickname } = req.body;
@@ -120,4 +138,5 @@ const changePassword = async (req: Request, res: Response) => {
         res.json({ result: false });
     }
 };
-export default { signup, login, checkuser, kakaoCallback, withdrawal, changeNickname, changePassword };
+
+export default { signup, login, checkuser, kakaoCallback, withdrawal, changeNickname, changePassword, googleCallback };

@@ -26,6 +26,10 @@ import { kakaoPassport } from "./passport/kakao";
 
 kakaoPassport();
 
+import { googlePassport } from "./passport/google";
+
+googlePassport();
+
 
 
 /** Log the request */

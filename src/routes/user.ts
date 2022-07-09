@@ -21,4 +21,12 @@ userRouter.get("/kakao", passport.authenticate("kakao"));
 //kakao login callback
 userRouter.get("/kakao/callback", userController.kakaoCallback);
 
+// 구글 로그인
+userRouter.get('/google', passport.authenticate('google', {
+    scope: ['profile', 'email']
+  }));
+    
+  // 구글 로그인 Callback
+userRouter.get("/google/callback", userController.googleCallback);
+
 export { userRouter };
