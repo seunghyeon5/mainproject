@@ -21,7 +21,7 @@ const getDrink = async (req: Request, res: Response) => {
     const drink: IDrink = await Drinks.findById(drinkId).lean();
 
     if (drink) {
-      res.json({ message: "success", drink });
+      res.json({ message: "success", drink:[drink] });
     } else {
       res.status(406).send({ message: "fail", error: "no exist drink" });
     }
