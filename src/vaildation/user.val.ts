@@ -25,6 +25,37 @@ const user_validation = {
             });
         }
         next();
+    },
+
+    user_changenickname: async (req: Request, res: Response, next: NextFunction) => {
+        const body = req.body;
+        const changeUserSchema = Joi.object({
+            nickname: Joi.string().required()
+        });
+
+        try {
+            await changeUserSchema.validateAsync(body);
+        } catch (err) {
+            console.log(err);
+            return res.json({ result: false });
+        }
+        next();
+    },
+
+    user_changepassword: async (req: Request, res: Response, next: NextFunction) => {
+        const body = req.body;
+        const ChangeUserSchema = Joi.object({
+            password: Joi.string().required().pattern(new RegExp("^[0-9a-z]{6,}$")),
+            newpassword: Joi.string().required().pattern(new RegExp("^[0-9a-z]{6,}$")) //최소 6자 이상
+        });
+
+        try {
+            await ChangeUserSchema.validateAsync(body);
+        } catch (err) {
+            console.log(err);
+            return res.json({ result: false });
+        }
+        next();
     }
 };
 
