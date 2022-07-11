@@ -12,6 +12,14 @@ const RecipeSchema: Schema = new Schema({
     type: Array,
     default: [],
   },
+  steps: {
+    type: Array,
+    default: [],
+  },
+  alc: {
+    type: Number,
+    required: true
+  },
   recommender_list: {
     type: Array,
     default: [],
