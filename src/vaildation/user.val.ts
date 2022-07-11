@@ -3,7 +3,7 @@ import Joi from "joi";
 
 const user_validation = {
     user_signUp: async (req: Request, res: Response, next: NextFunction) => {
-        console.log("req :", req.body);
+        // console.log("req :", req.body);
         const body = req.body;
         const postUsersSchema = Joi.object({
             email: Joi.string()

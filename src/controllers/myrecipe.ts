@@ -1,10 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import MyRecipe from "../models/myrecipe";
+import User from "../models/user";
+import { IMyrecipe } from "../interfaces/myrecipe";
+
+let num: number = 0;
 
 //레시피 작성
 const postrecipe = async (req: Request, res: Response) => {
     const { title, image, ingredients, brief_description } = req.body;
-    const { nickname, userId } = res.locals.user;
+    const userId = res.locals.user._id;
+    const nickname = res.locals.user.nickname;
     try {
         await MyRecipe.create({
             title,
@@ -14,6 +19,8 @@ const postrecipe = async (req: Request, res: Response) => {
             nickname,
             userId
         });
+        console.log(num);
+        await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: ++num } });
         res.json({ result: true });
     } catch (err) {
         res.json({ result: false });
@@ -23,7 +30,7 @@ const postrecipe = async (req: Request, res: Response) => {
 //레시피 전체목록조회
 const getAllrecipe = async (req: Request, res: Response) => {
     try {
-        const myrecipe = await MyRecipe.find().sort({ createdAt: "desc" });
+        const myrecipe: Array<IMyrecipe> = await MyRecipe.find().sort({ createdAt: "desc" });
         res.json({ result: true, myrecipe });
     } catch (err) {
         res.json({ result: false });
@@ -56,15 +63,17 @@ const getAllmyrecipe = async (req: Request, res: Response) => {
 };
 //내가 쓴 레시피 삭제
 const deleterecipe = async (req: Request, res: Response) => {
-    const userId = String(res.locals.user.userId);
+    const userId = String(res.locals.user._id);
     const { myrecipeId } = req.params;
     const existsRecipe: any = await MyRecipe.findById(myrecipeId);
+    console.log(userId);
 
     try {
         if (existsRecipe.userId !== userId) {
-            throw new Error("Error");
+            res.json({ result: false, message: "유저정보가 다릅니다" });
         } else {
             await MyRecipe.findByIdAndDelete(myrecipeId);
+            await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: -num } });
         }
         res.json({ result: true });
     } catch (err) {

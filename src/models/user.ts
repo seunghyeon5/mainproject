@@ -13,6 +13,10 @@ const UserSchema: Schema = new Schema({
     },
     password: {
         type: String
+    },
+    createdposts: {
+        type: Number,
+        default: 0
     }
 });
 

@@ -90,7 +90,7 @@ const googleCallback = (req: Request, res: Response, next: NextFunction) => {
         (err, user, info) => {
             if (err) return next(err);
             const { email, nickname } = user;
-            const token = jwt.sign({ user: user._id }, "main-secret-key");
+            const token = jwt.sign({ user: user._id }, "main-secret-key", { expiresIn: "1d" });
             console.log(user);
             res.send({ token, email, nickname });
         }
@@ -139,4 +139,9 @@ const changePassword = async (req: Request, res: Response) => {
     }
 };
 
-export default { signup, login, checkuser, kakaoCallback, withdrawal, changeNickname, changePassword, googleCallback };
+const getmypage = async (req: Request, res: Response) => {
+    const user = res.locals.user;
+    res.send({ user });
+};
+
+export default { signup, login, checkuser, kakaoCallback, withdrawal, changeNickname, changePassword, googleCallback, getmypage };
