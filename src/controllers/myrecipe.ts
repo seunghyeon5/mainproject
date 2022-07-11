@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import MyRecipe from "../models/myrecipe";
+import { IMyrecipe } from "../interfaces/myrecipe";
 
 //레시피 작성
 const postrecipe = async (req: Request, res: Response) => {
@@ -23,7 +24,7 @@ const postrecipe = async (req: Request, res: Response) => {
 //레시피 전체목록조회
 const getAllrecipe = async (req: Request, res: Response) => {
     try {
-        const myrecipe = await MyRecipe.find().sort({ createdAt: "desc" });
+        const myrecipe: Array<IMyrecipe> = await MyRecipe.find().sort({ createdAt: "desc" });
         res.json({ result: true, myrecipe });
     } catch (err) {
         res.json({ result: false });
