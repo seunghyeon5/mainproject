@@ -15,6 +15,7 @@ import { userRouter } from "./routes/user";
 import { categoryRouter } from "./routes/category";
 import { myrecipeRouter } from "./routes/myrecipe";
 import { drinkRouter } from "./routes/drink";
+import { recipeRouter } from "./routes/recipe";
 import { favoriteRouter } from "./routes/favorite";
 
 import cors from "cors";
@@ -101,9 +102,9 @@ app.use("/api/product", [productRoutes]);
 app.use("/api/user", [userRouter]);
 app.use("/api/category", [categoryRouter]);
 app.use("/api/myrecipe", [myrecipeRouter]);
-app.use("/api/drink", [drinkRouter]);
+app.use("/api/drink",[drinkRouter]);
+app.use("/api/recipe",[recipeRouter]);
 app.use("/api/favorite", [favoriteRouter]);
-
 
 app.get("/", (req, res) => {
     res.send("This is a test page");
