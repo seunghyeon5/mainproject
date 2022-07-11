@@ -68,4 +68,5 @@ const getMyrecipe = async (req: Request, res: Response) => {
         res.json({ result: false });
     }
 };
+
 export default { postlike, getAlluser, deletelike, getMyrecipe };

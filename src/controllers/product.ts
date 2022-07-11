@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
-import mongoose from 'mongoose';
-import Product from '../models/product';
+import { NextFunction, Request, Response } from "express";
+import mongoose from "mongoose";
+import Product from "../models/product";
 
 const createProduct = (req: Request, res: Response, next: NextFunction) => {
     let { country, make, price } = req.body;

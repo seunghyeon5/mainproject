@@ -32,6 +32,7 @@ const signup = async (req: Request, res: Response) => {
         console.log(err);
     }
 };
+
 //로그인
 const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
@@ -48,17 +49,19 @@ const login = async (req: Request, res: Response) => {
         }
         //토큰 발급
         const token = jwt.sign({ user: user!._id }, "main-secret-key", { expiresIn: "1d" });
-        res.status(200).send({ msg: "success", token, user });
+        res.status(200).send({ msg: "success", token, _id: user?._id, nickname: user?.nickname });
     } catch (err) {
         res.json({ result: false });
         console.log(err);
     }
 };
+
 //로그인한 유저에 대한 정보 가져오기
 const checkuser = async (req: Request, res: Response) => {
     const { user } = res.locals;
     res.send({ email: user.email, nickName: user.nickname });
 };
+
 //회원탈퇴
 const withdrawal = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -69,6 +72,7 @@ const withdrawal = async (req: Request, res: Response, next: NextFunction) => {
         console.log(err);
     }
 };
+
 //카카오 콜백
 const kakaoCallback = async (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate("kakao", { failureRedirect: "/" }, (err, user) => {
@@ -79,6 +83,7 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
         res.send({ email, nickname, token });
     })(req, res, next);
 };
+
 //구글 콜백
 const googleCallback = (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate(
@@ -115,6 +120,7 @@ const changeNickname = async (req: Request, res: Response) => {
         res.json({ result: false });
     }
 };
+
 //비밀번호 변경하기
 const changePassword = async (req: Request, res: Response) => {
     const { user } = res.locals;
@@ -141,7 +147,7 @@ const changePassword = async (req: Request, res: Response) => {
 
 const getmypage = async (req: Request, res: Response) => {
     const user = res.locals.user;
-    res.send({ user });
+    res.send({ _id: user._id, nickname: user.nickname, email: user.email, createdposts: user.createdposts });
 };
 
 export default { signup, login, checkuser, kakaoCallback, withdrawal, changeNickname, changePassword, googleCallback, getmypage };
