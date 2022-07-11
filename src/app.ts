@@ -6,6 +6,7 @@ import express, { Application, Request, Response, NextFunction } from "express";
 import { initCategoryRouter } from "./initData/category";
 import { initDrinksRouter } from "./initData/drinks";
 import { initDrinkRecipeRouter } from "./initData/recipe";
+import { initIngredientsRouter } from "./initData/ingredient";
 
 import config from "./config/config";
 import productRoutes from "./routes/product";
@@ -14,6 +15,7 @@ import { userRouter } from "./routes/user";
 import { categoryRouter } from "./routes/category";
 import { myrecipeRouter } from "./routes/myrecipe";
 import { drinkRouter } from "./routes/drink";
+
 import cors from "cors";
 
 const router = express();
@@ -64,6 +66,7 @@ app.use(express.json());
 app.use("/api/init/category", [initCategoryRouter]);
 app.use("/api/init/drinks", [initDrinksRouter]);
 app.use("/api/init/recipes", [initDrinkRecipeRouter]);
+app.use("/api/init/ingredients", [initIngredientsRouter]);
 
 /** Rules of our API */
 router.use((req, res, next) => {
@@ -97,6 +100,7 @@ app.use("/api/user", [userRouter]);
 app.use("/api/category", [categoryRouter]);
 app.use("/api/myrecipe", [myrecipeRouter]);
 app.use("/api/drink",[drinkRouter]);
+
 
 app.get("/", (req, res) => {
     res.send("This is a test page");
