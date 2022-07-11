@@ -27,6 +27,7 @@ const postrecipe = async (req: Request, res: Response) => {
         console.log(err);
     }
 };
+
 //레시피 전체목록조회
 const getAllrecipe = async (req: Request, res: Response) => {
     try {
@@ -37,6 +38,7 @@ const getAllrecipe = async (req: Request, res: Response) => {
         console.log(err);
     }
 };
+
 //레시피 상세조회
 const detailrecipe = async (req: Request, res: Response) => {
     try {
@@ -49,6 +51,7 @@ const detailrecipe = async (req: Request, res: Response) => {
         console.log(err);
     }
 };
+
 //내가 쓴 레시피 조회
 const getAllmyrecipe = async (req: Request, res: Response) => {
     try {
@@ -61,6 +64,7 @@ const getAllmyrecipe = async (req: Request, res: Response) => {
         console.log(err);
     }
 };
+
 //내가 쓴 레시피 삭제
 const deleterecipe = async (req: Request, res: Response) => {
     const userId = String(res.locals.user._id);
@@ -81,6 +85,7 @@ const deleterecipe = async (req: Request, res: Response) => {
         console.log(err);
     }
 };
+
 //내가 쓴 레시피 수정
 const modifyrecipe = async (req: Request, res: Response) => {
     const userId = String(res.locals.user.userId);
