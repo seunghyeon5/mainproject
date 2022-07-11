@@ -63,7 +63,7 @@ const deleterecipe = async (req: Request, res: Response) => {
 
     try {
         if (existsRecipe.userId !== userId) {
-            throw new Error("Error");
+            res.json({ result: false, message: "유저정보가 다릅니다" });
         } else {
             await MyRecipe.findByIdAndDelete(myrecipeId);
         }
