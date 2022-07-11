@@ -14,7 +14,7 @@ userRouter.put("/changenick", user_validation.user_changenickname, authMiddlewar
 userRouter.put("/changepassword", user_validation.user_changepassword, authMiddleware, userController.changePassword);
 
 //마이페이지
-// userRouter.get("/mypage", authMiddleware, userController.getmypage);
+userRouter.get("/mypage", authMiddleware, userController.getmypage);
 
 //kakao login
 userRouter.get("/kakao", passport.authenticate("kakao"));
@@ -22,11 +22,14 @@ userRouter.get("/kakao", passport.authenticate("kakao"));
 userRouter.get("/kakao/callback", userController.kakaoCallback);
 
 // 구글 로그인
-userRouter.get('/google', passport.authenticate('google', {
-    scope: ['profile', 'email']
-  }));
-    
-  // 구글 로그인 Callback
+userRouter.get(
+    "/google",
+    passport.authenticate("google", {
+        scope: ["profile", "email"]
+    })
+);
+
+// 구글 로그인 Callback
 userRouter.get("/google/callback", userController.googleCallback);
 
 export { userRouter };

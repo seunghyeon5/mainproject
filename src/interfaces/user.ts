@@ -6,5 +6,5 @@ export interface IUser {
     password: string;
     _id?: Types.ObjectId;
     userId: Types.ObjectId;
-    token?: string;
+    createdposts: number;
 }
