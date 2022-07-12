@@ -3,14 +3,15 @@ import MyRecipe from "../models/myrecipe";
 import User from "../models/user";
 import { IMyrecipe } from "../interfaces/myrecipe";
 
-let num: number = 0;
-
 //레시피 작성
 const postrecipe = async (req: Request, res: Response) => {
     const { title, image, ingredients, brief_description } = req.body;
     const userId = res.locals.user._id;
     const nickname = res.locals.user.nickname;
     try {
+        if (!userId) {
+            return res.json({ result: false, msg: "유저정보가 다릅니다." });
+        }
         await MyRecipe.create({
             title,
             image,
@@ -19,9 +20,14 @@ const postrecipe = async (req: Request, res: Response) => {
             nickname,
             userId
         });
-        console.log(num);
+        const user = await User.findById({ _id: userId });
+        if (!user) {
+            res.json({ result: false, msg: "유저정보가 다릅니다." });
+            return;
+        }
+        let num: number = user.createdposts;
         await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: ++num } });
-        res.json({ result: true });
+        return res.json({ result: true });
     } catch (err) {
         res.json({ result: false });
         console.log(err);
@@ -32,7 +38,7 @@ const postrecipe = async (req: Request, res: Response) => {
 const getAllrecipe = async (req: Request, res: Response) => {
     try {
         const myrecipe: Array<IMyrecipe> = await MyRecipe.find().sort({ createdAt: "desc" });
-        res.json({ result: true, myrecipe });
+        return res.json({ result: true, myrecipe });
     } catch (err) {
         res.json({ result: false });
         console.log(err);
@@ -45,7 +51,7 @@ const detailrecipe = async (req: Request, res: Response) => {
         const userId = String(res.locals.user.userId);
         const { myrecipeId } = req.params;
         const existsRecipe: any = await MyRecipe.findById(myrecipeId);
-        res.json({ result: true, existsRecipe, userId });
+        return res.json({ result: true, existsRecipe, userId });
     } catch (err) {
         res.json({ result: false });
         console.log(err);
@@ -56,9 +62,13 @@ const detailrecipe = async (req: Request, res: Response) => {
 const getAllmyrecipe = async (req: Request, res: Response) => {
     try {
         const { userId } = res.locals.user;
+        if (!userId) {
+            return res.json({ result: false, msg: "유저정보가 다릅니다." });
+        }
         const Myrecipe = await MyRecipe.find({ userId });
-        console.log(userId);
+        // console.log(userId);
         res.json({ result: true, Myrecipe });
+        return;
     } catch (err) {
         res.json({ result: false });
         console.log(err);
@@ -70,16 +80,22 @@ const deleterecipe = async (req: Request, res: Response) => {
     const userId = String(res.locals.user._id);
     const { myrecipeId } = req.params;
     const existsRecipe: any = await MyRecipe.findById(myrecipeId);
-    console.log(userId);
+    const user: any = await User.findById({ _id: userId });
+    // console.log(userId);
 
     try {
+        if (!user) {
+            return res.json({ result: false, msg: "유저정보가 다릅니다." });
+        }
         if (existsRecipe.userId !== userId) {
-            res.json({ result: false, message: "유저정보가 다릅니다" });
+            res.json({ result: false, message: "레시피의 유저정보가 다릅니다" });
+            return;
         } else {
             await MyRecipe.findByIdAndDelete(myrecipeId);
-            await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: -num } });
+            let num: number = user.createdposts;
+            await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: --num } });
+            return res.json({ result: true });
         }
-        res.json({ result: true });
     } catch (err) {
         res.json({ result: false });
         console.log(err);
@@ -92,15 +108,15 @@ const modifyrecipe = async (req: Request, res: Response) => {
     const { myrecipeId } = req.params;
     const { title, image, ingredients, brief_description } = req.body;
     const existsRecipe: any = await MyRecipe.findById(myrecipeId);
-    console.log(existsRecipe);
+    // console.log(existsRecipe);
 
     try {
         if (existsRecipe.userId !== userId) {
-            return res.json({ message: false });
+            return res.json({ result: false, msg: "레시피의 유저정보가 다릅니다." });
         } else {
             await MyRecipe.findByIdAndUpdate(myrecipeId, { $set: { title, image, ingredients, brief_description } });
+            return res.json({ result: true, existsRecipe });
         }
-        res.json({ result: true, existsRecipe });
     } catch (err) {
         res.json({ result: false });
         console.log(err);
