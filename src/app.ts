@@ -53,14 +53,13 @@ const port = config.server.port;
 
 const app = express();
 
-app.use(
-    cors({
-        // CORS 모듈 실행
-        //origin : "we need frontsever address",
-        origin: "*"||"http://localhost:3000", // 출처 허용 옵션 (전부 허용) must be changed
-        //credential: 'true' // 사용자 인증이 필요한 리소스(쿠키 ..등) 접근
-    })
-);
+const allowedOrigins = ["http://localhost:3000","http://www.b-tender.com","https://www.b-tender.com"];
+const options: cors.CorsOptions = {
+    origin:allowedOrigins,
+    credentials:true, // 사용자 인증이 필요한 리소스(쿠키 ..등) 접근
+};
+
+app.use( cors(options));
 
 app.use(express.urlencoded({ extended: false }));
 
