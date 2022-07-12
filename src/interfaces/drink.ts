@@ -4,7 +4,6 @@ export interface IDrink {
     _id?: Types.ObjectId;
     title_kor: string;
     title_eng: string;
-    short_description: string;
     flavour: string;
     alc: number;
     country: string;
