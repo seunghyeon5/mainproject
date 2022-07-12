@@ -39,17 +39,19 @@ const login = async (req: Request, res: Response) => {
     try {
         const user = await User.findOne({ email: email });
         console.log(user);
-        if (!user) {
-            res.json({ result: false });
+        if (!user?.email) {
+            res.json({ result: false, msg: "이메일이 존재하지 않습니다." });
+            return;
         }
         const check = await bcrypt.compare(password, user!.password);
         if (!check) {
-            res.json({ result: false });
+            res.json({ result: false, msg: "비밀번호가 틀립니다." });
             return;
         }
         //토큰 발급
         const token = jwt.sign({ user: user!._id }, "main-secret-key", { expiresIn: "1d" });
         res.status(200).send({ msg: "success", token, _id: user?._id, nickname: user?.nickname });
+        return;
     } catch (err) {
         res.json({ result: false });
         console.log(err);
@@ -59,7 +61,11 @@ const login = async (req: Request, res: Response) => {
 //로그인한 유저에 대한 정보 가져오기
 const checkuser = async (req: Request, res: Response) => {
     const { user } = res.locals;
+    if (!user) {
+        res.json({ result: false, msg: "유저정보가 다릅니다." });
+    }
     res.send({ email: user.email, nickName: user.nickname });
+    return;
 };
 
 //회원탈퇴
@@ -68,6 +74,7 @@ const withdrawal = async (req: Request, res: Response, next: NextFunction) => {
         const userId = res.locals.user.userId;
         await User.findByIdAndDelete(userId);
         res.json({ msg: "success" });
+        return;
     } catch (err) {
         console.log(err);
     }
@@ -130,6 +137,7 @@ const changePassword = async (req: Request, res: Response) => {
     try {
         if (!user) {
             res.json({ result: false, msg: "존재하는 유저가 아닙니다." });
+            return;
         }
         const check = await bcrypt.compare(existPassword, user!.password);
         if (!check) {
@@ -139,6 +147,7 @@ const changePassword = async (req: Request, res: Response) => {
             newPassword = bcrypt.hashSync(newPassword, 10);
             await User.findOneAndUpdate({ _id: user._id }, { $set: { password: newPassword } });
             res.json({ result: true });
+            return;
         }
     } catch (err) {
         console.log(err);
@@ -148,6 +157,9 @@ const changePassword = async (req: Request, res: Response) => {
 
 const getmypage = async (req: Request, res: Response) => {
     const user = res.locals.user;
+    if (!user) {
+        res.json({ result: false, msg: "유저 정보가 다릅니다." });
+    }
     res.send({ _id: user._id, nickname: user.nickname, email: user.email, createdposts: user.createdposts });
 };
 
