@@ -8,9 +8,6 @@ const DrinkSchema: Schema = new Schema({
     title_eng: {
         type: String
     },
-    short_description: {
-        type: String
-    },  
     flavour: {
         type: String
     },
