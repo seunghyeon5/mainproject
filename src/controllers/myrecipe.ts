@@ -1,25 +1,45 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import MyRecipe from "../models/myrecipe";
 import User from "../models/user";
 import { IMyrecipe } from "../interfaces/myrecipe";
+import config from "../config/config";
+import AWS from "aws-sdk";
 
-let num: number = 0;
+AWS.config.update({
+    accessKeyId: config.aws.access_key_id,
+    secretAccessKey: config.aws.access_secret,
+    region: config.aws.region,
+  });
+const s3 = new AWS.S3();
 
 //레시피 작성
 const postrecipe = async (req: Request, res: Response) => {
-    const { title, image, ingredients, brief_description } = req.body;
-    const userId = res.locals.user._id;
-    const nickname = res.locals.user.nickname;
+    const { title, ingredients, brief_description } = req.body;
+    const { userId ,nickname }= res.locals.user;
+
+    //console.log("loc",(req.file as Express.MulterS3.File).location);
+    //console.log("key",(req.file as Express.MulterS3.File).key);
+    //console.log(JSON.stringify(req.body));       
+    //console.log(typeof(ingredients)); object     
+    
     try {
         await MyRecipe.create({
             title,
-            image,
+            image: (req.file as Express.MulterS3.File).location,
+            key: (req.file as Express.MulterS3.File).key, 
             ingredients,
             brief_description,
             nickname,
-            userId
+            userId,
         });
-        console.log(num);
+        const user = await User.findById({ _id: userId }); 
+        if(!user)
+        {
+            res.json({ result: false});
+            return
+        }
+        let num: number = user.createdposts;
+        
         await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: ++num } });
         res.json({ result: true });
     } catch (err) {
@@ -71,13 +91,13 @@ const deleterecipe = async (req: Request, res: Response) => {
     const { myrecipeId } = req.params;
     const existsRecipe: any = await MyRecipe.findById(myrecipeId);
     console.log(userId);
-
+    let num:number=0;
     try {
         if (existsRecipe.userId !== userId) {
             res.json({ result: false, message: "유저정보가 다릅니다" });
         } else {
             await MyRecipe.findByIdAndDelete(myrecipeId);
-            await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: -num } });
+            await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: --num } });
         }
         res.json({ result: true });
     } catch (err) {
