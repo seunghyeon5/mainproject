@@ -16,9 +16,9 @@ const googlePassport = () => {
       {
         clientID: "815398021427-9dtl8rrtqq6dc0jn567m5vr9r6002tp6.apps.googleusercontent.com",
         clientSecret: "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",
-        callbackURL: "http://localhost:8080/api/user/google/callback",
+        callbackURL: "http://localhost:3000/api/user/google/callback",
       },
-      async function (accessToken:any, refreshToken:any, profile, cb) {
+      async function ( accessToken:any, refreshToken:any, profile:any, cb:any ) {
         let email: string;
         email = profile._json.email
         console.log(email)

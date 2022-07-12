@@ -88,12 +88,12 @@ const googleCallback = (req: Request, res: Response, next: NextFunction) => {
         successRedirect: "/",
         failureRedirect: "/login",
       },
-      (err, profile, info) => {
+      (err, user, info) => {
         if (err) return next(err);
-        const { email, nickname } = profile;
+        const { email, nickname } = user;
         const token = jwt.sign({ email }, "main-secret-key");
-        console.log(profile);
-        res.send({ token, email, nickname });
+        console.log(user);
+        res.redirect(`http://localhost:3000/api/user/google/callback/token=${token}&nickname=${nickname}&email=${email}`);
       }
     )(req, res, next);
   };
