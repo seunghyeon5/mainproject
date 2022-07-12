@@ -80,7 +80,8 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
         const { email, nickname } = user;
         const token = jwt.sign({ user: user._id }, "main-secret-key", { expiresIn: "1d" });
         console.log(user);
-        res.send({ email, nickname, token });
+
+        res.redirect(`http://localhost:8080/api/user/kakao/callback/token=${token}&nickname=${nickname}&email=${email}`);
     })(req, res, next);
 };
 
