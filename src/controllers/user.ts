@@ -10,19 +10,19 @@ const signup = async (req: Request, res: Response) => {
     try {
         if (password !== confirmpassword) {
             res.status(400).json({
-                errorMessage: "패스워드와 패스워드 확인란이 동일하지 않습니다."
+                errorMessage: "1"
             });
             return;
         }
         // 이메일 중복확인 버튼
         const existEmail = await User.findOne({ email });
         if (existEmail) {
-            return res.status(400).json({ errorMessage: "중복된 이메일이 존재합니다." });
+            return res.status(400).json({ errorMessage: "2" });
         }
         // 닉네임 중복확인 버튼
         const existnicName = await User.findOne({ nickname: nickname });
         if (existnicName) {
-            return res.status(400).json({ errorMessage: "중복된 닉네임이 존재합니다." });
+            return res.status(400).json({ errorMessage: "3" });
         }
         password = bcrypt.hashSync(password, 10); //비밀번호 해싱
         await User.create({ email, nickname, password });
@@ -40,12 +40,12 @@ const login = async (req: Request, res: Response) => {
         const user = await User.findOne({ email: email });
         console.log(user);
         if (!user?.email) {
-            res.json({ result: false, msg: "이메일이 존재하지 않습니다." });
+            res.json({ result: false, msg: "1" });
             return;
         }
         const check = await bcrypt.compare(password, user!.password);
         if (!check) {
-            res.json({ result: false, msg: "비밀번호가 틀립니다." });
+            res.json({ result: false, msg: "2" });
             return;
         }
         //토큰 발급
@@ -62,7 +62,8 @@ const login = async (req: Request, res: Response) => {
 const checkuser = async (req: Request, res: Response) => {
     const { user } = res.locals;
     if (!user) {
-        res.json({ result: false, msg: "유저정보가 다릅니다." });
+        res.json({ result: false, msg: "1" });
+        return;
     }
     res.send({ email: user.email, nickName: user.nickname });
     return;
@@ -72,6 +73,9 @@ const checkuser = async (req: Request, res: Response) => {
 const withdrawal = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = res.locals.user.userId;
+        if (!userId) {
+            return res.json({ result: false, msg: "1" });
+        }
         await User.findByIdAndDelete(userId);
         res.json({ msg: "success" });
         return;
@@ -117,7 +121,7 @@ const changeNickname = async (req: Request, res: Response) => {
     try {
         const existNickname = await User.findOne({ nickname });
         if (existNickname) {
-            res.json({ result: false, msg: "이미 존재하는 닉네임 입니다." });
+            res.json({ result: false, msg: "1" });
             return;
         } else {
             await User.findOneAndUpdate({ _id: user._id }, { $set: { nickname: nickname } });
@@ -136,12 +140,12 @@ const changePassword = async (req: Request, res: Response) => {
     let newPassword = req.body.newpassword;
     try {
         if (!user) {
-            res.json({ result: false, msg: "존재하는 유저가 아닙니다." });
+            res.json({ result: false, msg: "1" });
             return;
         }
         const check = await bcrypt.compare(existPassword, user!.password);
         if (!check) {
-            res.json({ result: false, msg: "비밀번호가 올바르지 않습니다." });
+            res.json({ result: false, msg: "2" });
             return;
         } else {
             newPassword = bcrypt.hashSync(newPassword, 10);
@@ -158,7 +162,7 @@ const changePassword = async (req: Request, res: Response) => {
 const getmypage = async (req: Request, res: Response) => {
     const user = res.locals.user;
     if (!user) {
-        res.json({ result: false, msg: "유저 정보가 다릅니다." });
+        res.json({ result: false, msg: "1" });
     }
     res.send({ _id: user._id, nickname: user.nickname, email: user.email, createdposts: user.createdposts });
 };
