@@ -3,10 +3,12 @@ import express, { Application, Request, Response, NextFunction } from "express";
 //import logging from './config/logging';
 
 //importing InitRouters
+/*
 import { initCategoryRouter } from "./initData/category";
 import { initDrinksRouter } from "./initData/drinks";
 import { initDrinkRecipeRouter } from "./initData/recipe";
 import { initIngredientsRouter } from "./initData/ingredient";
+*/
 
 import config from "./config/config";
 import productRoutes from "./routes/product";
@@ -65,10 +67,12 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json());
 //Initializing DBdata
+/*
 app.use("/api/init/category", [initCategoryRouter]);
 app.use("/api/init/drinks", [initDrinksRouter]);
 app.use("/api/init/recipes", [initDrinkRecipeRouter]);
 app.use("/api/init/ingredients", [initIngredientsRouter]);
+*/
 
 /** Rules of our API */
 router.use((req, res, next) => {
