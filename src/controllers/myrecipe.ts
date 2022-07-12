@@ -10,7 +10,7 @@ const postrecipe = async (req: Request, res: Response) => {
     const nickname = res.locals.user.nickname;
     try {
         if (!userId) {
-            return res.json({ result: false, msg: "유저정보가 다릅니다." });
+            return res.json({ result: false, msg: "1" });
         }
         await MyRecipe.create({
             title,
@@ -22,7 +22,7 @@ const postrecipe = async (req: Request, res: Response) => {
         });
         const user = await User.findById({ _id: userId });
         if (!user) {
-            res.json({ result: false, msg: "유저정보가 다릅니다." });
+            res.json({ result: false, msg: "2" });
             return;
         }
         let num: number = user.createdposts;
@@ -63,7 +63,7 @@ const getAllmyrecipe = async (req: Request, res: Response) => {
     try {
         const { userId } = res.locals.user;
         if (!userId) {
-            return res.json({ result: false, msg: "유저정보가 다릅니다." });
+            return res.json({ result: false, msg: "1" });
         }
         const Myrecipe = await MyRecipe.find({ userId });
         // console.log(userId);
@@ -85,10 +85,10 @@ const deleterecipe = async (req: Request, res: Response) => {
 
     try {
         if (!user) {
-            return res.json({ result: false, msg: "유저정보가 다릅니다." });
+            return res.json({ result: false, msg: "1" });
         }
         if (existsRecipe.userId !== userId) {
-            res.json({ result: false, message: "레시피의 유저정보가 다릅니다" });
+            res.json({ result: false, message: "2" });
             return;
         } else {
             await MyRecipe.findByIdAndDelete(myrecipeId);
@@ -112,7 +112,7 @@ const modifyrecipe = async (req: Request, res: Response) => {
 
     try {
         if (existsRecipe.userId !== userId) {
-            return res.json({ result: false, msg: "레시피의 유저정보가 다릅니다." });
+            return res.json({ result: false, msg: "1" });
         } else {
             await MyRecipe.findByIdAndUpdate(myrecipeId, { $set: { title, image, ingredients, brief_description } });
             return res.json({ result: true, existsRecipe });
