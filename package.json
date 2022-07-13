@@ -4,6 +4,8 @@
   "description": "메인프로젝트",
   "main": "index.js",
   "scripts": {
+    "start": "node build/app.js",
+    "build": "tsc -p .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
