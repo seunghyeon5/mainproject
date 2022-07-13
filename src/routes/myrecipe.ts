@@ -1,10 +1,11 @@
 import express from "express";
 import myrecipeController from "../controllers/myrecipe";
 import { authMiddleware } from "../middlewares/auth-middleware";
+import { imageuploader } from "../middlewares/image-uploader";
 
 const myrecipeRouter = express.Router();
 //레시피 작성
-myrecipeRouter.post("/post", authMiddleware, myrecipeController.postrecipe);
+myrecipeRouter.post("/post", authMiddleware, imageuploader.single("image"), myrecipeController.postrecipe);
 //레시피 전체목록 조회
 myrecipeRouter.get("/post/list", myrecipeController.getAllrecipe);
 //내가 쓴 레시피 조회
@@ -17,3 +18,4 @@ myrecipeRouter.delete("/:myrecipeId/delete", authMiddleware, myrecipeController.
 myrecipeRouter.put("/:myrecipeId/modify", authMiddleware, myrecipeController.modifyrecipe);
 
 export { myrecipeRouter };
+//myrecipeRouter.post("/post", authMiddleware, imageuploader.array("image",6), myrecipeController.postrecipe);//multi-images
