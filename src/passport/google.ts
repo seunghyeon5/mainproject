@@ -3,13 +3,14 @@ import GoogleRouter from "passport";
 import GoogleStrategy, { Strategy } from "passport-google-oauth2";
 
 const googlePassport = () => {
-  GoogleRouter.serializeUser((user, done) => {
-    done(null, user);
-  });
+    GoogleRouter.serializeUser((user, done) => {
+        done(null, user);
+    });
 
-  GoogleRouter.deserializeUser((user: any, done) => {
-    done(null, user);
-  });
+    GoogleRouter.deserializeUser((user: any, done) => {
+        done(null, user);
+    });
+
 
   GoogleRouter.use(
     new Strategy(
@@ -46,5 +47,6 @@ const googlePassport = () => {
     )
   );
     }
+
 
 export { googlePassport };

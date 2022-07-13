@@ -1,8 +1,8 @@
 import { Types } from "mongoose";
 
-export interface ICategory {
+export interface IIngredient {
     _id?: Types.ObjectId;
     title: string;
     image: string;
-    description: string;
+    category: string;
 }

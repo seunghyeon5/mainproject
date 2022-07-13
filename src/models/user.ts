@@ -14,8 +14,9 @@ const UserSchema: Schema = new Schema({
     password: {
         type: String
     },
-    token: {
-        type: String
+    createdposts: {
+        type: Number,
+        default: 0
     }
 });
 

@@ -10,19 +10,19 @@ const signup = async (req: Request, res: Response) => {
     try {
         if (password !== confirmpassword) {
             res.status(400).json({
-                errorMessage: "패스워드와 패스워드 확인란이 동일하지 않습니다."
+                errorMessage: "1"
             });
             return;
         }
         // 이메일 중복확인 버튼
         const existEmail = await User.findOne({ email });
         if (existEmail) {
-            return res.status(400).json({ errorMessage: "중복된 이메일이 존재합니다." });
+            return res.status(400).json({ errorMessage: "2" });
         }
         // 닉네임 중복확인 버튼
-        const existnicName = await User.findOne({ nickname });
+        const existnicName = await User.findOne({ nickname: nickname });
         if (existnicName) {
-            return res.status(400).json({ errorMessage: "중복된 닉네임이 존재합니다." });
+            return res.status(400).json({ errorMessage: "3" });
         }
         password = bcrypt.hashSync(password, 10); //비밀번호 해싱
         await User.create({ email, nickname, password });
@@ -32,57 +32,74 @@ const signup = async (req: Request, res: Response) => {
         console.log(err);
     }
 };
+
 //로그인
 const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email: email });
         console.log(user);
-        if (!user) {
-            res.json({ result: false });
+        if (!user?.email) {
+            res.json({ result: false, msg: "1" });
+            return;
         }
         const check = await bcrypt.compare(password, user!.password);
         if (!check) {
-            res.json({ result: false });
+            res.json({ result: false, msg: "2" });
             return;
         }
         //토큰 발급
-        const token = jwt.sign({ user: user!._id }, "main-secret-key");
-        await User.findByIdAndUpdate(user, { $set: { token } });
-        res.status(200).send({ msg: "success", token });
+        const token = jwt.sign({ user: user!._id }, "main-secret-key", { expiresIn: "1d" });
+        res.status(200).send({ msg: "success", token, _id: user?._id, nickname: user?.nickname });
+        return;
     } catch (err) {
         res.json({ result: false });
         console.log(err);
     }
 };
+
 //로그인한 유저에 대한 정보 가져오기
 const checkuser = async (req: Request, res: Response) => {
     const { user } = res.locals;
+    if (!user) {
+        res.json({ result: false, msg: "1" });
+        return;
+    }
     res.send({ email: user.email, nickName: user.nickname });
+    return;
 };
 
+//회원탈퇴
 const withdrawal = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { user } = res.locals;
-        await User.deleteOne({ user: user._id });
+        const userId = res.locals.user.userId;
+        if (!userId) {
+            return res.json({ result: false, msg: "1" });
+        }
+        await User.findByIdAndDelete(userId);
         res.json({ msg: "success" });
+        return;
     } catch (err) {
         console.log(err);
     }
 };
 
+//카카오 콜백
 const kakaoCallback = async (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate("kakao", { failureRedirect: "/" }, (err, user) => {
         if (err) return next(err);
         const { email, nickname } = user;
-        const token = jwt.sign({ userId: user._id }, "main-secret-key");
+        const token = jwt.sign({ user: user._id }, "main-secret-key", { expiresIn: "1d" });
         console.log(user);
-        res.send({ email, nickname, token });
+
+        res.redirect(`http://localhost:8080/api/user/kakao/callback/token=${token}&nickname=${nickname}&email=${email}`);
     })(req, res, next);
 };
 
+//구글 콜백
 const googleCallback = (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate(
+
       "google",
       {
         successRedirect: "/",
@@ -96,18 +113,45 @@ const googleCallback = (req: Request, res: Response, next: NextFunction) => {
         res.redirect(`http://localhost:3000/api/user/google/callback/token=${token}&nickname=${nickname}&email=${email}`);
       }
     )(req, res, next);
-  };
+};
 
-//로그아웃
-const logout = async (req: Request, res: Response) => {
+//닉네임 변경하기
+const changeNickname = async (req: Request, res: Response) => {
+    const { nickname } = req.body;
+    const { user } = res.locals;
     try {
-        const userId = res.locals.user._id;
-        const user = await User.findByIdAndUpdate(userId, { token: "" });
-        if (!user) {
-            res.status(401).json({ message: "fail" });
+        const existNickname = await User.findOne({ nickname });
+        if (existNickname) {
+            res.json({ result: false, msg: "1" });
             return;
         } else {
-            res.json({ message: "success", user });
+            await User.findOneAndUpdate({ _id: user._id }, { $set: { nickname: nickname } });
+            return res.json({ result: true });
+        }
+    } catch (err) {
+        console.log(err);
+        res.json({ result: false });
+    }
+};
+
+//비밀번호 변경하기
+const changePassword = async (req: Request, res: Response) => {
+    const { user } = res.locals;
+    let existPassword = req.body.password;
+    let newPassword = req.body.newpassword;
+    try {
+        if (!user) {
+            res.json({ result: false, msg: "1" });
+            return;
+        }
+        const check = await bcrypt.compare(existPassword, user!.password);
+        if (!check) {
+            res.json({ result: false, msg: "2" });
+            return;
+        } else {
+            newPassword = bcrypt.hashSync(newPassword, 10);
+            await User.findOneAndUpdate({ _id: user._id }, { $set: { password: newPassword } });
+            res.json({ result: true });
             return;
         }
     } catch (err) {
@@ -116,4 +160,12 @@ const logout = async (req: Request, res: Response) => {
     }
 };
 
-export default { signup, login, checkuser, kakaoCallback, googleCallback, withdrawal, logout };
+const getmypage = async (req: Request, res: Response) => {
+    const user = res.locals.user;
+    if (!user) {
+        res.json({ result: false, msg: "1" });
+    }
+    res.send({ _id: user._id, nickname: user.nickname, email: user.email, createdposts: user.createdposts });
+};
+
+export default { signup, login, checkuser, kakaoCallback, withdrawal, changeNickname, changePassword, googleCallback, getmypage };

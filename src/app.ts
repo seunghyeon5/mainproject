@@ -3,9 +3,12 @@ import express, { Application, Request, Response, NextFunction } from "express";
 //import logging from './config/logging';
 
 //importing InitRouters
+/*
 import { initCategoryRouter } from "./initData/category";
 import { initDrinksRouter } from "./initData/drinks";
 import { initDrinkRecipeRouter } from "./initData/recipe";
+import { initIngredientsRouter } from "./initData/ingredient";
+*/
 
 import config from "./config/config";
 import productRoutes from "./routes/product";
@@ -14,6 +17,9 @@ import { userRouter } from "./routes/user";
 import { categoryRouter } from "./routes/category";
 import { myrecipeRouter } from "./routes/myrecipe";
 import { drinkRouter } from "./routes/drink";
+import { recipeRouter } from "./routes/recipe";
+import { favoriteRouter } from "./routes/favorite";
+
 import cors from "cors";
 
 const router = express();
@@ -29,8 +35,6 @@ kakaoPassport();
 import { googlePassport } from "./passport/google";
 
 googlePassport();
-
-
 
 /** Log the request */
 router.use((req, res, next) => {
@@ -51,19 +55,24 @@ const port = config.server.port;
 
 const app = express();
 
-app.use(cors({ // CORS 모듈 실행
-    //origin : "we need frontsever address",  
-    origin : "*", // 출처 허용 옵션 (전부 허용) must be changed 
-    //credential: 'true' // 사용자 인증이 필요한 리소스(쿠키 ..등) 접근
-}));
+const allowedOrigins = ["http://localhost:3000","http://www.b-tender.com","https://www.b-tender.com"];
+const options: cors.CorsOptions = {
+    origin:allowedOrigins,
+    credentials:true, // 사용자 인증이 필요한 리소스(쿠키 ..등) 접근
+};
+
+app.use( cors(options));
 
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json());
 //Initializing DBdata
+/*
 app.use("/api/init/category", [initCategoryRouter]);
 app.use("/api/init/drinks", [initDrinksRouter]);
 app.use("/api/init/recipes", [initDrinkRecipeRouter]);
+app.use("/api/init/ingredients", [initIngredientsRouter]);
+*/
 
 /** Rules of our API */
 router.use((req, res, next) => {
@@ -97,6 +106,8 @@ app.use("/api/user", [userRouter]);
 app.use("/api/category", [categoryRouter]);
 app.use("/api/myrecipe", [myrecipeRouter]);
 app.use("/api/drink",[drinkRouter]);
+app.use("/api/recipe",[recipeRouter]);
+app.use("/api/favorite", [favoriteRouter]);
 
 app.get("/", (req, res) => {
     res.send("This is a test page");
