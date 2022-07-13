@@ -99,18 +99,19 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
 //구글 콜백
 const googleCallback = (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate(
-        "google",
-        {
-            successRedirect: "/",
-            failureRedirect: "/login"
-        },
-        (err, user, info) => {
-            if (err) return next(err);
-            const { email, nickname } = user;
-            const token = jwt.sign({ user: user._id }, "main-secret-key", { expiresIn: "1d" });
-            console.log(user);
-            res.send({ token, email, nickname });
-        }
+
+      "google",
+      {
+        successRedirect: "/",
+        failureRedirect: "/login",
+      },
+      (err, user, info) => {
+        if (err) return next(err);
+        const { email, nickname } = user;
+        const token = jwt.sign({ email }, "main-secret-key");
+        console.log(user);
+        res.redirect(`http://localhost:3000/api/user/google/callback/token=${token}&nickname=${nickname}&email=${email}`);
+      }
     )(req, res, next);
 };
 
