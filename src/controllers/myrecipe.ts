@@ -2,33 +2,19 @@ import { Request, Response, NextFunction } from "express";
 import MyRecipe from "../models/myrecipe";
 import User from "../models/user";
 import { IMyrecipe } from "../interfaces/myrecipe";
-import config from "../config/config";
-import AWS from "aws-sdk";
-
-AWS.config.update({
-    accessKeyId: config.aws.access_key_id,
-    secretAccessKey: config.aws.access_secret,
-    region: config.aws.region,
-  });
-const s3 = new AWS.S3();
 
 //레시피 작성
 const postrecipe = async (req: Request, res: Response) => {
-    const { title, ingredients, brief_description } = req.body;
-    const { userId, nickname } = res.locals.user;
-    //console.log("loc",(req.file as Express.MulterS3.File).location);
-    //console.log("key",(req.file as Express.MulterS3.File).key);
-    //console.log(JSON.stringify(req.body));       
-    //console.log(typeof(ingredients)); object     
-    
+    const { title, image, ingredients, brief_description } = req.body;
+    const userId = res.locals.user._id;
+    const nickname = res.locals.user.nickname;
     try {
         if (!userId) {
             return res.json({ result: false, msg: "1" });
         }
         await MyRecipe.create({
             title,
-            image: (req.file as Express.MulterS3.File).location,
-            key: (req.file as Express.MulterS3.File).key, 
+            image,
             ingredients,
             brief_description,
             nickname,
@@ -91,21 +77,13 @@ const getAllmyrecipe = async (req: Request, res: Response) => {
 
 //내가 쓴 레시피 삭제
 const deleterecipe = async (req: Request, res: Response) => {
-    try {
-    const { userId } = res.locals.user;
+    const userId = String(res.locals.user._id);
     const { myrecipeId } = req.params;
     const existsRecipe: any = await MyRecipe.findById(myrecipeId);
     const user: any = await User.findById({ _id: userId });
     // console.log(userId);
-    s3.deleteObject({
-        Bucket: <any>config.aws.bucket,
-        Key:existsRecipe.key
-    }, (err, data) => {
-        if (err) { throw err; }
-        console.log('s3 deleteObject ', data)
-    })
-    let num: number = user.createdposts;
-   
+
+    try {
         if (!user) {
             return res.json({ result: false, msg: "1" });
         }
@@ -115,9 +93,9 @@ const deleterecipe = async (req: Request, res: Response) => {
         } else {
             await MyRecipe.findByIdAndDelete(myrecipeId);
             let num: number = user.createdposts;
-            await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: --num } });            
+            await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: --num } });
+            return res.json({ result: true });
         }
-        return res.json({ result: true });
     } catch (err) {
         res.json({ result: false });
         console.log(err);
