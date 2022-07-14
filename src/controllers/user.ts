@@ -93,25 +93,25 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
         console.log(user);
 
         res.redirect(`http://localhost:8080/api/user/kakao/callback/token=${token}&nickname=${nickname}&email=${email}`);
+        // res.redirect(`http://localhost:8080/api/user/kakao/callback/token=${token}`);
     })(req, res, next);
 };
 
 //구글 콜백
 const googleCallback = (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate(
-
-      "google",
-      {
-        successRedirect: "/",
-        failureRedirect: "/login",
-      },
-      (err, user, info) => {
-        if (err) return next(err);
-        const { email, nickname } = user;
-        const token = jwt.sign({ email }, "main-secret-key");
-        console.log(user);
-        res.redirect(`http://localhost:3000/api/user/google/callback/token=${token}&nickname=${nickname}&email=${email}`);
-      }
+        "google",
+        {
+            successRedirect: "/",
+            failureRedirect: "/login"
+        },
+        (err, user, info) => {
+            if (err) return next(err);
+            const { email, nickname } = user;
+            const token = jwt.sign({ email }, "main-secret-key");
+            console.log(user);
+            res.redirect(`http://localhost:3000/api/user/google/callback/token=${token}&nickname=${nickname}&email=${email}`);
+        }
     )(req, res, next);
 };
 
