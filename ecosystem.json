@@ -4,11 +4,14 @@
             "name": "btender",
             "script": "build/app.js",
             "watch": true,
+            "comment": "enable watch & restart feature, if a file change in the folder or subfolder, your app will get reloaded",
             "env": {
-                "NODE_ENV": "development"
+                "NODE_ENV": "development",
+                "comment":"env variables which will appear in your app"
             },
             "env_production": {
-                "NODE_ENV": "production"
+                "NODE_ENV": "production",
+                "comment":"inject when doing pm2 restart ecosystem.json --env"
             }
         }
     ]
