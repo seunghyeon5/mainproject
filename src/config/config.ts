@@ -13,7 +13,7 @@ const MONGO = {
 const KAKAO_ID = process.env.KAKAO_ID;
 const KAKAO_URL = process.env.KAKAO_URL;
 //const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || 'localhost';
-const SERVER_PORT = process.env.SERVER_PORT || 3000;
+const SERVER_PORT = process.env.SERVER_PORT;
 const SERVER = {
     // hostname: SERVER_HOSTNAME,
     port: SERVER_PORT
