@@ -24,11 +24,14 @@ const AWS = {
     region: process.env.AWS_REGION,
     bucket: process.env.AWS_BUCKET
 };
+const JWT = {
+    secretKey: process.env.JWT_SECRET
+};
 const config = {
     mongo: MONGO,
     server: SERVER,
     aws: AWS,
-    jwt: process.env.JWT_SECRET
+    jwt: JWT
 };
 
 export default config;
