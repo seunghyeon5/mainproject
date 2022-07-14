@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
         {
-            name: "btneder",
+            name: "btender",
             script: "build/app.js",
             watch: true,
             env: {
