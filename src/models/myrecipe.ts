@@ -9,6 +9,9 @@ const MyrecipeSchema: Schema = new Schema(
         image: {
             type: String
         },
+        key: {
+            type: String
+        },
         ingredients: {
             type: Array,
             default: []
