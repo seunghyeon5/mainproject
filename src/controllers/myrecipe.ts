@@ -127,7 +127,7 @@ const deleterecipe = async (req: Request, res: Response) => {
 
 //내가 쓴 레시피 수정
 const modifyrecipe = async (req: Request, res: Response) => {
-    const userId = String(res.locals.user.userId);
+    const { userId } = res.locals.user;
     const { myrecipeId } = req.params;
     const { title, image, ingredients, brief_description } = req.body;
     const existsRecipe: IMyrecipe | null = await MyRecipe.findById(myrecipeId);
@@ -135,6 +135,7 @@ const modifyrecipe = async (req: Request, res: Response) => {
 
     try {
         if (existsRecipe?.userId !== userId) {
+            console.log(userId);
             return res.json({ result: false, msg: "1" });
         } else {
             await MyRecipe.findByIdAndUpdate(myrecipeId, { $set: { title, image, ingredients, brief_description } });
