@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import passport from "passport";
 import User from "../models/user";
+import config from "../config/config";
 
 //회원가입
 const signup = async (req: Request, res: Response) => {
@@ -49,7 +50,9 @@ const login = async (req: Request, res: Response) => {
             return;
         }
         //토큰 발급
-        const token = jwt.sign({ user: user!._id }, "main-secret-key", { expiresIn: "1d" });
+        // const token = jwt.sign({ user: user!._id, email: user.email, nickname: user.nickname }, config.jwt.secretKey as jwt.Secret, { expiresIn: "1d", algorithm: "RS256" });
+        const token = jwt.sign({ user: user!._id }, config.jwt.secretKey as jwt.Secret, { expiresIn: "1d", algorithm: "HS256" });
+        // console.log(jwt.decode(token, { complete: true }));
         res.status(200).send({ msg: "success", token, _id: user?._id, nickname: user?.nickname });
         return;
     } catch (err) {

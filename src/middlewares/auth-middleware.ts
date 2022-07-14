@@ -1,6 +1,7 @@
 import { Response, Request, NextFunction } from "express";
 import User from "../models/user";
 import jwt from "jsonwebtoken";
+import config from "../config/config";
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const authorization = String(req.headers.authorization);
@@ -18,12 +19,12 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         return;
     }
     try {
-        const user = jwt.verify(tokenvalue, "main-secret-key");
-        // console.log(user);
-        User.findById(Object.values(user)[0]).then((user) => {
+        const user: jwt.JwtPayload | string = jwt.verify(tokenvalue, config.jwt.secretKey as jwt.Secret);
+        User.findById((user as jwt.JwtPayload).user).then((user) => {
             // console.log(user);
             res.locals.user = user;
             next();
+            return;
         });
     } catch (err) {
         res.status(401).send({
