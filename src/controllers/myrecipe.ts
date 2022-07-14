@@ -9,30 +9,30 @@ import { IUser } from "../interfaces/user";
 AWS.config.update({
     accessKeyId: config.aws.access_key_id,
     secretAccessKey: config.aws.access_secret,
-    region: config.aws.region,
-  });
+    region: config.aws.region
+});
 const s3 = new AWS.S3();
 
 //레시피 작성
 const postrecipe = async (req: Request, res: Response) => {
     try {
-    const { title, ingredients, brief_description } = req.body;
-    const { userId, nickname }= res.locals.user;
-    //console.log("loc",(req.file as Express.MulterS3.File).location);
-    //console.log("key",(req.file as Express.MulterS3.File).key);
-    //console.log(JSON.stringify(req.body));       
-    //console.log(typeof(ingredients)); object      
-        
+        const { title, ingredients, brief_description } = req.body;
+        const { userId, nickname } = res.locals.user;
+        //console.log("loc",(req.file as Express.MulterS3.File).location);
+        //console.log("key",(req.file as Express.MulterS3.File).key);
+        //console.log(JSON.stringify(req.body));
+        //console.log(typeof(ingredients)); object
+
         await MyRecipe.create({
             title,
             image: (req.file as Express.MulterS3.File).location,
-            key: (req.file as Express.MulterS3.File).key, 
+            key: (req.file as Express.MulterS3.File).key,
             ingredients,
             brief_description,
             nickname,
             userId
         });
-        
+
         const user = await User.findById({ _id: userId });
         if (!user) {
             res.json({ result: false, msg: "2" });
@@ -62,10 +62,9 @@ const getAllrecipe = async (req: Request, res: Response) => {
 //레시피 상세조회
 const detailrecipe = async (req: Request, res: Response) => {
     try {
-        const userId = String(res.locals.user.userId);
         const { myrecipeId } = req.params;
-        const existsRecipe: any = await MyRecipe.findById(myrecipeId);
-        return res.json({ result: true, existsRecipe, userId });
+        const existsRecipe: IMyrecipe | null = await MyRecipe.findById(myrecipeId);
+        return res.json({ result: true, existsRecipe: [existsRecipe] });
     } catch (err) {
         res.json({ result: false });
         console.log(err);
@@ -91,43 +90,39 @@ const getAllmyrecipe = async (req: Request, res: Response) => {
 
 //내가 쓴 레시피 삭제
 const deleterecipe = async (req: Request, res: Response) => {
-  try {    
-    const { userId } = res.locals.user;
-    const { myrecipeId } = req.params;
-    const existsRecipe: IMyrecipe | null = await MyRecipe.findById(myrecipeId);
-    const user: IUser | null = await User.findById({ _id: userId });
-       
-    s3.deleteObject(
-      {
-        Bucket: String(config.aws.bucket),
-        Key: String(existsRecipe?.key),
-      },
-      (err, data) => {
-        if (err) {
-          throw err;
-        }    
-      }
-    );
-    
-    if (!user) {
-      return res.json({ result: false, msg: "1" });
+    try {
+        const { userId } = res.locals.user;
+        const { myrecipeId } = req.params;
+        const existsRecipe: IMyrecipe | null = await MyRecipe.findById(myrecipeId);
+        const user: IUser | null = await User.findById({ _id: userId });
+
+        s3.deleteObject(
+            {
+                Bucket: String(config.aws.bucket),
+                Key: String(existsRecipe?.key)
+            },
+            (err, data) => {
+                if (err) {
+                    throw err;
+                }
+            }
+        );
+
+        if (!user) {
+            return res.json({ result: false, msg: "1" });
+        }
+        if (existsRecipe?.userId !== userId) {
+            return res.json({ result: false, message: "2" });
+        } else {
+            await MyRecipe.findByIdAndDelete(myrecipeId);
+            let num: number = user.createdposts;
+            await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: --num } });
+            return res.json({ result: true });
+        }
+    } catch (err) {
+        res.json({ result: false });
+        console.log(err);
     }
-    if (existsRecipe?.userId !== userId) {
-      return res.json({ result: false, message: "2" });
-    } 
-    else{
-      await MyRecipe.findByIdAndDelete(myrecipeId);
-      let num: number = user.createdposts;
-      await User.findOneAndUpdate(
-        { _id: userId },
-        { $set: { createdposts: --num } }
-      );
-      return res.json({ result: true });
-    }
-  } catch (err) {
-    res.json({ result: false });
-    console.log(err);
-  }
 };
 
 //내가 쓴 레시피 수정
