@@ -1,6 +1,7 @@
 import User from "../models/user";
 import GoogleRouter from "passport";
 import GoogleStrategy, { Strategy } from "passport-google-oauth2";
+import config from "../config/config";
 
 const googlePassport = () => {
     GoogleRouter.serializeUser((user, done) => {
@@ -11,19 +12,17 @@ const googlePassport = () => {
         done(null, user);
     });
 
-
   GoogleRouter.use(
     new Strategy(
       {
-        clientID: "815398021427-9dtl8rrtqq6dc0jn567m5vr9r6002tp6.apps.googleusercontent.com",
-        clientSecret: "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",
-        callbackURL: "http://localhost:3000/api/user/google/callback",
+        clientID: String(config.social.google_id),
+        clientSecret: String(config.social.google_secret),
+        callbackURL: String(config.social.google_url),
       },
       async function ( accessToken:any, refreshToken:any, profile:any, cb:any ) {
-        let email: string;
-        email = profile._json.email
-        console.log(email)
+            
         try {
+          let email: string = profile._json.email;  
           const user = await User.findOne({ email: email });
           //동일한 이메일을 가졌을 때는 이미 가입중인 사용자라면 바로 로그인하도록 아니라면 신규 사용자 생성
           if (user) {
