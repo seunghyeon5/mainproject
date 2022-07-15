@@ -1,18 +1,18 @@
 version: 0.0
 os: linux
 files:
-  - source: /
-    destination: /home/ec2-user/mainproject
-  hooks:
+    - source: /
+      destination: /home/ec2-user/mainproject
+hooks:
     ApplicationStop:
-      - location: sccripts/application_stop.sh
-        timeout: 600
-        runas: ec2-user
+        - location: sccripts/application_stop.sh
+          timeout: 600
+          runas: ec2-user
     BeforeInstall:
-      - location: scripts/before_install.sh
-        timeout: 600
-        reunas: ec2-user
+        - location: scripts/before_install.sh
+          timeout: 600
+          reunas: ec2-user
     ApplicationStart:
-      - location: scripts/application_start.sh
-        timeout: 600
-        runas: ec2-user
+        - location: scripts/application_start.sh
+          timeout: 600
+          runas: ec2-user
