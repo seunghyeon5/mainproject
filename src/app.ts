@@ -55,15 +55,15 @@ const port = config.server.port;
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:3000","http://www.b-tender.com","https://www.b-tender.com"];
+const allowedOrigins = ["http://localhost:3000", "http://www.b-tender.com", "https://www.b-tender.com"];
 const options: cors.CorsOptions = {
-    origin:allowedOrigins,
-    credentials:true, // 사용자 인증이 필요한 리소스(쿠키 ..등) 접근
+    origin: allowedOrigins,
+    credentials: true // 사용자 인증이 필요한 리소스(쿠키 ..등) 접근
 };
 
-app.use( cors(options));
+app.use(cors(options));
 
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 //Initializing DBdata
@@ -105,8 +105,8 @@ app.use("/api/product", [productRoutes]);
 app.use("/api/user", [userRouter]);
 app.use("/api/category", [categoryRouter]);
 app.use("/api/myrecipe", [myrecipeRouter]);
-app.use("/api/drink",[drinkRouter]);
-app.use("/api/recipe",[recipeRouter]);
+app.use("/api/drink", [drinkRouter]);
+app.use("/api/recipe", [recipeRouter]);
 app.use("/api/favorite", [favoriteRouter]);
 
 app.get("/", (req, res) => {
