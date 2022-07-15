@@ -95,7 +95,7 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
         const token = jwt.sign({ user: user._id }, config.jwt.secretKey as jwt.Secret, { expiresIn: "1d" });
         console.log(user);
 
-        res.redirect(`https://www.naver.com`);
+        res.redirect(`https://www.naver.com/token=${token}`);
         // res.redirect(`http://localhost:8080/api/user/kakao/callback/token=${token}`);
     })(req, res, next);
 };
