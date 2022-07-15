@@ -93,8 +93,7 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
         if (err) return next(err);
         const { email, nickname } = user;
         const token = jwt.sign({ user: user._id }, config.jwt.secretKey as jwt.Secret, { expiresIn: "1d" });
-        console.log(user);
-
+       
         res.redirect(`https://www.naver.com/token=${token}&nickname=${nickname}&email=${email}`);
     })(req, res, next);
 };
@@ -103,8 +102,7 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
 const googleCallback = (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate(
         "google",
-        {
-            successRedirect: "/",
+        {        
             failureRedirect: "/login"
         },
         (err, user, info) => {
@@ -112,7 +110,7 @@ const googleCallback = (req: Request, res: Response, next: NextFunction) => {
             const { email, nickname } = user;
             const token = jwt.sign({ user: user._id }, config.jwt.secretKey as jwt.Secret, { expiresIn: "1d" });
             console.log(user);
-            res.redirect(`http://localhost:3000/api/user/google/callback/token=${token}&nickname=${nickname}&email=${email}`);
+            res.redirect(`https://www.naver.com/token=${token}&nickname=${nickname}&email=${email}`);
         }
     )(req, res, next);
 };
