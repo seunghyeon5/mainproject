@@ -7,7 +7,7 @@ const kakaoPassport = () => {
         new KakaoStrategy(
             {
                 clientID: process.env.KAKAO_ID, // 카카오 로그인에서 발급받은 REST API 키
-                callbackURL: "https://btenderapi.com/callback" // 카카오 로그인 Redirect URI 경로
+                callbackURL: "http://api.hel-ping.com" // 카카오 로그인 Redirect URI 경로
             },
             async (accessToken: any, refreshToken: any, profile: any, done: any) => {
                 let email: string;
