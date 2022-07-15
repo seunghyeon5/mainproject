@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#download node and npm
+curl -o- https://rew.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+. ~/.nvm/nvm.sh
+nvm install 16
+
 #give permission for everything in the mainproject directory
 sudo chmod -R 777 /home/ec2-user/mainproject
 
