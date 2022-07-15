@@ -95,7 +95,7 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
         const token = jwt.sign({ user: user._id }, config.jwt.secretKey as jwt.Secret, { expiresIn: "1d" });
         console.log(user);
 
-        res.redirect(`http://api.hel-ping.com/token=${token}`);
+        res.redirect(`http://api.hel-ping.com/api/user/kakao/callback/token=${token}`);
         // res.redirect(`http://localhost:8080/api/user/kakao/callback/token=${token}`);
     })(req, res, next);
 };
