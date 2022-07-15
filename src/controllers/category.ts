@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
 import Categories from "../models/category";
-import { ICategory } from "../interfaces/category";
 
 // 전체 카테고리 조회
 const getCategories = async (req: Request, res: Response) => {
     try {
-        const drinkCategories: Array<ICategory> = await Categories.find().lean();
+        const drinkCategories = await Categories.find().lean();
 
         res.json({ message: "success", drinkCategories });
     } catch (error) {
@@ -18,7 +17,7 @@ const getCategory = async (req: Request, res: Response) => {
     try {
         const { categoryId } = req.params;
         //console.log(categoryId);
-        const drinkCategory: ICategory | null = await Categories.findById(categoryId).lean();
+        const drinkCategory = await Categories.findById(categoryId).lean();
 
         if (drinkCategory) {
             res.json({ message: "success", drinkCategory });

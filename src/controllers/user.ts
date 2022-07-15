@@ -92,10 +92,10 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
     passport.authenticate("kakao", { failureRedirect: "/" }, (err, user) => {
         if (err) return next(err);
         const { email, nickname } = user;
-        const token = jwt.sign({ user: user._id }, "main-secret-key", { expiresIn: "1d" });
+        const token = jwt.sign({ user: user._id }, config.jwt.secretKey as jwt.Secret, { expiresIn: "1d" });
         console.log(user);
 
-        res.redirect(`http://localhost:8080/api/user/kakao/callback/token=${token}&nickname=${nickname}&email=${email}`);
+        res.redirect(`https://www.btenderapi.com/api/user/kakao/callback/token=${token}&nickname=${nickname}&email=${email}`);
         // res.redirect(`http://localhost:8080/api/user/kakao/callback/token=${token}`);
     })(req, res, next);
 };
@@ -111,7 +111,7 @@ const googleCallback = (req: Request, res: Response, next: NextFunction) => {
         (err, user, info) => {
             if (err) return next(err);
             const { email, nickname } = user;
-            const token = jwt.sign({ email }, "main-secret-key");
+            const token = jwt.sign({ user: user._id }, config.jwt.secretKey as jwt.Secret, { expiresIn: "1d" });
             console.log(user);
             res.redirect(`http://localhost:3000/api/user/google/callback/token=${token}&nickname=${nickname}&email=${email}`);
         }
