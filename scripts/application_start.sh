@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#give permission for everything in the mainproject directory
+sudo chmod -R 777 /home/ec2-user/mainproject
+
 #navigate into our working directory where we have all our github files
 cd /home/ec2-user/mainproject
 
