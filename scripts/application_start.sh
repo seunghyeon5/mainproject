@@ -11,6 +11,13 @@ export NBM_DIR="$HOME/.nvm"
 #install node modules
 npm install
 
+#install pm2
+npm install -g pm2
+echo "pm2 installed"
+
+# JS Heap extend memory
+export NODE_OPTIONS=--max_old_space_size=4096
+
 #complie typescript to  javascript
 npm run build
 
