@@ -1,5 +1,13 @@
 #!/bin/bash
 
+#download node and npm
+curl -o- https://rew.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+. ~/.nvm/nvm.sh
+nvm install 16
+
+#give permission for everything in the mainproject directory
+sudo chmod -R 777 /home/ec2-user/mainproject
+
 #navigate into our working directory where we have all our github files
 cd /home/ec2-user/mainproject
 
@@ -10,6 +18,13 @@ export NBM_DIR="$HOME/.nvm"
 
 #install node modules
 npm install
+
+#install pm2
+npm install -g pm2
+echo "pm2 installed"
+
+# JS Heap extend memory
+export NODE_OPTIONS=--max_old_space_size=4096
 
 #complie typescript to  javascript
 npm run build
