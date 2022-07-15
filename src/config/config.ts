@@ -9,15 +9,22 @@ const MONGO_DB = process.env.MONGO_DB;
 const MONGO = {
     url: `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}/${MONGO_DB}?retryWrites=true&w=majority`
 };
-
-const KAKAO_ID = process.env.KAKAO_ID;
-const KAKAO_URL = process.env.KAKAO_URL;
 //const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || 'localhost';
+
 const SERVER_PORT = process.env.SERVER_PORT;
+
 const SERVER = {
     // hostname: SERVER_HOSTNAME,
     port: SERVER_PORT
 };
+const SOCIAL = {
+    google_id: process.env.GOOGLE_ID,
+    google_url: process.env.GOOGLE_URL,
+    google_secret: process.env.GOOGLE_SECRET,
+
+    kakao_id: process.env.KAKAO_ID,
+    kakao_url: process.env.KAKAO_URL
+}
 const AWS = {
     access_key_id: process.env.AWS_ACCESS_KEY_ID,
     access_secret: process.env.AWS_ACCESS_SECRET,
@@ -31,7 +38,8 @@ const config = {
     mongo: MONGO,
     server: SERVER,
     aws: AWS,
-    jwt: JWT
+    jwt: JWT,
+    social: SOCIAL
 };
 
 export default config;
