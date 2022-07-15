@@ -94,7 +94,7 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
         const { email, nickname } = user;
         const token = jwt.sign({ user: user._id }, config.jwt.secretKey as jwt.Secret, { expiresIn: "1d" });
        
-        res.redirect(`http://wwww.b-tender.com/main/token=${token}&nickname=${nickname}&email=${email}`);
+        res.redirect(`http://www.b-tender.com/main/token=${token}&nickname=${nickname}&email=${email}`);
     })(req, res, next);
 };
 
@@ -110,7 +110,7 @@ const googleCallback = (req: Request, res: Response, next: NextFunction) => {
             const { email, nickname } = user;
             const token = jwt.sign({ user: user._id }, config.jwt.secretKey as jwt.Secret, { expiresIn: "1d" });
             //console.log(user);
-            res.redirect(`https://wwww.b-tender.com/main/token=${token}&nickname=${nickname}&email=${email}`);
+            res.redirect(`https://www.b-tender.com/main/token=${token}&nickname=${nickname}&email=${email}`);
         }
     )(req, res, next);
 };
