@@ -110,7 +110,7 @@ app.use("/api/recipe", [recipeRouter]);
 app.use("/api/favorite", [favoriteRouter]);
 
 app.get("/", (req, res) => {
-    res.send("This is a test page!!");
+    res.send("This is a test page!!!");
 });
 
 app.listen(port, (): void => {
