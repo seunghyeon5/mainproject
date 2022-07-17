@@ -55,9 +55,9 @@ const port = config.server.port;
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:3000", "http://www.b-tender.com", "https://www.b-tender.com"];
+//const allowedOrigins = ["http://localhost:3000", "http://www.b-tender.com", "https://www.b-tender.com"];
 const options: cors.CorsOptions = {
-    origin: allowedOrigins,
+    origin: ["http://localhost:3000", "http://www.b-tender.com", "https://www.b-tender.com"],
     credentials: true // 사용자 인증이 필요한 리소스(쿠키 ..등) 접근
 };
 
