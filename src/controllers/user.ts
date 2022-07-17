@@ -93,8 +93,9 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
         if (err) return next(err);
         const { email, nickname } = user;
         const token = jwt.sign({ user: user._id }, config.jwt.secretKey as jwt.Secret, { expiresIn: "1d" });
+        res.status(200).send({ msg: "success", token, email, nickname });
        
-        res.redirect(`http://www.b-tender.com/token=${token}&nickname=${nickname}&email=${email}`);
+        // res.redirect(`http://www.b-tender.com/token=${token}&nickname=${nickname}&email=${email}`);
     })(req, res, next);
 };
 
