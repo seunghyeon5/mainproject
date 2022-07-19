@@ -19,6 +19,7 @@ import { myrecipeRouter } from "./routes/myrecipe";
 import { drinkRouter } from "./routes/drink";
 import { recipeRouter } from "./routes/recipe";
 import { favoriteRouter } from "./routes/favorite";
+import { mystoreRouter } from "./routes/store";
 
 import cors from "cors";
 
@@ -33,6 +34,7 @@ import { kakaoPassport } from "./passport/kakao";
 kakaoPassport();
 
 import { googlePassport } from "./passport/google";
+
 
 googlePassport();
 
@@ -108,6 +110,8 @@ app.use("/api/myrecipe", [myrecipeRouter]);
 app.use("/api/drink", [drinkRouter]);
 app.use("/api/recipe", [recipeRouter]);
 app.use("/api/favorite", [favoriteRouter]);
+app.use("/api/mystore", [mystoreRouter]);
+// app.use("/api/seachstore". [seachstoreRoutes]);
 
 app.get("/", (req, res) => {
     res.send("This is a test page!!!");
