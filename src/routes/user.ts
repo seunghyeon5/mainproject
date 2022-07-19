@@ -1,17 +1,18 @@
 import express, { Request, Response, NextFunction, Router } from "express";
 import userController from "../controllers/user";
 import passport from "passport";
-import user_validation from "../vaildation/user.val";
 import { authMiddleware } from "../middlewares/auth-middleware";
+import { bodyValidator } from "../middlewares/dto";
+import { CreateUserDto } from "../vaildation/user.val";
 
 const userRouter = express.Router();
 
-userRouter.post("/signup", user_validation.user_signUp, userController.signup);
+userRouter.post("/signup", bodyValidator(CreateUserDto),userController.signup);
 userRouter.post("/login", userController.login);
 userRouter.get("/me", authMiddleware, userController.checkuser);
 userRouter.delete("/", authMiddleware, userController.withdrawal);
-userRouter.put("/changenick", user_validation.user_changenickname, authMiddleware, userController.changeNickname);
-userRouter.put("/changepassword", user_validation.user_changepassword, authMiddleware, userController.changePassword);
+userRouter.put("/changenick", bodyValidator(CreateUserDto), authMiddleware, userController.changeNickname);
+userRouter.put("/changepassword", bodyValidator(CreateUserDto), authMiddleware, userController.changePassword);
 
 //마이페이지
 userRouter.get("/mypage", authMiddleware, userController.getmypage);
