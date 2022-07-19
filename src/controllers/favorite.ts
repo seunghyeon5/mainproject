@@ -6,12 +6,9 @@ import { IFavorite } from "../interfaces/favorite";
 const postlike = async (req: Request, res: Response) => {
     const userId = String(res.locals.user._id);
     const nickname = String(res.locals.user.nickname);
-    const { 
-        myrecipeId,
-        mystoreId,
-     } = req.params;
+    const {  myrecipeId  } = req.params;
     try {
-        const existLike = await Favorite.findOne({ _id: userId, myrecipeId: myrecipeId, mystoreId:mystoreId, nickname: nickname });
+        const existLike = await Favorite.findOne({ _id: userId, myrecipeId: myrecipeId, nickname: nickname });
 
         if (existLike) {
             return res.json({ result: false, msg: "이미 좋아요를 누르셨습니다." });
@@ -19,7 +16,6 @@ const postlike = async (req: Request, res: Response) => {
             const favorite = await Favorite.create({
                 userId,
                 myrecipeId,
-                mystoreId,
                 nickname
             });
             res.json({ result: true, favorite });
@@ -32,9 +28,9 @@ const postlike = async (req: Request, res: Response) => {
 
 //마이레시피에 좋아요 누른사람 조회
 const getAlluser = async (req: Request, res: Response) => {
-    const { myrecipeId,mystoreId } = req.params;
+    const { myrecipeId } = req.params;
     try {
-        const getUser: Array<IFavorite> = await Favorite.find({ myrecipeId,mystoreId });
+        const getUser: Array<IFavorite> = await Favorite.find({ myrecipeId });
         res.json({ result: true, getUser });
     } catch (err) {
         console.log(err);
@@ -151,7 +147,7 @@ export default {
     deletelike,
     getMyrecipe,
     postStorelike,
-    getMystore,
     getAllstoreuser,
-    deleteStorelike
+    deleteStorelike,
+    getMystore
  };
