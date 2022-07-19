@@ -16,6 +16,8 @@ myrecipeRouter.get("/post/:myrecipeId", authMiddleware, myrecipeController.detai
 myrecipeRouter.delete("/:myrecipeId/delete", authMiddleware, myrecipeController.deleterecipe);
 //레시피 수정
 myrecipeRouter.put("/:myrecipeId/modify", authMiddleware, myrecipeController.modifyrecipe);
+//메인페이지에 띄울 레시피
+myrecipeRouter.get("/post/mainpage", authMiddleware, myrecipeController.mainpagerecipe);
 
 export { myrecipeRouter };
 //myrecipeRouter.post("/post", authMiddleware, imageuploader.array("image",6), myrecipeController.postrecipe);//multi-images
