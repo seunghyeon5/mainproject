@@ -7,4 +7,5 @@ export interface IUser {
     _id?: Types.ObjectId;
     userId: Types.ObjectId;
     createdposts: number;
+    createdposts_store: number;
 }
