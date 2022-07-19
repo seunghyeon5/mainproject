@@ -11,7 +11,6 @@ import { initIngredientsRouter } from "./initData/ingredient";
 */
 
 import config from "./config/config";
-import productRoutes from "./routes/product";
 import { connect } from "./models";
 import { userRouter } from "./routes/user";
 import { categoryRouter } from "./routes/category";
@@ -88,7 +87,6 @@ router.use((req, res, next) => {
 });
 
 /** Routes go here */
-router.use("/products", productRoutes);
 router.use("/user", userRouter);
 
 /** Error handling */
@@ -101,7 +99,6 @@ router.use((req, res, next) => {
 });
 
 // APIs
-app.use("/api/product", [productRoutes]);
 app.use("/api/user", [userRouter]);
 app.use("/api/category", [categoryRouter]);
 app.use("/api/myrecipe", [myrecipeRouter]);
