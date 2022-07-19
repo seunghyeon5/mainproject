@@ -33,7 +33,7 @@ const signup = async (req: Request, res: Response) => {
     }
     password = bcrypt.hashSync(password, 10); //비밀번호 해싱
     await User.create({ email, nickname, password });
-    return res.json({ result: false, message: "success" });
+    return res.json({ result: true, message: "success" });
   } catch (error) {
     res
       .status(HttpStatusCode.BAD_REQUEST)
@@ -49,13 +49,13 @@ const login = async (req: Request, res: Response) => {
 
     if (!user?.email) {
       return res
-        .status(HttpStatusCode.BAD_REQUEST)
+        .status(HttpStatusCode.NOT_FOUND)
         .json({ result: false, message: "이메일 없음" });
     }
     const check = await bcrypt.compare(password, user!.password);
     if (!check) {
       return res
-        .status(HttpStatusCode.BAD_REQUEST)
+        .status(HttpStatusCode.NOT_FOUND)
         .json({ result: false, message: "비밀번호 불일치" });
     }
     //토큰 발급
