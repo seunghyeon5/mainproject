@@ -92,7 +92,6 @@ const checkuser = async (req: Request, res: Response) => {
     result: true,
     message: "success",
     userId: user._id,
-    email: user.email,
     nickName: user.nickname,
   });
 };
@@ -129,7 +128,7 @@ const kakaoCallback = async (
       { expiresIn: "1d" }
     );
 
-    res.redirect(`http://www.b-tender.com/main/token=${token}`);
+    res.redirect(`http://www.b-tender.com/oauth/token=${token}`);
   })(req, res, next);
 };
 
@@ -148,7 +147,7 @@ const googleCallback = (req: Request, res: Response, next: NextFunction) => {
         { expiresIn: "1d" }
       );
 
-      res.redirect(`https://www.b-tender.com/main/token=${token}`);
+      res.redirect(`https://www.b-tender.com/oauth/token=${token}`);
     }
   )(req, res, next);
 };
@@ -218,10 +217,8 @@ const getmypage = async (req: Request, res: Response) => {
   return res.json({
     result: true,
     message: "success",
-    _id: user._id,
-    nickname: user.nickname,
-    email: user.email,
     createdposts: user.createdposts,
+    createdposts_store: user.createdposts_store
   });
 };
 
