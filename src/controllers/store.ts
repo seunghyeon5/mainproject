@@ -62,15 +62,15 @@ const detailstore = async (req: Request, res: Response) => {
   }
 };
 
-//내가 쓴 스토어 조회
+//내가 쓴 스토어 조회 // 스토어 빈배열로 보내기 // 더미 데이터 보내기 s3 aws
 const getAllmystore = async (req: Request, res: Response) => {
   try {
       const { userId } = res.locals.user;
       if (!userId) {
           return res.json({ result: false, msg: "1" });
       }
-      const store : any = await Mystore.find({ userId });
-      res.json({ result: true, store });
+      const mystore : any = await Mystore.find({ userId });
+      res.json({ result: true, mystore });
       return;
   } catch (err) {
       res.json({ result: false });
@@ -109,7 +109,7 @@ const deletestore = async (req: Request, res: Response) => {
 const modifystore = async (req: Request, res: Response) => {
   const userId = String(res.locals.user.userId);
   const { storeId } = req.params;
-  const { title, image, address, review } = req.body;
+  const { title, address, review } = req.body;
   const existsStore: IStore | null = await Mystore.findById(storeId);
  
 
@@ -117,7 +117,7 @@ const modifystore = async (req: Request, res: Response) => {
       if (existsStore?.userId !== userId) {
           return res.json({ result: false, msg: "1" });
       } else {
-          await Mystore.findByIdAndUpdate(storeId, { $set: { title, image, address, review } });
+          await Mystore.findByIdAndUpdate(storeId, { $set: { title, address, review } });
           return res.json({ result: true, existsStore });
       }
   } catch (err) {
