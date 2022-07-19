@@ -7,7 +7,7 @@ export interface IRecipe {
   ingredients: Array<string>;
   steps: Array<string>;
   alc: number;
-  recommender_list?: Array<Types.ObjectId>;
+  recommender_list?: Array<string>;
   recommends?: number;
   brief_description: string;
   keywords: string;
