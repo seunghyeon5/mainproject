@@ -1,47 +1,68 @@
 import { Request, Response } from "express";
-//import moment from "moment";
 import Recipes from "../models/recipe";
 import ingredients from "../models/ingredient";
-import { IRecipe } from "../interfaces/recipe";
 import { IIngredient } from "../interfaces/ingredient";
+import HttpStatusCode from "../common/httpStatusCode";
 
 // 전체 리스트 출력하기
 const getRecipes = async (req: Request, res: Response) => {
-    try {
-        const recipes: IRecipe = await Recipes.find().lean();
-
-        res.json({ message: "success", recipes });
-    } catch (error) {
-        res.status(400).send({ message: "fail", error });
-    }
+  try {
+    const recipes = await Recipes.find().exec();
+    return res.json({ result: true, message: "success", recipes });
+  } catch (error) {
+    res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .send({ result: false, message: "잘못된 요청", error });
+  }
 };
 
 // 레시피 상세조회
 const getRecipe = async (req: Request, res: Response) => {
-    try {
-        const { recipeId } = req.params;
-        let recipe: IRecipe = await Recipes.findById(recipeId).lean();
-        let [ingredient] = "";
-        let temp: IIngredient;
-        let ingredient_images: Array<string> = [];
-        for (let i = 0; i < recipe.ingredients.length; i++) {
-            [ingredient] = recipe.ingredients[i].split("/");
-            temp = await ingredients.findOne({ title: ingredient }).lean();
-            ingredient_images.push(temp.image);
-        }
-        //console.log(recipe);
-        //console.log(ingredient_images);
-        if (recipe) {
-            res.json({ message: "success", images: ingredient_images, recipe: [recipe] });
-        } else {
-            res.status(406).send({ message: "fail", error: "no exist recipe" });
-        }
-    } catch (error) {
-        res.status(400).send({ message: "fail", error });
+  try {
+    const { recipeId } = req.params;
+    const { user } = res.locals;
+    const user_id = (user._id).toHexString(); 
+    
+    let recipe = await Recipes.findById(recipeId).exec();
+    let recommend:boolean = false;
+    if(recipe!.recommender_list!.find(e => e === user_id)){
+      recommend = true;
+    }else{
+      recommend = false;
     }
+    
+    let [ingredient] = "";
+    let temp: IIngredient | null;
+    let ingredient_images: Array<string> = [];
+
+    for (let i = 0; i < recipe!.ingredients.length; i++) {
+      [ingredient] = recipe!.ingredients[i].split("/");
+      temp = await ingredients.findOne({ title: ingredient }).exec();
+      ingredient_images.push(temp!.image);
+    }
+
+    if (recipe) {
+      return res.json({
+        result: true,
+        message: "success",
+        images: ingredient_images,        
+        recipe: [recipe],
+        recommend
+      });
+    } else {
+      return res
+        .status(HttpStatusCode.NOT_FOUND)
+        .json({ result: false, message: "no exist recipe" });
+    }
+  } catch (error) {
+    res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .send({ result: false, message: "잘못된 요청", error });
+  }
 };
 
+
 export default {
-    getRecipes,
-    getRecipe
+  getRecipes,
+  getRecipe  
 };
