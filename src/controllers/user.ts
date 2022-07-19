@@ -6,8 +6,9 @@ import User from "../models/user";
 import config from "../config/config";
 
 //회원가입
-const signup = async (req: Request, res: Response) => {
+const signup = async (req: Request, res: Response, next: NextFunction) => {
     let { email, nickname, password, confirmpassword } = req.body;
+
     try {
         if (password !== confirmpassword) {
             res.status(400).json({
@@ -91,11 +92,9 @@ const withdrawal = async (req: Request, res: Response, next: NextFunction) => {
 const kakaoCallback = async (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate("kakao", { failureRedirect: "/" }, (err, user) => {
         if (err) return next(err);
-        const { email, nickname } = user;
         const token = jwt.sign({ user: user._id }, config.jwt.secretKey as jwt.Secret, { expiresIn: "1d" });
-        res.status(200).send({ msg: "success", token, email, nickname });
-       
-        // res.redirect(`http://www.b-tender.com/token=${token}&nickname=${nickname}&email=${email}`);
+
+        res.redirect(`http://www.b-tender.com/main/token=${token}`);
     })(req, res, next);
 };
 
@@ -103,15 +102,14 @@ const kakaoCallback = async (req: Request, res: Response, next: NextFunction) =>
 const googleCallback = (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate(
         "google",
-        {        
+        {
             failureRedirect: "/login"
         },
         (err, user, info) => {
             if (err) return next(err);
-            const { email, nickname } = user;
             const token = jwt.sign({ user: user._id }, config.jwt.secretKey as jwt.Secret, { expiresIn: "1d" });
             //console.log(user);
-            res.redirect(`https://www.b-tender.com/main/token=${token}&nickname=${nickname}&email=${email}`);
+            res.redirect(`https://www.b-tender.com/main/token=${token}`);
         }
     )(req, res, next);
 };
