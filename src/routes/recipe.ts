@@ -8,5 +8,7 @@ const recipeRouter = express.Router();
 recipeRouter.get("/list/all", authMiddleware, recipeController.getRecipes);
 // 레시피 상세정보 
 recipeRouter.get("/list/:recipeId", authMiddleware, recipeController.getRecipe);
+// 레시피 추천하기
+recipeRouter.put("/list/:recipeId/recommend", authMiddleware, recipeController.recommendRecipe);
 
 export { recipeRouter };
