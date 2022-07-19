@@ -17,6 +17,10 @@ const UserSchema: Schema = new Schema({
     createdposts: {
         type: Number,
         default: 0
+    },
+    createdposts_store:{
+        type: Number,
+        default: 0
     }
 });
 

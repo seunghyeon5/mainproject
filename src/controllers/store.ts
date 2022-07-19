@@ -28,9 +28,9 @@ const poststore = async (req: Request, res: Response) => {
             res.json({ result: false, msg: "2" });
             return;
         }
-        let num: number = user.createdposts;
+        let num: number = user.createdposts_store;
 
-        await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: ++num } });
+        await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts_store: ++num } });
         return res.json({ result: true });
     } catch (err) {
         res.json({ result: false });
@@ -95,8 +95,8 @@ const deletestore = async (req: Request, res: Response) => {
           return;
       } else {
           await Mystore.findByIdAndDelete(storeId);
-          let num: number = user.createdposts;
-          await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: --num } });
+          let num: number = user.createdposts_store;
+          await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts_store: --num } });
           return res.json({ result: true });
       }
   } catch (err) {
