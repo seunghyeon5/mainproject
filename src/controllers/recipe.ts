@@ -61,8 +61,33 @@ const getRecipe = async (req: Request, res: Response) => {
   }
 };
 
+//추천하기
+const recommendRecipe = async (req: Request, res: Response) => {
+  try {
+    const { user } = res.locals;
+    const user_id = user._id.toHexString();
+    const { recipeId } = req.params;
+    const recipe = await Recipes.findById(recipeId).exec();
+
+    let cnt: number = recipe!.recommends!;
+
+    await Recipes.updateMany(
+      { _id: { $in: recipeId } },
+      { $set: { recommends: cnt + 1 }, $push: { recommender_list: user_id } }
+    ).exec();
+    return res
+      .status(HttpStatusCode.CREATED)
+      .json({ result: true, message: "추천" });
+  } catch (error) {
+    res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .send({ result: false, message: "잘못된 요청", error });
+  }
+};
+
 
 export default {
   getRecipes,
-  getRecipe  
+  getRecipe,
+  recommendRecipe  
 };
