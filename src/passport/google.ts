@@ -1,6 +1,6 @@
 import User from "../models/user";
 import GoogleRouter from "passport";
-import GoogleStrategy, { Strategy } from "passport-google-oauth2";
+import { Strategy } from "passport-google-oauth2";
 import config from "../config/config";
 
 const googlePassport = () => {
@@ -15,9 +15,9 @@ const googlePassport = () => {
   GoogleRouter.use(
     new Strategy(
       {
-        clientID: String(config.social.google_id),
-        clientSecret: String(config.social.google_secret),
-        callbackURL: String(config.social.google_url),
+        clientID: config.social.google_id as string,
+        clientSecret: config.social.google_secret as string,
+        callbackURL: config.social.google_url as string,
       },
       async function ( accessToken:any, refreshToken:any, profile:any, cb:any ) {
             
