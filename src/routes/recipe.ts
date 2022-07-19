@@ -10,5 +10,7 @@ recipeRouter.get("/list/all", authMiddleware, recipeController.getRecipes);
 recipeRouter.get("/list/:recipeId", authMiddleware, recipeController.getRecipe);
 // 레시피 추천하기
 recipeRouter.put("/list/:recipeId/recommend", authMiddleware, recipeController.recommendRecipe);
+// 레시피 추천취소
+recipeRouter.put("/list/:recipeId/undorecommend", authMiddleware, recipeController.undoRecommend);
 
 export { recipeRouter };
