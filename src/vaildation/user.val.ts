@@ -12,4 +12,7 @@ export class CreateUserDto {
         message: "required nickname"
     }) 
     public nickname!: string;
+
+    @Matches(/^(?=.*\d)(?=.*[a-zA-Z])(?=.*[@$!%*#?&])[0-9a-zA-Z@$!%*#?&]{3,10}$/,)
+    public newpassword!: string;
 }
