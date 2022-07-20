@@ -15,8 +15,8 @@ const poststore = async (req: Request, res: Response) => {
 
         await Mystore.create({
             title,
-            image: (req.file as Express.MulterS3.File).location,
-            key: (req.file as Express.MulterS3.File).key,
+            // image: (req.file as Express.MulterS3.File).location,
+            // key: (req.file as Express.MulterS3.File).key,
             address,
             review,
             nickname,
@@ -52,30 +52,32 @@ const getAllstore = async (req: Request, res: Response) => {
 //스토어 상세조회
 const detailstore = async (req: Request, res: Response) => {
   try {
-      const userId = String(res.locals.user.userId);
-      const { storeId } = req.params;
-      const existsStore: any = await Mystore.findById(storeId);
-      return res.json({ result: true, existsStore, userId });
+    const { storeId } = req.params;
+    const existsStore: IStore | null = await Mystore.findById(storeId);
+    return res.json({ result: true, existsStore: [existsStore] });
   } catch (err) {
       res.json({ result: false });
       console.log(err);
   }
 };
 
+
+
 //내가 쓴 스토어 조회 // 스토어 빈배열로 보내기 // 더미 데이터 보내기 s3 aws
 const getAllmystore = async (req: Request, res: Response) => {
-  try {
-      const { userId } = res.locals.user;
-      if (!userId) {
-          return res.json({ result: false, msg: "1" });
-      }
-      const mystore : any = await Mystore.find({ userId });
-      res.json({ result: true, mystore });
-      return;
-  } catch (err) {
-      res.json({ result: false });
-      console.log(err);
-  }
+    try {
+        const { userId } = res.locals.user;
+        if (!userId) {
+            return res.json({ result: false, msg: "1" });
+        }
+        const mystore = await Mystore.find({ userId });
+        // console.log(userId);
+        res.json({ result: true, mystore });
+        return;
+    } catch (err) {
+        res.json({ result: false });
+        console.log(err);
+    }
 };
 
 //내가 쓴 스토어 삭제
