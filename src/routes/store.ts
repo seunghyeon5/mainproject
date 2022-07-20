@@ -4,7 +4,7 @@ import { authMiddleware } from "../middlewares/auth-middleware";
 
 const mystoreRouter = express.Router();
 
-// 술집 전체 조회
+// 스토어 전체 조회
 mystoreRouter.get("/post/list", storeContoller.getAllstore);
 
 // 스토어 상세조회
