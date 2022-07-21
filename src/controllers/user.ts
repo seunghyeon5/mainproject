@@ -128,7 +128,7 @@ const kakaoCallback = async (
       { expiresIn: "1d" }
     );
 
-    res.redirect(`http://www.b-tender.com/oauth/token=${token}`);
+    res.redirect(`http://www.b-tender.com/token=${token}`);
   })(req, res, next);
 };
 
