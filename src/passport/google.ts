@@ -19,31 +19,26 @@ const googlePassport = () => {
         clientSecret: config.social.google_secret as string,
         callbackURL: config.social.google_url as string,
       },
-      async function ( accessToken:any, refreshToken:any, profile:any, cb:any ) {
-        console.log("11")
-            
+      async function ( accessToken:any, refreshToken:any, profile:any, done:any ) {           
         try {
           let email: string = profile._json.email;
           let provider: string = profile.provider;
-          // console.log(provider,email)  
-          const user = await User.find({ email: email }, {provider: provider});
+           
+          const existUser = await User.findOne({$and:[{email: email},{provider:provider}]});
           //동일한 이메일을 가졌을 때는 이미 가입중인 사용자라면 바로 로그인하도록 아니라면 신규 사용자 생성
-          if (user) {
-            // user.socialId = profile.id;
-            // user.save();
-            return cb(null, user);
+          if (existUser) {
+            
+            return done(null, existUser);
           } else {
-            const newUser = await User.create({
-              // socialtype: "google",
-              // socialId: profile.id,
-              provider: provider,
+            const newUser = await User.create({             
+              email,
               nickname: profile._json.name,
-              email: email,
+              provider              
             });
-            return cb(null, newUser);
+            return done(null, newUser);
           }
         } catch (error) {
-          return cb(error);
+          return done(error);
         }
       }
     )
