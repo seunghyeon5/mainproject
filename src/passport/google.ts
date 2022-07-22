@@ -2,6 +2,8 @@ import User from "../models/user";
 import GoogleRouter from "passport";
 import { Strategy } from "passport-google-oauth2";
 import config from "../config/config";
+import { IUser } from "../interfaces/user"
+import { Document, Types } from "mongoose"
 
 const googlePassport = () => {
    
@@ -12,11 +14,10 @@ const googlePassport = () => {
         clientSecret: config.social.google_secret as string,
         callbackURL: config.social.google_url as string,
       },
-      async function ( accessToken:any, refreshToken:any, profile:any, done:any ) {           
+      async function ( accessToken:any, refreshToken:any, profile:{ id: any; displayName: any; _json: { email: any; }; }, done: (arg0: unknown, arg1: (IUser & Document<any, any, any> & { _id: Types.ObjectId; }) | undefined) => void ) {           
         try {
-          const email: string = profile.email
-          const provider: string = profile.provider;
-          const locale:string = profile._json.locale
+          const email: string = profile._json.email
+          const provider: string = "google";
           console.log(profile)
            
 
@@ -29,14 +30,13 @@ const googlePassport = () => {
           } else {
             const newUser = await User.create({             
               email,
-              nickname: profile._json.name,
-              provider,
-              locale              
+              nickname: profile.displayName,
+              provider,             
             });
             return done(null, newUser);
           }
         } catch (error) {
-          return done(error);
+          return;
         }
       }
     )
