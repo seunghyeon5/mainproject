@@ -16,6 +16,8 @@ const googlePassport = () => {
         try {
           const email: string = profile.emails[0].value;
           const provider: string = profile.provider;
+          const locale:string = profile._json.locale
+          console.log(provider, locale)
            
           const existUser = await User.findOne({$and:[{email: email},{provider:provider}]});
           //console.log("here",existUser);
@@ -27,7 +29,8 @@ const googlePassport = () => {
             const newUser = await User.create({             
               email,
               nickname: profile._json.name,
-              provider              
+              provider,
+              locale              
             });
             return done(null, newUser);
           }
