@@ -24,7 +24,7 @@ userRouter.get("/kakao/callback", userController.kakaoCallback);
 
 // 구글 로그인
 //userRouter.get( "/google", passport.authenticate("google", { scope: ["profile", "email"] }));
-userRouter.get( "/google", passport.authenticate("google", { scope: ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"] }));
+userRouter.get( "/google", passport.authenticate("google"));
 // 구글 로그인 Callback
 userRouter.get("/google/callback", userController.googleCallback);
 
