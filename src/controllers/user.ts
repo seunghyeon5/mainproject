@@ -145,8 +145,7 @@ const googleCallback = (req: Request, res: Response, next: NextFunction) => {
         { user: user._id },
         config.jwt.secretKey as jwt.Secret,
         { expiresIn: "1d" }
-      );
-
+      );     
       res.redirect(`http://www.b-tender.com/oauth/token=${token}`);
     }
   )(req, res, next);
