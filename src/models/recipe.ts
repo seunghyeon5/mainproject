@@ -41,4 +41,11 @@ const RecipeSchema: Schema = new Schema({
   }, 
 });
 
+RecipeSchema.virtual("RecipeId").get(function () {
+  return this._id.toHexString();
+});
+RecipeSchema.set("toJSON", {
+  virtuals: true
+});
+
 export default mongoose.model<IRecipe & Document>("Recipes", RecipeSchema);

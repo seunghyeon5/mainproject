@@ -13,4 +13,11 @@ const favoriteSchema: Schema = new Schema({
     }
 });
 
+favoriteSchema.virtual("favoriteId").get(function () {
+    return this._id.toHexString();
+});
+favoriteSchema.set("toJSON", {
+    virtuals: true
+});
+
 export default mongoose.model<IFavorite & Document>("favorite", favoriteSchema);

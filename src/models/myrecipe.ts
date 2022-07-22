@@ -35,4 +35,11 @@ const MyrecipeSchema: Schema = new Schema(
     }
 );
 
+MyrecipeSchema.virtual("MyrecipeId").get(function () {
+    return this._id.toHexString();
+});
+MyrecipeSchema.set("toJSON", {
+    virtuals: true
+});
+
 export default mongoose.model<IMyrecipe & Document>("MyRecipe", MyrecipeSchema);

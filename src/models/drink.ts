@@ -32,4 +32,12 @@ const DrinkSchema: Schema = new Schema({
         required: true
     }
 });
+
+DrinkSchema.virtual("DrinksId").get(function () {
+    return this._id.toHexString();
+});
+DrinkSchema.set("toJSON", {
+    virtuals: true
+});
+
 export default mongoose.model<IDrink & Document>("Drinks", DrinkSchema);

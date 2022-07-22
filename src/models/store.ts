@@ -31,4 +31,11 @@ const MyStoreSchema: Schema = new Schema(
     }
 );
 
+MyStoreSchema.virtual("MystoreId").get(function () {
+    return this._id.toHexString();
+});
+MyStoreSchema.set("toJSON", {
+    virtuals: true
+});
+
 export default mongoose.model<IStore & Document>("Mystore", MyStoreSchema);
