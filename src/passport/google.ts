@@ -21,10 +21,11 @@ const googlePassport = () => {
       },
       async function ( accessToken:any, refreshToken:any, profile:any, done:any ) {           
         try {
-          let email: string = profile._json.email;
-          let provider: string = profile.provider;
+          const email: string = profile._json.email;
+          const provider: string = profile.provider;
            
           const existUser = await User.findOne({$and:[{email: email},{provider:provider}]}).exec();
+          console.log("here",existUser);
           //동일한 이메일을 가졌을 때는 이미 가입중인 사용자라면 바로 로그인하도록 아니라면 신규 사용자 생성
           if (existUser?.email===email) {
             
