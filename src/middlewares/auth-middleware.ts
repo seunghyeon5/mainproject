@@ -14,7 +14,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     }
     if (tokentype !== "Bearer") {
         res.status(401).send({
-            errorMessage: "로그인 후 사용하세요 🙄"
+            message: "토큰값 에러"
         });
         return;
     }
@@ -22,15 +22,16 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         const user: jwt.JwtPayload | string = jwt.verify(tokenvalue, config.jwt.secretKey as jwt.Secret);
         User.findById((user as jwt.JwtPayload).user).then((user) => {
             // console.log(user);
-            res.locals.user = user;
-            next();
-            return;
+            res.locals = { user }
+            return next();
         });
     } catch (err) {
         res.status(401).send({
-            errorMessage: "로그인 후 사용하세요"
+            message: "로그인 후 사용하세요"
         });
         console.log(err);
         return;
     }
 };
+
+export default authMiddleware

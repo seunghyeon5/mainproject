@@ -9,4 +9,5 @@ export interface IStore {
     review: string;
     userId: string;
     nickname: string;
+    favorite_count: number;
 }

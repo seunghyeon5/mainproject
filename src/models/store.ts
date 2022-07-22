@@ -20,6 +20,10 @@ const MyStoreSchema: Schema = new Schema(
         },
         nickname: {
             type: String
+        },
+        favorite_count:{
+            type:Number,
+            default: 0
         }
     },
     {
