@@ -15,6 +15,14 @@ const categorySchema: Schema = new Schema({
     required: true,
   },
 });
+
+categorySchema.virtual("categoryId").get(function () {
+  return this._id.toHexString();
+});
+categorySchema.set("toJSON", {
+  virtuals: true
+});
+
 export default mongoose.model<ICategory & Document>(
   "categories",
   categorySchema
