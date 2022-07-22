@@ -5,11 +5,15 @@ import { IUser } from "../interfaces/user";
 const UserSchema: Schema = new Schema({
     email: {
         type: String,
-        unique: true
+        required: true
     },
     nickname: {
         type: String,
-        unique: true
+        required: true
+    },
+    provider:{
+        type:String,
+        default:"b_tender"
     },
     password: {
         type: String
@@ -21,11 +25,7 @@ const UserSchema: Schema = new Schema({
     createdposts_store:{
         type: Number,
         default: 0
-    },
-    provider:{
-        type:String,
-        default:"b_tender"
-    }
+    }    
 });
 
 UserSchema.virtual("userId").get(function () {

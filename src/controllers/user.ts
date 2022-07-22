@@ -18,7 +18,7 @@ const signup = async (req: Request, res: Response) => {
       });
     }
     // 이메일 중복확인 버튼
-    const existEmail = await User.findOne({ email });
+    const existEmail = await User.findOne({$and:[{email: email},{provider:"b_tender"}]});
     if (existEmail) {
       return res
         .status(HttpStatusCode.BAD_REQUEST)
@@ -45,7 +45,7 @@ const signup = async (req: Request, res: Response) => {
 const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({$and:[{email: email},{provider:"b_tender"}]});
 
     if (!user?.email) {
       return res
