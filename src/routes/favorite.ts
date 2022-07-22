@@ -13,13 +13,13 @@ favoriteRouter.delete("/:myrecipeId/delete", authMiddleware, favoriteController.
 favoriteRouter.get("/getmyrecipe", authMiddleware, favoriteController.getMyrecipe);
 
 //마이 스토어에 좋아요 누르기
-favoriteRouter.post("/:mystoreId", authMiddleware, favoriteController.postlike);
+favoriteRouter.post("/store/:mystoreId", authMiddleware, favoriteController.postStorelike);
 //마이스토어 좋아요 누른사람 조회
-favoriteRouter.get("/:mystoreId/list", favoriteController.getAlluser);
+favoriteRouter.get("/store/:mystoreId/list", favoriteController.getAllstoreuser);
 //좋아요 취소하기
-favoriteRouter.delete("/:mystoreId/delete", authMiddleware, favoriteController.deletelike);
+favoriteRouter.delete("/store/:mystoreId/delete", authMiddleware, favoriteController.deleteStorelike);
 //내가 좋아요누른 마이레시피 조회
-favoriteRouter.get("/getmystore", authMiddleware, favoriteController.getMyrecipe);
+favoriteRouter.get("/store/getmystore", authMiddleware, favoriteController.getMystore);
 
 
 
