@@ -3,8 +3,6 @@ import request from "supertest";
 import mongoose from "mongoose";
 import config from "../config/config";
 
-const port = config.server.port;
-let server:any
 let token = ""
 
 beforeAll(async () => {
