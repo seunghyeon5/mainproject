@@ -4,7 +4,16 @@ import { Strategy } from "passport-google-oauth2";
 import config from "../config/config";
 
 const googlePassport = () => {
-   
+  
+  GoogleRouter.serializeUser((user, done) => {
+    done(null, user);
+});
+
+GoogleRouter.deserializeUser((user: any, done) => {
+    done(null, user);
+});
+
+    }   
   GoogleRouter.use(
     new Strategy(
       {
@@ -14,11 +23,9 @@ const googlePassport = () => {
       },
       async function ( accessToken:any, refreshToken:any, profile:any, done:any ) {           
         try {
-          const email: string = profile.email
+          const email: string = profile._json.email;
           const provider: string = profile.provider;
-          const locale:string = profile._json.locale
-          console.log(profile)
-           
+            
 
           const existUser = await User.findOne({$and:[{email: email},{provider:provider}]});
           //console.log("here",existUser);
@@ -30,8 +37,7 @@ const googlePassport = () => {
             const newUser = await User.create({             
               email,
               nickname: profile._json.name,
-              provider,
-              locale              
+              provider                       
             });
             return done(null, newUser);
           }
@@ -42,15 +48,7 @@ const googlePassport = () => {
     )
   );
 
-  GoogleRouter.serializeUser((user, done) => {
-    done(null, user);
-});
 
-GoogleRouter.deserializeUser((user: any, done) => {
-    done(null, user);
-});
-
-    }
 
 
 export { googlePassport };
