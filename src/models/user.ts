@@ -21,6 +21,10 @@ const UserSchema: Schema = new Schema({
     createdposts_store:{
         type: Number,
         default: 0
+    },
+    provider:{
+        type:String,
+        default:"b_tender"
     }
 });
 
