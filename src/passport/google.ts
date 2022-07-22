@@ -11,7 +11,6 @@ const googlePassport = () => {
         clientID: config.social.google_id as string,
         clientSecret: config.social.google_secret as string,
         callbackURL: config.social.google_url as string,
-        passReqToCallback: true,
       },
       async function ( accessToken:any, refreshToken:any, profile:any, done:any ) {           
         try {
