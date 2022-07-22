@@ -14,7 +14,7 @@ const googlePassport = () => {
       },
       async function ( accessToken:any, refreshToken:any, profile:any, done:any ) {           
         try {
-          const email: string = profile._json.email;
+          const email: string = profile.email;
           const provider: string = profile.provider;
            
           const existUser = await User.findOne({$and:[{email: email},{provider:provider}]});
