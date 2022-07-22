@@ -14,7 +14,7 @@ const googlePassport = () => {
       },
       async function ( accessToken:any, refreshToken:any, profile:any, done:any ) {           
         try {
-          const email: string = profile.emails[0].value;
+          const email: string | undefined = profile.emails[0].value;
           const provider: string = profile.provider;
           const locale:string = profile._json.locale
           console.log(provider, locale)
