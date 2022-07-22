@@ -19,10 +19,10 @@ GoogleRouter.deserializeUser((user: any, done) => {
       {
         clientID: config.social.google_id as string,
         clientSecret: config.social.google_secret as string,
-        callbackURL: config.social.google_url as string,
-        scope:["openid","https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"]
+        callbackURL: config.social.google_url as string
+        //scope:["openid","https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"]
       },
-      async function ( accessToken:any, refreshToken:any, profile:any, done:any ) {           
+      async function ( accessToken, refreshToken, profile, done ) {           
         try {
           const email: string = profile._json.email;
           const provider: string = profile.provider;
