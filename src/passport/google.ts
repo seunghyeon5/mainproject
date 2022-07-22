@@ -2,6 +2,8 @@ import User from "../models/user";
 import GoogleRouter from "passport";
 import { Strategy } from "passport-google-oauth2";
 import config from "../config/config";
+import { IUser } from "../interfaces/user"
+import { Document, Types } from "mongoose"
 
 const googlePassport = () => {
    
@@ -12,12 +14,13 @@ const googlePassport = () => {
         clientSecret: config.social.google_secret as string,
         callbackURL: config.social.google_url as string,
       },
-      async function ( accessToken:any, refreshToken:any, profile:any, done:any ) {           
+      async function ( accessToken:any, refreshToken:any, profile:{ id: any; displayName: any; _json: { email: any; }; }, done: (arg0: unknown, arg1: (IUser & Document<any, any, any> & { _id: Types.ObjectId; }) | undefined) => void ) {           
         try {
-          const email: string = profile.email;
-          const provider: string = profile.provider;
-          console.log(email)
+          const email: string = profile._json.email
+          const provider: string = "google";
+          console.log(profile)
            
+
           const existUser = await User.findOne({$and:[{email: email},{provider:provider}]});
           //console.log("here",existUser);
           //동일한 이메일을 가졌을 때는 이미 가입중인 사용자라면 바로 로그인하도록 아니라면 신규 사용자 생성
@@ -27,13 +30,13 @@ const googlePassport = () => {
           } else {
             const newUser = await User.create({             
               email,
-              nickname: profile._json.name,
-              provider              
+              nickname: profile.displayName,
+              provider,             
             });
             return done(null, newUser);
           }
         } catch (error) {
-          return done(error);
+          return;
         }
       }
     )
