@@ -11,10 +11,11 @@ const googlePassport = () => {
         clientID: config.social.google_id as string,
         clientSecret: config.social.google_secret as string,
         callbackURL: config.social.google_url as string,
+        passReqToCallback: true,
       },
       async function ( accessToken:any, refreshToken:any, profile:any, done:any ) {           
         try {
-          const email: string = profile.emails;
+          const email: string = profile.emails[0].value;
           const provider: string = profile.provider;
           console.log("show",email,provider);
           const existUser = await User.findOne({$and:[{email: email},{provider:provider}]});
