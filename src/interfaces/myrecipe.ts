@@ -9,4 +9,5 @@ export interface IMyrecipe {
     brief_description: string;
     userId: string;
     nickname: string;
+    favorite_count: number;
 }

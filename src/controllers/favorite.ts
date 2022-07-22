@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import Favorite from "../models/favorite";
 import { IFavorite } from "../interfaces/favorite";
+import myrecipe from "../models/myrecipe";
 
 //마이레시피에 좋아요 누르기
 const postlike = async (req: Request, res: Response) => {
@@ -20,6 +21,12 @@ const postlike = async (req: Request, res: Response) => {
             });
             res.json({ result: true, favorite });
         }
+        // const Myrecipe = await myrecipe.findById({ _id: myrecipeId})
+
+        // // let num: number = Myrecipe.favorite_count;
+
+        // await myrecipe.findOneAndUpdate({ _id: myrecipeId }, {$set: {favorite_count: ++num}})
+        // return res.json({ result: true })
     } catch (err) {
         console.log(err);
         res.json({ result: false });

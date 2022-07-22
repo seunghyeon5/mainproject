@@ -19,6 +19,10 @@ const MyrecipeSchema: Schema = new Schema(
         brief_description: {
             type: String
         },
+        favorite_count:{
+            type: Number,
+            default: 0
+        },
         userId: {
             type: String
         },
