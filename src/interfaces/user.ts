@@ -8,4 +8,5 @@ export interface IUser {
     userId: Types.ObjectId;
     createdposts: number;
     createdposts_store: number;
+    provider: string;
 }

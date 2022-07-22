@@ -13,11 +13,12 @@ const kakaoPassport = () => {
             async (accessToken: any, refreshToken: any, profile: any, done: any) => {
                 try {
                     let email: string = profile._json.kakao_account.email;
+                    let provider: string = profile.provider;
                     const existUser = await User.findOne({
                         // 카카오 플랫폼에서 로그인 했고 이메일이 일치하는경우
                         //email: profile._json.kakao_account_email
                         email: email
-                    });
+                    }, {provider: provider});
                     //console.log(email);
                     //console.log(existUser);
                     // 이미 가입된 카카오 프로필이면 성공
@@ -25,10 +26,11 @@ const kakaoPassport = () => {
                         done(null, existUser); // 로그인 인증 완료
                     } else {
                         const newUser = await User.create({
-                            //email: profile._json.kakao_account_email,
+                            provider: provider,
                             email: email,
                             nickname: profile.username
                         });
+                        console.log(newUser)
                         
                         done(null, newUser); // 회원가입하고 로그인 인증 완료
                         return;
