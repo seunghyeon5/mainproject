@@ -5,32 +5,21 @@ const GoogleStrategy = require("passport-google-oauth2").Strategy;
 import config from "../config/config";
 
 const googlePassport = () => {
-/*
-  GoogleRouter.serializeUser((user, done) => {
-    done(null, user);
-});
-
-GoogleRouter.deserializeUser((user: any, done) => {
-    done(null, user);
-});
-*/
-
-  
-  GoogleRouter.use(
+    GoogleRouter.use(
     new GoogleStrategy(
       {
         clientID: config.social.google_id,
         clientSecret: config.social.google_secret,
-        callbackURL: config.social.google_url,
-        scope: ["email","profile"],
+        callbackURL: config.social.google_url,        
         accessType: 'offline',
         prompt: 'consent'    
       },
       async function ( accessToken:any, refreshToken:any, profile:any, done:any ) {           
         try {
+          console.log("here",profile);
           const email: string = profile._json.email;
           const provider: string = profile.provider;          
-          console.log("here",profile);
+          console.log("here",email);         
             
 
           const existUser = await User.findOne({$and:[{email: email},{provider:provider}]});
