@@ -137,28 +137,6 @@ const deleterecipe = async (req: Request, res: Response) => {
     }
 };
 
-//내가 쓴 레시피 수정
-const modifyrecipe = async (req: Request, res: Response) => {
-    const { userId } = res.locals.user;
-    const { myrecipeId } = req.params;
-    const { title, image, ingredients, brief_description } = req.body;
-    const existsRecipe: IMyrecipe | null = await MyRecipe.findById(myrecipeId);
-    // console.log(existsRecipe);
-
-    try {
-        if (existsRecipe?.userId !== userId) {
-            console.log(userId);
-            return res.json({ result: false, msg: "1" });
-        } else {
-            await MyRecipe.findByIdAndUpdate(myrecipeId, { $set: { title, image, ingredients, brief_description } });
-            return res.json({ result: true, existsRecipe });
-        }
-    } catch (err) {
-        res.json({ result: false });
-        console.log(err);
-    }
-};
-
 
 //홈화면에 띄울 레시피목록
 // const mainpagerecipe = async (req: Request, res: Response) => {
@@ -170,4 +148,4 @@ const modifyrecipe = async (req: Request, res: Response) => {
 //         console.log(err);
 //     }
 // };
-export default { postrecipe, getAllrecipe, deleterecipe, modifyrecipe, detailrecipe, getAllmyrecipe};
+export default { postrecipe, getAllrecipe, deleterecipe, detailrecipe, getAllmyrecipe};
