@@ -137,15 +137,4 @@ const deleterecipe = async (req: Request, res: Response) => {
     }
 };
 
-
-//홈화면에 띄울 레시피목록
-// const mainpagerecipe = async (req: Request, res: Response) => {
-//     try {
-//         const myrecipe: Array<IMyrecipe> = await MyRecipe.find().sort({ createdAt: "desc" }).limit(5);
-//         return res.json({ result: true, myrecipe });
-//     } catch (err) {
-//         res.json({ result: false });
-//         console.log(err);
-//     }
-// };
 export default { postrecipe, getAllrecipe, deleterecipe, detailrecipe, getAllmyrecipe};
