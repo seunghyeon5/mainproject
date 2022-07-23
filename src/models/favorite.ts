@@ -10,6 +10,12 @@ const favoriteSchema: Schema = new Schema({
     },
     userId: {
         type: String
+    },
+    MystoreId:{
+        type: String
+    },
+    category:{
+        type: String
     }
 });
 
