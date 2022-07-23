@@ -5,6 +5,7 @@ import { IMyrecipe } from "../interfaces/myrecipe";
 import config from "../config/config";
 import AWS from "aws-sdk";
 import { IUser } from "../interfaces/user";
+import HttpStatusCode from "../common/httpStatusCode";
 
 AWS.config.update({
     accessKeyId: config.aws.access_key_id,
@@ -16,7 +17,7 @@ const s3 = new AWS.S3();
 //레시피 작성
 const postrecipe = async (req: Request, res: Response) => {
     try {
-        const { title, ingredients, brief_description } = req.body;
+        const { title, ingredients, brief_description, steps } = req.body;
         const { userId, nickname } = res.locals.user;
         //console.log("loc",(req.file as Express.MulterS3.File).location);
         //console.log("key",(req.file as Express.MulterS3.File).key);
@@ -29,22 +30,25 @@ const postrecipe = async (req: Request, res: Response) => {
             key: (req.file as Express.MulterS3.File).key,
             ingredients,
             brief_description,
+            steps,
             nickname,
             userId
         });
 
         const user = await User.findById({ _id: userId });
         if (!user) {
-            res.json({ result: false, msg: "2" });
-            return;
+            return res
+            .status(HttpStatusCode.NOT_FOUND)
+            .json({ result: false, message: "no exist user" });
         }
         let num: number = user.createdposts;
 
         await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: ++num } });
-        return res.json({ result: true });
-    } catch (err) {
-        res.json({ result: false });
-        console.log(err);
+        return res.json({ result: true, message: "success" });;
+    } catch (error) {
+        res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .send({ result: false, message: "잘못된 요청", error });
     }
 };
 
@@ -52,10 +56,11 @@ const postrecipe = async (req: Request, res: Response) => {
 const getAllrecipe = async (req: Request, res: Response) => {
     try {
         const myrecipe: Array<IMyrecipe> = await MyRecipe.find().sort({ createdAt: "desc" });
-        return res.json({ result: true, myrecipe });
-    } catch (err) {
-        res.json({ result: false });
-        console.log(err);
+        return res.json({ result: true, message: "success", myrecipe });
+    } catch (error) {
+        res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .send({ result: false, message: "잘못된 요청", error });
     }
 };
 
@@ -64,7 +69,7 @@ const detailrecipe = async (req: Request, res: Response) => {
     try {
         const { myrecipeId } = req.params;
         const existsRecipe: IMyrecipe | null = await MyRecipe.findById(myrecipeId);
-        return res.json({ result: true, existsRecipe: [existsRecipe] });
+        return res.json({ result: true, message: "success", existsRecipe: [existsRecipe] });
     } catch (err) {
         res.json({ result: false });
         console.log(err);
@@ -76,15 +81,17 @@ const getAllmyrecipe = async (req: Request, res: Response) => {
     try {
         const { userId } = res.locals.user;
         if (!userId) {
-            return res.json({ result: false, msg: "1" });
+            return res
+            .status(HttpStatusCode.NOT_FOUND)
+            .json({ result: false, message: "no exist user" });
         }
         const Myrecipe = await MyRecipe.find({ userId });
         // console.log(userId);
-        res.json({ result: true, Myrecipe });
-        return;
-    } catch (err) {
-        res.json({ result: false });
-        console.log(err);
+        return res.json({ result: true, message: "success", Myrecipe });
+    } catch (error) {
+        res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .send({ result: false, message: "잘못된 요청", error });
     }
 };
 
@@ -98,8 +105,8 @@ const deleterecipe = async (req: Request, res: Response) => {
 
         s3.deleteObject(
             {
-                Bucket: String(config.aws.bucket),
-                Key: String(existsRecipe?.key)
+                Bucket: config.aws.bucket as string,
+                Key: existsRecipe?.key as string
             },
             (err, data) => {
                 if (err) {
@@ -109,19 +116,24 @@ const deleterecipe = async (req: Request, res: Response) => {
         );
 
         if (!user) {
-            return res.json({ result: false, msg: "1" });
+            return res
+            .status(HttpStatusCode.NOT_FOUND)
+            .json({ result: false, message: "no exist user" });
         }
         if (existsRecipe?.userId !== userId) {
-            return res.json({ result: false, message: "2" });
+            return res
+            .status(HttpStatusCode.NOT_FOUND)
+            .json({ result: false, message: "no exist user" });
         } else {
             await MyRecipe.findByIdAndDelete(myrecipeId);
             let num: number = user.createdposts;
             await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: --num } });
-            return res.json({ result: true });
+            return res.json({ result: true, message: "success"});
         }
-    } catch (err) {
-        res.json({ result: false });
-        console.log(err);
+    } catch (error) {
+        res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .send({ result: false, message: "잘못된 요청", error });
     }
 };
 
@@ -146,6 +158,7 @@ const modifyrecipe = async (req: Request, res: Response) => {
         console.log(err);
     }
 };
+
 
 //홈화면에 띄울 레시피목록
 // const mainpagerecipe = async (req: Request, res: Response) => {
