@@ -3,6 +3,7 @@ import Favorite from "../models/favorite";
 import { IFavorite } from "../interfaces/favorite";
 import myrecipe from "../models/myrecipe";
 import Mystore from "../models/store";
+import { IStore } from "../interfaces/store";
 
 //마이레시피에 좋아요 누르기
 const postlike = async (req: Request, res: Response) => {
@@ -10,7 +11,8 @@ const postlike = async (req: Request, res: Response) => {
     const nickname = String(res.locals.user.nickname);
     const { myrecipeId } = req.params;
     try {
-        const existLike = await Favorite.findOne({ _id: userId, myrecipeId: myrecipeId, nickname: nickname });
+        const existLike = await Favorite.findOne({ userId, myrecipeId, nickname });
+        // console.log(existLike)
         const Myrecipe = await myrecipe.findById({ _id: myrecipeId });
         if (!Myrecipe) {
             return res.json({ result: false, msg: "존재하지 않는 값입니다." });
@@ -21,7 +23,8 @@ const postlike = async (req: Request, res: Response) => {
             const favorite = await Favorite.create({
                 userId,
                 myrecipeId,
-                nickname
+                nickname,
+                category: "myrecipe"
             });
             let num: number = Myrecipe.favorite_count;
             await myrecipe.findOneAndUpdate({ _id: myrecipeId }, { $set: { favorite_count: ++num } });
@@ -79,7 +82,7 @@ const deletelike = async (req: Request, res: Response) => {
 const getMyrecipe = async (req: Request, res: Response) => {
     const userId = String(res.locals.user._id);
     try {
-        const getMyrecipe: Array<IFavorite> = await Favorite.find({ userId });
+        const getMyrecipe: Array<IFavorite> = await Favorite.find({ userId, category:"myrecipe" });
 
         res.json({ result: true, getMyrecipe });
     } catch (err) {
@@ -95,9 +98,11 @@ const postStorelike = async (req: Request, res: Response) => {
     const userId = String(res.locals.user._id);
     const nickname = String(res.locals.user.nickname);
     const { MystoreId } = req.params;
+    console.log({MystoreId})
     try {
-        const existLike = await Favorite.findOne({ _id: userId, MystoreId: MystoreId, nickname: nickname });
-        const Store = await Mystore.findById({ _id: MystoreId });
+        const existLike = await Favorite.findOne({ userId, MystoreId, nickname });
+        console.log({existLike})
+        const Store: IStore | null = await Mystore.findById({ _id: MystoreId });
         if (!Store) {
             res.json({ result: false, msg: "존재하지 않는 값입니다." });
             return;
@@ -108,10 +113,11 @@ const postStorelike = async (req: Request, res: Response) => {
             const favorite = await Favorite.create({
                 userId,
                 MystoreId,
-                nickname
+                nickname,
+                category:"mystore"
             });
             let num: number = Store.favorite_count;
-            await myrecipe.findOneAndUpdate({ _id: MystoreId }, { $set: { favorite_count: ++num } });
+            await Mystore.findOneAndUpdate({ _id: MystoreId }, { $set: { favorite_count: ++num } });
             return res.json({ result: true, favorite });
         }
     } catch (err) {
@@ -150,7 +156,7 @@ const deleteStorelike = async (req: Request, res: Response) => {
         } else {
             await Favorite.findByIdAndDelete(findUser);
             let num: number = Store.favorite_count;
-            await myrecipe.findOneAndUpdate({ _id: MystoreId }, { $set: { favorite_count: --num } });
+            await Mystore.findOneAndUpdate({ _id: MystoreId }, { $set: { favorite_count: --num } });
             return res.json({ result: true });
         }
     } catch (err) {
@@ -163,7 +169,7 @@ const deleteStorelike = async (req: Request, res: Response) => {
 const getMystore = async (req: Request, res: Response) => {
     const userId = String(res.locals.user._id);
     try {
-        const getMystore: Array<IFavorite> = await Favorite.find({ userId });
+        const getMystore: Array<IFavorite> = await Favorite.find({ userId, category:"mystore" });
         res.json({ result: true, getMystore });
     } catch (err) {
         console.log(err);
