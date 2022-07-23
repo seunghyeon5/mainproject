@@ -1,10 +1,11 @@
 import User from "../models/user";
 import GoogleRouter from "passport";
-import { Strategy } from "passport-google-oauth2";
+//import { Strategy } from "passport-google-oauth2";
+const GoogleStrategy = require("passport-google-oauth2").Strategy;
 import config from "../config/config";
 
 const googlePassport = () => {
-
+/*
   GoogleRouter.serializeUser((user, done) => {
     done(null, user);
 });
@@ -12,16 +13,19 @@ const googlePassport = () => {
 GoogleRouter.deserializeUser((user: any, done) => {
     done(null, user);
 });
+*/
 
-    }   
+  
   GoogleRouter.use(
-    new Strategy(
+    new GoogleStrategy(
       {
         clientID: config.social.google_id as string,
         clientSecret: config.social.google_secret as string,
-        callbackURL: config.social.google_url as string        
+        callbackURL: config.social.google_url as string,
+        accessType: 'offline',
+        prompt: 'consent'    
       },
-      async function ( accessToken, refreshToken, profile, done ) {           
+      async function ( accessToken:any, refreshToken:any, profile:any, done:any ) {           
         try {
           const email: string = profile._json.email;
           const provider: string = profile.provider;          
@@ -49,7 +53,7 @@ GoogleRouter.deserializeUser((user: any, done) => {
     )
   );
 
-
+    }
 
 
 export { googlePassport };
