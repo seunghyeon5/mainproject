@@ -31,7 +31,7 @@ const getComments = async (req: Request, res: Response) => {
     const { mystoreId } = req.params;
     try {
         if (!mystoreId) {
-            return res.status(HttpStatusCode.NOT_FOUND).json({ result: false, message: "잘못된 정보" });
+            return res.status(HttpStatusCode.NOT_FOUND).json({ result: false, message: "잘못된 접근" });
         }
         const getAllcomment = await Comment.find({ mystoreId }).sort({ createdAt: "desc" });
         return res.status(HttpStatusCode.OK).json({ result: true, getAllcomment });
