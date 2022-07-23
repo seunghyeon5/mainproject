@@ -19,9 +19,10 @@ GoogleRouter.deserializeUser((user: any, done) => {
   GoogleRouter.use(
     new GoogleStrategy(
       {
-        clientID: config.social.google_id as string,
-        clientSecret: config.social.google_secret as string,
-        callbackURL: config.social.google_url as string,
+        clientID: config.social.google_id,
+        clientSecret: config.social.google_secret,
+        callbackURL: config.social.google_url,
+        scope: ["email","profile"],
         accessType: 'offline',
         prompt: 'consent'    
       },
