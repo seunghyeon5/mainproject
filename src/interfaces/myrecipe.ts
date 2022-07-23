@@ -7,6 +7,7 @@ export interface IMyrecipe {
     key: string;
     ingredients: Array<string>;
     brief_description: string;
+    steps: Array<string>;
     userId: string;
     nickname: string;
     favorite_count: number;
