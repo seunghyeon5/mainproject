@@ -31,7 +31,7 @@ userRouter.get("/kakao/callback", userController.kakaoCallback);
 // 'https://www.googleapis.com/auth/plus.login',
 // 'https://www.googleapis.com/auth/userinfo.email'] }));
 
-userRouter.get( "/google", passport.authenticate("google",{ scope: "openid https://www.googleapis.com/auth/userinfo.email"}));
+userRouter.get( "/google", passport.authenticate("google",{ scope: "openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email"}));
 
 // 구글 로그인 Callback
 userRouter.get("/google/callback", userController.googleCallback);
