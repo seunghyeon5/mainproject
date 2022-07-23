@@ -62,6 +62,7 @@ const allowedOrigins = [
   config.server.host2 as string,
   config.server.host3 as string,
   config.server.host4 as string,
+  "https://www.googleapis.com/auth/userinfo.email",
 ];
 const options: cors.CorsOptions = {
   origin: allowedOrigins,
