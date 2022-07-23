@@ -16,6 +16,17 @@ const getRecipes = async (req: Request, res: Response) => {
   }
 };
 
+const getMostRecommendedRecipes = async (req: Request, res: Response) => {
+  try {
+    const recipes = await Recipes.find().sort({ recommends: "desc" }).limit(5);
+    return res.json({ result: true, message: "success", recipes });
+  } catch (error) {
+    res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .send({ result: false, message: "잘못된 요청", error });
+  }
+};
+
 // 레시피 상세조회
 const getRecipe = async (req: Request, res: Response) => {
   try {
@@ -112,6 +123,7 @@ const undoRecommend = async (req: Request, res: Response) => {
 export default {
   getRecipes,
   getRecipe,
+  getMostRecommendedRecipes,
   recommendRecipe,
   undoRecommend,  
 };
