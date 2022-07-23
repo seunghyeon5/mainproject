@@ -22,9 +22,9 @@ userRouter.get("/kakao", passport.authenticate("kakao"));
 //kakao login callback
 userRouter.get("/kakao/callback", userController.kakaoCallback);
 
-// 구글 로그인
+// 구글 로그인scope:"openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
 //userRouter.get( "/google", passport.authenticate("google", { scope: ["profile", "email"] }));
-userRouter.get( "/google", passport.authenticate("google"));
+userRouter.get( "/google", passport.authenticate("google", { scope: ["openid", "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"] }));
 
 // 구글 로그인 Callback
 userRouter.get("/google/callback", userController.googleCallback);
