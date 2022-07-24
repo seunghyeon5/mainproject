@@ -12,7 +12,8 @@ const googlePassport = () => {
         clientSecret: config.social.google_secret,
         callbackURL: config.social.google_url,        
         accessType: 'offline',
-        prompt: 'consent'    
+        prompt: 'consent',
+        done: GoogleStrategy.VerifyCallback    
       },
       async function ( accessToken:any, refreshToken:any, profile:any, done:any ) {           
         try {
