@@ -25,7 +25,10 @@ const UserSchema: Schema = new Schema({
     createdposts_store:{
         type: Number,
         default: 0
-    }    
+    },
+    Drink_refrigerator:{
+        type: Array
+    }
 });
 
 UserSchema.virtual("userId").get(function () {
