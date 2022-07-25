@@ -14,6 +14,9 @@ const favoriteSchema: Schema = new Schema({
     MystoreId:{
         type: String
     },
+    drinkId: {
+        type: String
+    },
     category:{
         type: String
     }
