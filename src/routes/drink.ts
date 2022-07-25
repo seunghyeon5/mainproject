@@ -20,5 +20,6 @@ drinkRouter.post("/list/:drinkId/post", authMiddleware, drinkController.addDrink
 drinkRouter.delete("/list/:drinkId/delete", authMiddleware, drinkController.deleteDrink)
 
 // 술냉장고 이미지 불러오기
-drinkRouter.get("list/drinkimage", authMiddleware, drinkController.getMydrinks)
+drinkRouter.get("/drinkimage", authMiddleware, drinkController.getMydrinks)
+
 export { drinkRouter };
