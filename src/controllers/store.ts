@@ -4,37 +4,57 @@ import User from "../models/user";
 import { IUser } from "../interfaces/user";
 import { IStore } from "../interfaces/store";
 
+import config from "../config/config";
+import AWS from "aws-sdk";
+import HttpStatusCode from "../common/httpStatusCode";
+
+AWS.config.update({
+    accessKeyId: config.aws.access_key_id,
+    secretAccessKey: config.aws.access_secret,
+    region: config.aws.region
+});
+const s3 = new AWS.S3();
+
 // import { getRegExp } from "korean-regexp"; //스토어 검색 기능
-
-
-//스토어 작성
-const poststore = async (req: Request, res: Response) => {
+const postStore = async (req: Request, res: Response) => {
     try {
         const { title, address, review } = req.body;
         const { userId, nickname } = res.locals.user;
 
+        const images:Array<string> = [];
+        const keys:Array<string> = [];
+
+        for(let i=0;i<((req.files as Express.MulterS3.File[]).length);i++){
+            images.push((req.files as Express.MulterS3.File[])[i].location);
+            //keys.push((req.files as Express.MulterS3.File[])[i].key);      
+           const [temp,key] =(req.files as Express.MulterS3.File[])[i].location.split("com/")
+            keys.push(key);
+           }   
+
         await Mystore.create({
             title,
-            // image: (req.file as Express.MulterS3.File).location,
-            // key: (req.file as Express.MulterS3.File).key,
+            images,
+            keys,
             address,
-            review,
-            nickname,
-            userId
-        });
+            review,            
+            userId,
+            nickname
+        });        
 
         const user = await User.findById({ _id: userId });
         if (!user) {
-            res.json({ result: false, msg: "2" });
-            return;
+            return res
+            .status(HttpStatusCode.NOT_FOUND)
+            .json({ result: false, message: "no exist user" });
         }
         let num: number = user.createdposts_store;
 
         await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts_store: ++num } });
-        return res.json({ result: true });
-    } catch (err) {
-        res.json({ result: false });
-        console.log(err);
+        return res.json({ result: true, message: "success" });
+    } catch (error) {
+        res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .send({ result: false, message: "잘못된 요청", error });
     }
 };
 
@@ -43,10 +63,11 @@ const getAllstore = async (req: Request, res: Response) => {
   try {
       const mystore: Array<IStore> = await Mystore.find().sort({ createdAt: "desc" });
       return res.json({ result: true, mystore });
-  } catch (err) {
-      res.json({ result: false });
-      console.log(err);
-  }
+  } catch (error) {
+    res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .send({ result: false, message: "잘못된 요청", error });
+}
 };
 
 //스토어 상세조회
@@ -79,16 +100,31 @@ const getAllmystore = async (req: Request, res: Response) => {
         console.log(err);
     }
 };
-
+/*
 //내가 쓴 스토어 삭제
 const deletestore = async (req: Request, res: Response) => {
-  const userId = String(res.locals.user._id);
+    try {
+  const {userId} = res.locals.user;
   const { storeId } = req.params;
-  const existsStore: any = await Mystore.findById(storeId);
+  const existsStore: any = await Mystore.findById({_id:storeId});
   const user: IUser | null = await User.findById({ _id: userId });
 
-
-  try {
+  for(let i=0;i<existsStore.images.length;i++){
+    const [temp,key] =existsStore?.images[i].split("com/");    
+   
+    s3.deleteObject(
+        {
+            Bucket: config.aws.bucket as string,
+            Key:key
+        },
+        (err, data) => {
+            if (err) {
+                throw err;
+            }
+        }
+    )
+  }
+  
       if (!user) {
           return res.json({ result: false, msg: "1" });
       }
@@ -106,7 +142,7 @@ const deletestore = async (req: Request, res: Response) => {
       console.log(err);
   }
 };
-
+*/
 //내가 쓴 스토어 수정
 const modifystore = async (req: Request, res: Response) => {
   const userId = String(res.locals.user.userId);
@@ -130,9 +166,9 @@ const modifystore = async (req: Request, res: Response) => {
 
 export default {
   getAllstore,
-  detailstore,
-  poststore,
+  detailstore,  
+  postStore,
   getAllmystore,
-  deletestore,
+ // deletestore,
   modifystore,
 };
