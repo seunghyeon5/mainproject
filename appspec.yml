@@ -1,8 +1,8 @@
 version: 0.0
 os: linux
 files:
-  - source: /
-    destination: /home/ubuntu/mainproject
+    - source: /
+      destination: /home/ubuntu/mainproject
 hooks:
     ApplicationStop:
         - location: scripts/application_stop.sh
