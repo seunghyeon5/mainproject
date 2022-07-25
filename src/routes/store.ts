@@ -18,7 +18,7 @@ mystoreRouter.post("/post/images", authMiddleware, multiimageuploader.array("ima
 mystoreRouter.get("/post/getmystore", storeContoller.getAllmystore);
 
 // 스토어 삭제하기
-mystoreRouter.delete("/delete/:mystoreId", authMiddleware, storeContoller.deletestore);
+//mystoreRouter.delete("/delete/:mystoreId", authMiddleware, storeContoller.deletestore);
 
 // 스토어 수정
 mystoreRouter.put("/:mystoreId/modify", authMiddleware, storeContoller.modifystore);
