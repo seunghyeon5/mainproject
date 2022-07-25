@@ -44,7 +44,7 @@ const postrecipe = async (req: Request, res: Response) => {
         let num: number = user.createdposts;
 
         await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: ++num } });
-        return res.json({ result: true, message: "success" });;
+        return res.json({ result: true, message: "success" });
     } catch (error) {
         res
           .status(HttpStatusCode.BAD_REQUEST)
