@@ -88,12 +88,11 @@ const detailstore = async (req: Request, res: Response) => {
 const getAllmystore = async (req: Request, res: Response) => {
     try {
         const { userId } = res.locals.user;
-        
         if (!userId) {
             return res.json({ result: false, msg: "1" });
         }
         const mystore = await Mystore.find({ userId });
-        
+        // console.log(userId);
         res.json({ result: true, mystore });
         return;
     } catch (err) {
@@ -101,19 +100,17 @@ const getAllmystore = async (req: Request, res: Response) => {
         console.log(err);
     }
 };
-
+/*
 //내가 쓴 스토어 삭제
 const deletestore = async (req: Request, res: Response) => {
     try {
   const {userId} = res.locals.user;
-  const { mystoreId } = req.params;
- 
-  const existsStore: any = await Mystore.findById({_id:mystoreId});
+  const { storeId } = req.params;
+  const existsStore: any = await Mystore.findById({_id:storeId});
   const user: IUser | null = await User.findById({ _id: userId });
-  
+
   for(let i=0;i<existsStore.images.length;i++){
     const [temp,key] =existsStore?.images[i].split("com/");    
-  
    
     s3.deleteObject(
         {
@@ -126,8 +123,8 @@ const deletestore = async (req: Request, res: Response) => {
             }
         }
     )
-    
-  }  
+  }
+  
       if (!user) {
           return res.json({ result: false, msg: "1" });
       }
@@ -135,7 +132,7 @@ const deletestore = async (req: Request, res: Response) => {
           res.json({ result: false, message: "2" });
           return;
       } else {
-          await Mystore.findByIdAndDelete(mystoreId);
+          await Mystore.findByIdAndDelete(storeId);
           let num: number = user.createdposts_store;
           await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts_store: --num } });
           return res.json({ result: true });
@@ -145,7 +142,7 @@ const deletestore = async (req: Request, res: Response) => {
       console.log(err);
   }
 };
-
+*/
 //내가 쓴 스토어 수정
 const modifystore = async (req: Request, res: Response) => {
   const userId = String(res.locals.user.userId);
@@ -172,6 +169,6 @@ export default {
   detailstore,  
   postStore,
   getAllmystore,
-  deletestore,
+ // deletestore,
   modifystore,
 };
