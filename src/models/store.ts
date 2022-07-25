@@ -6,8 +6,18 @@ const MyStoreSchema: Schema = new Schema(
         title: {
             type: String
         },
+        /*
         image: {
             type: String
+        },
+        */
+        images: {
+            type: Array,
+            default: [],
+        },
+        keys: {
+            type: Array,
+            default: [],
         },
         address: {
             type: String,
