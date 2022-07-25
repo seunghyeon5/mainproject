@@ -54,7 +54,7 @@ const addDrink = async (req: Request, res: Response) => {
         const user = await User.findById({ _id: userId });
         const drink = await Drinks.findById({ _id: drinkId });
         if (!drink) {
-            return res.status(HttpStatusCode.NOT_FOUND).json({ result: false, message: "존재하지 않는 술 입니다." });
+            return res.status(HttpStatusCode.NOT_FOUND).json({ result: false, message: "없는 술 입니다." });
         }
         if (!user) {
             return res.status(HttpStatusCode.UNAUTHORIZED).json({ result: false, message: "유저정보가 올바르지 않습니다." });
@@ -76,7 +76,7 @@ const deleteDrink = async (req:Request, res:Response) => {
         const user = await User.findById({ _id: userId });
         const drink = await Drinks.findById({ _id: drinkId });
         if (!drink) {
-            return res.status(HttpStatusCode.NOT_FOUND).json({ result: false, message: "존재하지 않는 술 입니다." });
+            return res.status(HttpStatusCode.NOT_FOUND).json({ result: false, message: "없는 술 입니다." });
         }
         if (!user) {
             return res.status(HttpStatusCode.UNAUTHORIZED).json({ result: false, message: "유저정보가 올바르지 않습니다." });
@@ -94,26 +94,23 @@ const deleteDrink = async (req:Request, res:Response) => {
 const getMydrinks = async (req: Request, res: Response) => {
     try {
         const { userId } = res.locals.user;
-        let drinks = await Drinks.findById({_id: Drinks})
-        const user = await User.findById({ _id: userId });
+        let user = await User.findById({ _id: userId });
         if (!user) {
             return res.status(HttpStatusCode.UNAUTHORIZED).json({ result: false, message: "유저정보가 올바르지 않습니다." });
         }
-        
-        let [Mydrinks] = ""
+        let Mydrinks = ""
+        let temp: IDrink | null;
         let drink_image:string[] = []
-        let Drink: IDrink | null
         for (let i = 0; i < user.Drink_refrigerator.length; i++) {
-            [Mydrinks] = user.Drink_refrigerator[i].split("")
-            console.log(Mydrinks)
-            if(Mydrinks === drinks?.title_kor){
-                drink_image.push(Drink!.image)
-            }
+            Mydrinks = user.Drink_refrigerator[i]
+            temp = await Drinks.findOne({ title_kor: Mydrinks })
+            drink_image.push(temp!.image)
         }
-        if(drinks){
+        console.log(drink_image)
+        if(user){
             res.status(HttpStatusCode.OK).json({result: true, message:"success", image: drink_image})
         }else{
-            return res.status(HttpStatusCode.NOT_FOUND).json({result: false, message: "술정보가 올바르지 않습니다."})
+            return res.status(HttpStatusCode.NOT_FOUND).json({result: false, message: "없는 술 입니다."})
         }
     } catch (err) {
         res.status(HttpStatusCode.BAD_REQUEST).send({ result: false, message: "잘못된 요청" });
