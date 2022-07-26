@@ -104,14 +104,16 @@ const checkuser = async (req: Request, res: Response) => {
 //회원탈퇴
 const withdrawal = async (req: Request, res: Response) => {
   try {
-    const userId = res.locals.user.userId;
+    const {userId} = res.locals.user;
     if (!userId) {
       return res
         .status(HttpStatusCode.NOT_FOUND)
         .json({ result: false, message: "존재하지 않음" });
     }
-    await myrecipe.deleteMany({ _id: userId })
-    await store.deleteMany({ _id: userId })
+    await myrecipe.deleteMany({ userId: userId })
+    await store.deleteMany({ userId: userId })
+    await favorite.deleteMany({ userId: userId })
+    await comment.deleteMany({ userId: userId })
     await User.findByIdAndDelete(userId);
     return res.json({ result: true, message: "success" });
   } catch (error) {
