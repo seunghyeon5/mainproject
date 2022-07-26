@@ -5,6 +5,11 @@ import passport from "passport";
 import User from "../models/user";
 import config from "../config/config";
 import HttpStatusCode from "../common/httpStatusCode";
+import myrecipe from "../models/myrecipe"
+import comment from "../models/comment"
+import store from "../models/store";
+import favorite from "../models/favorite";
+
 
 //회원가입
 const signup = async (req: Request, res: Response) => {
@@ -105,6 +110,8 @@ const withdrawal = async (req: Request, res: Response) => {
         .status(HttpStatusCode.NOT_FOUND)
         .json({ result: false, message: "존재하지 않음" });
     }
+    await myrecipe.deleteMany({ _id: userId })
+    await store.deleteMany({ _id: userId })
     await User.findByIdAndDelete(userId);
     return res.json({ result: true, message: "success" });
   } catch (error) {
