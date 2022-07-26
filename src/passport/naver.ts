@@ -14,7 +14,7 @@ const naverPassport = () => {
       async function ( accessToken:any, refreshToken:any, profile:any, done:any ) {           
         try {
           console.log("profile contents",profile);
-          const email: string = profile.email;
+          const email: string = profile._json.email;
           const provider: string = profile.provider;          
           console.log("email :",email," provider :",provider);         
             
@@ -27,7 +27,7 @@ const naverPassport = () => {
           } else {
             const newUser = await User.create({             
               email,
-              nickname: profile._json.name,
+              nickname: profile.displayName,
               provider                       
             });
             return done(null, newUser);
