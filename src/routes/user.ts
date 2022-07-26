@@ -31,9 +31,10 @@ userRouter.get("/kakao/callback", userController.kakaoCallback);
 // 'https://www.googleapis.com/auth/plus.login',
 // 'https://www.googleapis.com/auth/userinfo.email'] }));
 
-userRouter.get( "/google", passport.authenticate("google",{ scope: "openid profile https://www.googleapis.com/auth/userinfo.email"}));
+//네이버 로그인
+userRouter.get( "/naver", passport.authenticate("naver"));
 
-// 구글 로그인 Callback
-userRouter.get("/google/callback", userController.googleCallback);
+//네이버 로그인 Callback
+userRouter.get("/naver/callback", userController.naverCallback);
 
 export { userRouter };
