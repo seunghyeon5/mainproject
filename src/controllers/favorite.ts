@@ -26,7 +26,7 @@ const postlike = async (req: Request, res: Response) => {
         } else {
             const favorite = await Favorite.create({
                 userId,
-                myrecipeId,
+                Myrecipe,
                 nickname,
                 category: "myrecipe"
             });
@@ -114,7 +114,7 @@ const postStorelike = async (req: Request, res: Response) => {
         } else {
             const favorite = await Favorite.create({
                 userId,
-                MystoreId,
+                Store,
                 nickname,
                 category:"mystore"
             });
@@ -194,7 +194,7 @@ const drinklike = async (req: Request, res: Response) => {
             return res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "이미 좋아요를 누르셨습니다." });
         } else {
             const favorite = await Favorite.create({
-                drinkId,
+                drinks,
                 userId,
                 nickname,
                 category: "drink"

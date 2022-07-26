@@ -19,14 +19,16 @@ const favoriteSchema: Schema = new Schema({
     },
     category:{
         type: String
+    },
+    drinks: {
+        type: Array
+    },
+    Store: {
+        type: Array
+    },
+    Myrecipe:{
+        type: Array
     }
-});
-
-favoriteSchema.virtual("favoriteId").get(function () {
-    return this._id.toHexString();
-});
-favoriteSchema.set("toJSON", {
-    virtuals: true
 });
 
 export default mongoose.model<IFavorite & Document>("favorite", favoriteSchema);
