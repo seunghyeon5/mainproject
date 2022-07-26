@@ -5,15 +5,16 @@ import config from "../config/config";
 
 let token = ""
 
-beforeAll(async () => {
-    await mongoose.connect(config.mongo.url, {
+beforeAll(() => {
+    mongoose.Promise = Promise;
+    mongoose.connect(config.mongo.url, {
         ignoreUndefined: true
     });
 });
 
-afterAll(async () => {
+afterAll((done) => {
     // Closing the DB connection allows Jest to exit successfully.
-    await mongoose.connection.close();
+    mongoose.disconnect(done);
 });
 
 describe("Signup test", () => {
