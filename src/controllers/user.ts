@@ -132,12 +132,12 @@ const kakaoCallback = async (
   })(req, res, next);
 };
 
-//구글 콜백
-const googleCallback = (req: Request, res: Response, next: NextFunction) => {
+//네이버 콜백
+const naverCallback = (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate(
-    "google",
+    "naver",
     {
-      failureRedirect: "/login",
+      failureRedirect: "/",
     },
     (err, user, info) => {
       if (err) return next(err);
@@ -229,6 +229,6 @@ export default {
   withdrawal,
   changeNickname,
   changePassword,
-  googleCallback,
+  naverCallback,
   getmypage,
 };

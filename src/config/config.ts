@@ -21,9 +21,9 @@ const SERVER = {
 };
 
 const SOCIAL = {
-    google_id: process.env.GOOGLE_ID,
-    google_url: process.env.GOOGLE_URL,
-    google_secret: process.env.GOOGLE_SECRET,
+    naver_id: process.env.NAVER_ID,
+    naver_url: process.env.NAVER_URL,
+    naver_secret: process.env.NAVER_SECRET,
 
     kakao_id: process.env.KAKAO_ID,
     kakao_url: process.env.KAKAO_URL

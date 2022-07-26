@@ -1,19 +1,15 @@
 import User from "../models/user";
-import GoogleRouter from "passport";
-//import { Strategy } from "passport-google-oauth2";
-const GoogleStrategy = require("passport-google-oauth2").Strategy;
+import NaverRouter from "passport";
+const NaverStrategy = require("passport-naver").Strategy;
 import config from "../config/config";
 
-const googlePassport = () => {
-    GoogleRouter.use(
-    new GoogleStrategy(
+const naverPassport = () => {
+  NaverRouter.use(
+    new NaverStrategy(
       {
-        clientID: config.social.google_id,
-        clientSecret: config.social.google_secret,
-        callbackURL: config.social.google_url,        
-        accessType: 'offline',
-        prompt: 'consent',
-        done: GoogleStrategy.VerifyCallback    
+        clientID: config.social.naver_id,
+        clientSecret: config.social.naver_secret,
+        callbackURL: config.social.naver_url,         
       },
       async function ( accessToken:any, refreshToken:any, profile:any, done:any ) {           
         try {
@@ -46,4 +42,4 @@ const googlePassport = () => {
     }
 
 
-export { googlePassport };
+export { naverPassport };

@@ -33,9 +33,9 @@ import { kakaoPassport } from "./passport/kakao";
 
 kakaoPassport();
 
-import { googlePassport } from "./passport/google";
+import { naverPassport } from "./passport/naver";
 
-googlePassport();
+naverPassport();
 
 /** Log the request */
 router.use((req, res, next) => {
