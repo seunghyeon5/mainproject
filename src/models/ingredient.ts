@@ -16,13 +16,6 @@ const ingredientSchema: Schema = new Schema({
   },
 });
 
-ingredientSchema.virtual("ingredientId").get(function () {
-  return this._id.toHexString();
-});
-ingredientSchema.set("toJSON", {
-  virtuals: true
-});
-
 export default mongoose.model<IIngredient & Document>(
   "ingredients",
   ingredientSchema
