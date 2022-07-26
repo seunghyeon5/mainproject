@@ -10,4 +10,5 @@ export interface IFavorite {
     drinks:Array<string>;
     Myrecipe:Array<string>;
     Store:Array<string>;
+    userId:string;
 }
