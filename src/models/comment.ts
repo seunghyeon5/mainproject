@@ -12,6 +12,9 @@ const commentSchema: Schema = new Schema(
         },
         comment: {
             type: String,
+        },
+        userId: {
+            type: String,
         }
     },
     {

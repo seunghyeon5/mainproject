@@ -5,4 +5,5 @@ export interface IComment {
     nickname: string;
     mystoreId:string;
     comment:string;
+    userId:string;
 }
