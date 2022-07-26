@@ -72,17 +72,18 @@ const getAllstore = async (req: Request, res: Response) => {
 
 //스토어 상세조회
 const detailstore = async (req: Request, res: Response) => {
-  try {
-    const { storeId } = req.params;
-    const existsStore: IStore | null = await Mystore.findById(storeId);
-    return res.json({ result: true, existsStore: [existsStore] });
-  } catch (err) {
-      res.json({ result: false });
-      console.log(err);
-  }
-};
-
-
+    try {
+      const { mystoreId } = req.params;
+      const existsStore: IStore | null = await Mystore.findById({ _id: mystoreId }) ;
+      if (!mystoreId){
+          res.json({ result : false ,message: "스토어 정보가 올바르지 않습니다"})
+      }
+      return res.json({ result: true, existsStore: [existsStore] });
+    } catch (err) {
+        res.json({ result: false });
+        console.log(err);
+    }
+  };
 
 //내가 쓴 스토어 조회 // 스토어 빈배열로 보내기 // 더미 데이터 보내기 s3 aws
 const getAllmystore = async (req: Request, res: Response) => {
@@ -148,24 +149,24 @@ const deletestore = async (req: Request, res: Response) => {
 
 //내가 쓴 스토어 수정
 const modifystore = async (req: Request, res: Response) => {
-  const userId = String(res.locals.user.userId);
-  const { storeId } = req.params;
-  const { title, address, review } = req.body;
-  const existsStore: IStore | null = await Mystore.findById(storeId);
- 
-
-  try {
-      if (existsStore?.userId !== userId) {
-          return res.json({ result: false, msg: "1" });
-      } else {
-          await Mystore.findByIdAndUpdate(storeId, { $set: { title, address, review } });
-          return res.json({ result: true, existsStore });
-      }
-  } catch (err) {
-      res.json({ result: false });
-      console.log(err);
-  }
-};
+    const userId = String(res.locals.user.userId);
+    const { mystoreId } = req.params;
+    const { title, address, review } = req.body;
+    const existsStore: IStore | null = await Mystore.findById(mystoreId);
+   
+  
+    try {
+        if (existsStore?.userId !== userId) {
+            return res.json({ result: false, msg: "1" });
+        } else {
+            await Mystore.findByIdAndUpdate(mystoreId, { $set: { title, address, review } });
+            return res.json({ result: true, existsStore });
+        }
+    } catch (err) {
+        res.json({ result: false });
+        console.log(err);
+    }
+  };
 
 export default {
   getAllstore,
