@@ -1,15 +1,18 @@
 import { Request, Response, NextFunction } from "express";
 import Comment from "../models/comment";
 import HttpStatusCode from "../common/httpStatusCode";
+import user from "./user";
 
 //스토어에 댓글달기
 const addComment = async (req: Request, res: Response) => {
-    const { nickname } = res.locals.user.nickname;
-    const { userId } = res.locals.user.userId;
+    const nickname: string = res.locals.user.nickname;
+    const userId: string = res.locals.user._id;
     const { comment } = req.body;
     const { mystoreId } = req.params;
-    console.log({mystoreId})
     try {
+        if(!userId){
+            return res.status(HttpStatusCode.BAD_REQUEST).json({result:false, message:"유저정보가 올바르지 않습니다."})
+        }
         if (!mystoreId) {
             return res.status(HttpStatusCode.NOT_FOUND).json({ result: false, message: "잘못된 접근" });
         }
@@ -44,7 +47,7 @@ const getComments = async (req: Request, res: Response) => {
 };
 //댓글 수정
 const modifyComment = async (req: Request, res: Response) => {
-    const { userId } = res.locals.user.userId;
+    const { userId } = res.locals.user;
     const { commentId } = req.params;
     const { comment } = req.body;
     try {
@@ -62,7 +65,7 @@ const modifyComment = async (req: Request, res: Response) => {
 };
 //댓글 삭제
 const deleteCommeent = async (req: Request, res: Response) => {
-    const { userId } = res.locals.user.userId
+    const { userId } = res.locals.user
     const { commentId } = req.params;
     try {
         const existUser = await Comment.findById({ _id: commentId });
