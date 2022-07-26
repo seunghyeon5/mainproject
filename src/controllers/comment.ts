@@ -4,10 +4,11 @@ import HttpStatusCode from "../common/httpStatusCode";
 
 //스토어에 댓글달기
 const addComment = async (req: Request, res: Response) => {
-    const nickname: string = res.locals.user.nickname;
-    console.log(nickname);
+    const { nickname } = res.locals.user.nickname;
+    const { userId } = res.locals.user.userId;
     const { comment } = req.body;
     const { mystoreId } = req.params;
+    console.log({mystoreId})
     try {
         if (!mystoreId) {
             return res.status(HttpStatusCode.NOT_FOUND).json({ result: false, message: "잘못된 접근" });
@@ -18,6 +19,7 @@ const addComment = async (req: Request, res: Response) => {
         await Comment.create({
             nickname,
             comment,
+            userId,
             mystoreId
         });
         return res.status(HttpStatusCode.CREATED).json({ result: true, nickname, comment });
@@ -42,12 +44,12 @@ const getComments = async (req: Request, res: Response) => {
 };
 //댓글 수정
 const modifyComment = async (req: Request, res: Response) => {
-    const nickname: string = res.locals.user.nickname;
+    const { userId } = res.locals.user.userId;
     const { commentId } = req.params;
     const { comment } = req.body;
     try {
         const existUser = await Comment.findById({ _id: commentId });
-        if (existUser?.nickname !== nickname) {
+        if (existUser?.userId !== userId) {
             return res.status(HttpStatusCode.UNAUTHORIZED).json({ result: false, message: "유저정보가 다릅니다." });
         } else {
             const modifycomment = await Comment.findByIdAndUpdate({ _id: commentId }, { $set: { comment: comment } });
@@ -60,11 +62,11 @@ const modifyComment = async (req: Request, res: Response) => {
 };
 //댓글 삭제
 const deleteCommeent = async (req: Request, res: Response) => {
-    const nickname: string = res.locals.user.nickname;
+    const { userId } = res.locals.user.userId
     const { commentId } = req.params;
     try {
         const existUser = await Comment.findById({ _id: commentId });
-        if (existUser?.nickname !== nickname) {
+        if (existUser?.userId !== userId) {
             return res.status(HttpStatusCode.UNAUTHORIZED).json({ result: false, message: "유저정보가 다릅니다." });
         } else {
             await Comment.findByIdAndDelete({ _id: commentId });
