@@ -101,18 +101,22 @@ const getMydrinks = async (req: Request, res: Response) => {
         let Mydrinks = ""
         let temp: IDrink | null;
         let drink_image:string[] = []
+        let drink_info:{image:string,id:string}[]=[];
         for (let i = 0; i < user.Drink_refrigerator.length; i++) {
             Mydrinks = user.Drink_refrigerator[i]
             temp = await Drinks.findOne({ title_kor: Mydrinks })
             if(!(temp!._id)){
                 return false
             }else{
-                drink_image.push(temp!.image, (temp!._id).toString())
+                //drink_image.push({temp!.image, (temp!._id).toString()})
+                drink_info.push({image:temp!.image,id:(temp!._id.toString())})
             }
         }
-        console.log(drink_image)
+        //console.log(drink_image)
+        console.log(drink_info)
         if(user){
-            res.status(HttpStatusCode.OK).json({result: true, message:"success", image: drink_image})
+            res.status(HttpStatusCode.OK).json({result: true, message:"success", drink_info: drink_info})
+            //res.status(HttpStatusCode.OK).json({result: true, message:"success", image: drink_image})
         }else{
             return res.status(HttpStatusCode.NOT_FOUND).json({result: false, message: "없는 술 입니다."})
         }
