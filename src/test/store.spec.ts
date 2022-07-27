@@ -16,7 +16,7 @@ afterAll(async () => {
     await mongoose.connection.close();
 });
 
-describe("[POST] Myrecipe", () => {
+describe("[POST] store", () => {
     test("회원가입 안되어있는 경우 회원가입 시키기", async () => {
         const response = await request(app).post("/api/user/signup").send({ email: "jest@test.com", nickname: "jest", password: "jest123@", confirmpassword: "jest123@" });
 
@@ -41,15 +41,15 @@ describe("[POST] Myrecipe", () => {
     // })
 })
 
-describe("[GET] Myrecipe", () => {
-    test("레시피 전체목록 조회 성공시 success", async () => {
-        const response = await request(app).get("/api/myrecipe/post/list").set("authorization", `Bearer ${token}`).send()
+describe("[GET] store", () => {
+    test("스토어 전체목록 조회 성공시 스테이터스코드 200", async () => {
+        const response = await request(app).get("/api/mystore/post/list").set("authorization", `Bearer ${token}`).send()
         
-        expect(response.body.message).toBe("success")
+        expect(response.body.message).toBe(200)
     })
 
-    test("레시피 상세조회 성공시 success", async () => {
-        const response = await request(app).get("/api/myrecipe/post/62dad72a54df2f1eab050765").set("authorization", `Bearer ${token}`).send()
+    test("스토어 상세조회 성공시 success", async () => {
+        const response = await request(app).get("/api/myrecipe/post/62deb2d65ebbaba975882db1").set("authorization", `Bearer ${token}`).send()
 
         expect(response.body.message).toBe("success")
     })
