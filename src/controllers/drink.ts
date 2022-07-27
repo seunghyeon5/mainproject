@@ -60,7 +60,7 @@ const addDrink = async (req: Request, res: Response) => {
             return res.status(HttpStatusCode.UNAUTHORIZED).json({ result: false, message: "유저정보가 올바르지 않습니다." });
         } else {
             await User.findOneAndUpdate({ _id: userId }, { $push: { Drink_refrigerator: drink.title_kor as string } });
-            return res.status(HttpStatusCode.CREATED).json({ result: true });
+            return res.status(HttpStatusCode.CREATED).json({ result: true, message: "success", drinkId });
         }
     } catch (err) {
         res.status(HttpStatusCode.BAD_REQUEST).send({ result: false, message: "잘못된 요청" });
