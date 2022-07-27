@@ -118,7 +118,7 @@ app.use("/api/comment", [commentRouter])
 // app.use("/api/seachstore". [seachstoreRoutes]);
 
 app.get("/", (req, res) => {
-    res.send("This is a test page!!!!");
+    res.send("This is a test page");
 });
 
 app.listen(port, (): void => {
