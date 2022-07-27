@@ -104,7 +104,11 @@ const getMydrinks = async (req: Request, res: Response) => {
         for (let i = 0; i < user.Drink_refrigerator.length; i++) {
             Mydrinks = user.Drink_refrigerator[i]
             temp = await Drinks.findOne({ title_kor: Mydrinks })
-            drink_image.push(temp!.image)
+            if(!(temp!._id)){
+                return false
+            }else{
+                drink_image.push(temp!.image, (temp!._id).toString())
+            }
         }
         console.log(drink_image)
         if(user){
