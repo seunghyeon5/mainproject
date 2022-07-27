@@ -30,7 +30,7 @@ jobs:
     - run: npm run build --if-present
 
     - name: zip file
-      run: zip -r hous.zip ./src/scripts ./appspec.yml ./src/controllers ./package.json ./jest.config.js ./package-lock.json ./ecosystem.json ./tsconfig.json ./src/common ./src/config ./src/customtype ./src/interfaces ./src/middlewares ./src/models ./src/passport ./src/routes ./src/vaildation ./src/app.ts ./src/test
+      run: zip -r hous.zip ./scripts ./appspec.yml ./src/controllers ./package.json ./jest.config.js ./package-lock.json ./ecosystem.json ./tsconfig.json ./src/common ./src/config ./src/customtype ./src/interfaces ./src/middlewares ./src/models ./src/passport ./src/routes ./src/vaildation ./src/app.ts ./src/test
 
     - name: AWS configure credentials
       uses: aws-actions/configure-aws-credentials@v1
