@@ -45,6 +45,6 @@ jobs:
     - name: deploy with AWS codeDeploy
       run: aws deploy create-deployment
         --application-name btender
-        --deployment-config-name CodeDeployDefault.AllAtAOnce
+        --deployment-config-name CodeDeployDefault.AllAtOnce
         --deployment-group-name btender-group
         --s3-location bucket=btender,bundleType=zip,key=deploy/hous.zip
