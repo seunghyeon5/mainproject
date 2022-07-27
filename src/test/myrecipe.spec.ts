@@ -3,6 +3,8 @@ import request from "supertest";
 import mongoose from "mongoose";
 import config from "../config/config";
 
+let token = ""
+
 beforeAll(async () => {
     await mongoose.connect(config.mongo.url, {
         ignoreUndefined: true
@@ -27,36 +29,39 @@ afterAll(async () => {
 
     describe("[DELETE] signout", () => {
         test("테스트용 아이디 탈퇴", async () => {
-            
+            request(app).delete("/api/user").auth("jest@test.com", "jest123@").set("authorization", `Bearer ${token}`)
         })
     })
 });
 
 describe("[POST] Myrecipe", () => {
     test("게시글 올리는 것에 성공할경우 success", async () => {
-        const response = await request(app).post("/api/myreipce/post").send({
+        const response = await request(app).post("/api/myreipce/post").set("authorization", `Bearer ${token}`).send({
             title: "jest test",
             ingredients: "jest test",
             brief_description:"jest test"
         })
+
         expect(response.body.message).toBe("success")
     })
 })
 
 describe("[GET] Myrecipe", () => {
     test("레시피 전체목록 조회 성공시 success", async () => {
-        const response = await request(app).get("/api/myrecipe/post/list").send()
+        const response = await request(app).get("/api/myrecipe/post/list").set("authorization", `Bearer ${token}`).send()
         
         expect(response.body.message).toBe("success")
     })
 
     test("레시피 상세조회 성공시 success", async () => {
-        const response = await request(app).get("/api/myrecipe/post/:myrecipeId").send()
+        const response = await request(app).get("/api/myrecipe/post/:myrecipeId").set("authorization", `Bearer ${token}`).send()
 
         expect(response.body.message).toBe("success")
     })
 
     test("내가 쓴 레시피 조회 성공시 success", async () => {
-        const response = await request(app).get("/api/myrecipe/post")
+        const response = await request(app).get("/api/myrecipe/post").set("authorization", `Bearer ${token}`).send()
+
+        expect(response.body.message).toBe("success")
     })
 })
