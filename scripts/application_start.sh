@@ -6,10 +6,10 @@ curl -o- https://rew.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 nvm install 16
 
 #give permission for everything in the mainproject directory
-sudo chmod -R 777 /home/ec2-user/mainproject
+sudo chmod -R 777 /home/ubuntu/mainproject
 
 #navigate into our working directory where we have all our github files
-cd /home/ec2-user/mainproject
+cd /home/ubuntu/mainproject
 
 #add npm and node to path
 export NBM_DIR="$HOME/.nvm"
