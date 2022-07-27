@@ -9,15 +9,15 @@ permissions:
       owner: ubuntu
       group: ubuntu
 hooks:
-    Befallinstall:
-        - locations: scripts/before_install.sh
-            timeout: 600
-            runas: ubuntu
+    Beforeinstall:
+      - locations: scripts/before_install.sh
+        timeout: 500
+        runas: ubuntu
     ApplicationStop:
-        - location: scripts/application_stop.sh
-            timeout: 600
-            runas: ubuntu
+      - location: scripts/application_stop.sh
+        timeout: 500
+        runas: ubuntu
     ApplicationStart:
-        - location: scripts/application_start.sh
-            timeout: 600
-            runas: ubuntu
+      - location: scripts/application_start.sh
+        timeout: 500
+        runas: ubuntu
