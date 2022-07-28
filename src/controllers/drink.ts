@@ -19,11 +19,12 @@ const getDrink = async (req: Request, res: Response) => {
     try {
         const { drinkId } = req.params;
         const drink = await Drinks.findById(drinkId).exec();
-        const { userId } = res.locals.user;
+        const user = res.locals.user;
+        const user_id = user._id.toHexString();
 
         let drinks = await Drinks.findById(drinkId).exec()
         let recommend:boolean = false;
-        if(drinks!.recommend_list!.find(e => e === userId)){
+        if(drinks!.recommend_list!.find(e => e === user_id)){
             recommend = true;
         }else{
             recommend = false;
@@ -58,10 +59,11 @@ const getDrinksByCategory = async (req: Request, res: Response) => {
 //술 추천누르기
 const recommendDrink = async (req: Request, res: Response) => {
     try{
-        const { userId } = res.locals.user;
+        const { user } = res.locals;
+        const user_id = user._id.toHexString();
         const { drinkId } = req.params;
         const drink = await Drinks.findById(drinkId).exec()
-        const existRecommend = await Drinks.findOne({$and: [{recommend_list: userId}, {_id: drinkId}]})
+        const existRecommend = await Drinks.findOne({$and: [{recommend_list: user_id}, {_id: drinkId}]})
         console.log(existRecommend)
         
         if(existRecommend){
@@ -82,7 +84,8 @@ const recommendDrink = async (req: Request, res: Response) => {
 //술 추천취소하기
 const undoRecommend = async (req: Request, res: Response) => {
     try{
-        const { userId } = res.locals.user
+        const { user } = res.locals;
+        const user_id = user._id.toHexString();
         const { drinkId } = req.params;
         const drink = await Drinks.findById(drinkId).exec();
 
@@ -90,7 +93,7 @@ const undoRecommend = async (req: Request, res: Response) => {
 
         await Drinks.updateMany(
             { _id: { $in: drinkId }},
-            { $set: { recommend: cnt - 1 }, $pull: { recommend_list: userId }}
+            { $set: { recommend: cnt - 1 }, $pull: { recommend_list: user_id }}
         ).exec();
         return res.status(HttpStatusCode.OK).json({ result: true, message: "추천취소"}) 
     }catch(err){
@@ -100,10 +103,11 @@ const undoRecommend = async (req: Request, res: Response) => {
 
 //추천누른 술 불러오기
 const recommendlist = async (req: Request, res: Response) => {
-    const { userId } = res.locals.user
-    console.log({userId})
+    const { user } = res.locals;
+    const user_id = user._id.toHexString();
+    
     try {
-        let mydrinks= await Drinks.find({ recommend_list: userId})
+        let mydrinks= await Drinks.find({ recommend_list: user_id})
         res.status(HttpStatusCode.OK).json({result: true, message: "success", mydrinks})
     }catch(err){
         res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", err})
