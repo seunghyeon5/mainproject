@@ -33,10 +33,6 @@ import { kakaoPassport } from "./passport/kakao";
 
 kakaoPassport();
 
-import { naverPassport } from "./passport/naver";
-
-naverPassport();
-
 /** Log the request */
 router.use((req, res, next) => {
     /** Log the req */
