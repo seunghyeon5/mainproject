@@ -184,7 +184,8 @@ const getMyrecipe = async (req: Request, res: Response) => {
           image: e.image,
           title: e.title,
           brief_description: e.brief_description,
-          recommends: e.recommends
+          recommends: e.recommends,
+          _id: user_id
         }))
       });
   }catch(err){
