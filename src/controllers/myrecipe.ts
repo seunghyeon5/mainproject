@@ -56,28 +56,25 @@ const postrecipe = async (req: Request, res: Response) => {
 
 //레시피 전체목록조회
 const getAllrecipe = async (req: Request, res: Response) => {
-  try {
-    const myrecipes = await MyRecipe.find().sort({ createdAt: "desc" });
-    return res.json({
-      result: true,
-      message: "success",
+    try {
+        const myrecipes = await MyRecipe.find().sort({ createdAt: "desc" });
+        return res.json({ result: true, message: "success",  
 
-      myrecipes: myrecipes.map((a) => ({
-        image: a.image,
-        title: a.title,
-        brief_description: a.brief_description,
-        favorite_count: a.favorite_count,
-        nickname: a.nickname,
-        userId: a.userId,
-        _id: a._id, //myrecipe id
-        createdAt: a.createdAt?.toLocaleDateString("ko-KR"),
-      })),
+        myrecipes: myrecipes.map((a) => ({
+            image: a.image,
+            title: a.title,
+            brief_description: a.brief_description,
+            favorite_count: a.favorite_count,
+            nickname:a.nickname,
+            userId: a.userId,
+            createdAt: a.createdAt?.toLocaleDateString('ko-KR'),
+          }))
     });
-  } catch (error) {
-    res
-      .status(HttpStatusCode.BAD_REQUEST)
-      .send({ result: false, message: "잘못된 요청", error });
-  }
+    } catch (error) {
+        res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .send({ result: false, message: "잘못된 요청", error });
+    }
 };
 
 //레시피 상세조회
