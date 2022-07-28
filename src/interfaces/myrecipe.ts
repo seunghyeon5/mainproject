@@ -11,4 +11,5 @@ export interface IMyrecipe {
     userId: string;
     nickname: string;
     favorite_count: number;
+    createdAt?: Date;
 }

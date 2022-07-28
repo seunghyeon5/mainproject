@@ -16,6 +16,7 @@ const getRecipes = async (req: Request, res: Response) => {
         title: a.title,
         brief_description: a.brief_description,
         recommends: a.recommends,
+        _id: a._id,
       }))
     });
   } catch (error) {
@@ -37,6 +38,7 @@ const getMostRecommendedRecipes = async (req: Request, res: Response) => {
         title: a.title,
         brief_description: a.brief_description,
         recommends: a.recommends,
+        _id: a._id,
       }))
     });
   } catch (error) {
