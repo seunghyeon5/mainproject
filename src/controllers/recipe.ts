@@ -183,7 +183,8 @@ const getMyrecipe = async (req: Request, res: Response) => {
         myrecipes: myrecipes.map((e) => ({
           image: e.image,
           title: e.title,
-          brief_description: e.brief_description
+          brief_description: e.brief_description,
+          recommends: e.recommends
         }))
       });
   }catch(err){
