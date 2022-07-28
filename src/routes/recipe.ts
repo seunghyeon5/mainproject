@@ -14,7 +14,9 @@ recipeRouter.get("/list/recommended", authMiddleware, recipeController.getMostRe
 recipeRouter.put("/list/recommend/:recipeId", authMiddleware, recipeController.recommendRecipe);
 // 레시피 추천취소
 recipeRouter.put("/list/undorecommend/:recipeId", authMiddleware, recipeController.undoRecommend);
-//레시피 검색
+// 레시피 검색
 recipeRouter.get("/list/search/:search", authMiddleware, recipeController.searchRecipes);
+// 추천 누른 레시피 불러오기
+recipeRouter.get("/list/getrecipe", authMiddleware, recipeController.getMyrecipe)
 
 export { recipeRouter };
