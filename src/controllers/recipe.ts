@@ -119,37 +119,6 @@ const undoRecommend = async (req: Request, res: Response) => {
       .send({ result: false, message: "잘못된 요청", error });
   }
 };
-//레시피 검색기능
-const searchRecipes = async (req: Request, res: Response) => {
-  try {
-    const { search } = req.params;
-
-    const findAllRecipes = await Recipes.find({
-      $or: [
-        { title: { $regex: search, $options: "i" } },
-        { keywords: { $regex: search, $options: "i" } },
-        { brief_description: { $regex: search, $options: "i" } },
-      ],
-    }).exec();
-
-    return res.status(HttpStatusCode.CREATED).json({
-      result: true,
-      message: "success",
-      findAllRecipes: findAllRecipes.map((a) => ({
-        image: a.image,
-        title: a.title,
-        brief_description: a.brief_description,
-        recommends: a.recommends,
-      })),
-    });
-  } catch (error) {
-    res
-      .status(HttpStatusCode.BAD_REQUEST)
-      .send({ result: false, message: "잘못된 요청", error });
-  }
-};
-
-
 
 export default {
   getRecipes,
@@ -157,5 +126,4 @@ export default {
   getMostRecommendedRecipes,
   recommendRecipe,
   undoRecommend,  
-  searchRecipes,
 };
