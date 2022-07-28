@@ -19,11 +19,11 @@ const getDrink = async (req: Request, res: Response) => {
     try {
         const { drinkId } = req.params;
         const drink = await Drinks.findById(drinkId).exec();
-        const user = res.locals;
+        const { userId } = res.locals.user;
 
         let drinks = await Drinks.findById(drinkId).exec()
         let recommend:boolean = false;
-        if(drinks!.recommend_list!.find(e => e === user._id)){
+        if(drinks!.recommend_list!.find(e => e === userId)){
             recommend = true;
         }else{
             recommend = false;
