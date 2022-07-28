@@ -5,6 +5,8 @@ import { IMyrecipe } from "../interfaces/myrecipe";
 import config from "../config/config";
 import AWS from "aws-sdk";
 import { IUser } from "../interfaces/user";
+import { IIngredient } from "../interfaces/ingredient"
+import ingredients from "../models/ingredient";;
 import HttpStatusCode from "../common/httpStatusCode";
 
 AWS.config.update({
@@ -55,8 +57,19 @@ const postrecipe = async (req: Request, res: Response) => {
 //레시피 전체목록조회
 const getAllrecipe = async (req: Request, res: Response) => {
     try {
-        const myrecipe: Array<IMyrecipe> = await MyRecipe.find().sort({ createdAt: "desc" });
-        return res.json({ result: true, message: "success", myrecipe });
+        const myrecipes = await MyRecipe.find().sort({ createdAt: "desc" });
+        return res.json({ result: true, message: "success",  
+
+        myrecipes: myrecipes.map((a) => ({
+            image: a.image,
+            title: a.title,
+            brief_description: a.brief_description,
+            favorite_count: a.favorite_count,
+            nickname:a.nickname,
+            userId: a.userId,
+            createdAt: a.createdAt?.toLocaleDateString('ko-KR'),
+          }))
+    });
     } catch (error) {
         res
           .status(HttpStatusCode.BAD_REQUEST)
@@ -67,12 +80,36 @@ const getAllrecipe = async (req: Request, res: Response) => {
 //레시피 상세조회
 const detailrecipe = async (req: Request, res: Response) => {
     try {
-        const { myrecipeId } = req.params;
-        const existsRecipe: IMyrecipe | null = await MyRecipe.findById(myrecipeId);
-        return res.json({ result: true, message: "success", existsRecipe: [existsRecipe] });
-    } catch (err) {
-        res.json({ result: false });
-        console.log(err);
+        const { myrecipeId } = req.params;        
+        const existsRecipe = await MyRecipe.findById(myrecipeId);
+        
+        let ingredient = "";
+        let temp: IIngredient | null;
+        let ingredient_images: Array<string> = [];
+    
+        for (let i = 0; i < existsRecipe!.ingredients.length; i++) {
+        //  [ingredient] = recipe!.ingredients[i].split("/");
+          ingredient = existsRecipe!.ingredients[i];
+          temp = await ingredients.findOne({ title: ingredient }).exec();
+          ingredient_images.push(temp!.image);
+        }
+        if (existsRecipe) {
+            return res.json({
+              result: true,
+              message: "success",
+              images: ingredient_images,        
+              myrecipe: [existsRecipe]             
+            });
+          } else {
+            return res
+              .status(HttpStatusCode.NOT_FOUND)
+              .json({ result: false, message: "no exist myrecipe" });
+          }
+        
+    } catch (error) {
+        res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .send({ result: false, message: "잘못된 요청", error });
     }
 };
 
