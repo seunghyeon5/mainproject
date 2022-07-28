@@ -21,11 +21,4 @@ favoriteRouter.delete("/store/:MystoreId/delete", authMiddleware, favoriteContro
 //내가 좋아요누른 마이레시피 조회
 favoriteRouter.get("/store/getmystore", authMiddleware, favoriteController.getMystore);
 
-//술에 좋아요 누르기
-favoriteRouter.post("/drink/:drinkId", authMiddleware, favoriteController.drinklike);
-//술 좋아요 취소
-favoriteRouter.delete("/drink/:drinkId/delete", authMiddleware, favoriteController.deletedrink)
-//내가 좋아요 누른 술 조회
-favoriteRouter.get("/drink/getdrinks", authMiddleware, favoriteController.getdrinks)
-
 export { favoriteRouter };

@@ -16,10 +16,19 @@ drinkRouter.get("/list/category/:categoryId", drinkController.getDrinksByCategor
 // 술냉장고에 술 넣기
 drinkRouter.post("/list/:drinkId/post", authMiddleware, drinkController.addDrink)
 
-//술냉장고 술 삭제하기
+// 술냉장고 술 삭제하기
 drinkRouter.delete("/list/:drinkId/delete", authMiddleware, drinkController.deleteDrink)
 
 // 술냉장고 이미지 불러오기
 drinkRouter.get("/drinkimage", authMiddleware, drinkController.getMydrinks)
+
+// 술 추천누르기
+drinkRouter.post("/list/recommend/:drinkId", authMiddleware, drinkController.recommendDrink)
+
+// 술 추천 취소하기
+drinkRouter.delete("/list/undorecommend/:drinkId", authMiddleware, drinkController.undoRecommend)
+
+// 추천누른 술 불러오기
+drinkRouter.get("/recommendlist", authMiddleware, drinkController.recommendlist)
 
 export { drinkRouter };

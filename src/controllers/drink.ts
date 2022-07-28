@@ -19,9 +19,18 @@ const getDrink = async (req: Request, res: Response) => {
     try {
         const { drinkId } = req.params;
         const drink = await Drinks.findById(drinkId).exec();
+        const user = res.locals;
+
+        let drinks = await Drinks.findById(drinkId).exec()
+        let recommend:boolean = false;
+        if(drinks!.recommend_list!.find(e => e === user._id)){
+            recommend = true;
+        }else{
+            recommend = false;
+        }
 
         if (drink) {
-            return res.json({ result: true, message: "success", drink: [drink] });
+            return res.json({ result: true, message: "success", drink: [drink], recommend });
         } else {
             return res.status(HttpStatusCode.NOT_FOUND).json({ result: false, message: "no exist drink" });
         }
@@ -45,6 +54,61 @@ const getDrinksByCategory = async (req: Request, res: Response) => {
         res.status(HttpStatusCode.BAD_REQUEST).send({ result: false, message: "잘못된 요청", error });
     }
 };
+
+//술 추천누르기
+const recommendDrink = async (req: Request, res: Response) => {
+    try{
+        const { userId } = res.locals.user;
+        const { drinkId } = req.params;
+        const drink = await Drinks.findById(drinkId).exec()
+        const existRecommend = await Drinks.findOne({$and: [{recommend_list: userId}, {_id: drinkId}]})
+        console.log(existRecommend)
+        
+        if(existRecommend){
+            return res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "이미 추천을 누르셨습니다."})
+        }
+        let cnt: number = drink?.recommend!;
+
+        await Drinks.updateMany(
+            { _id: { $in: drinkId}},
+            { $set: {recommend: cnt + 1}, $push: {recommend_list: userId}}
+        ).exec()
+        return res.status(HttpStatusCode.CREATED).json({ result: true, message: "추천"})
+    }catch(err){
+        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", err })
+    }
+}
+
+//술 추천취소하기
+const undoRecommend = async (req: Request, res: Response) => {
+    try{
+        const { userId } = res.locals.user
+        const { drinkId } = req.params;
+        const drink = await Drinks.findById(drinkId).exec();
+
+        let cnt: number = drink?.recommend!;
+
+        await Drinks.updateMany(
+            { _id: { $in: drinkId }},
+            { $set: { recommend: cnt - 1 }, $pull: { recommend_list: userId }}
+        ).exec();
+        return res.status(HttpStatusCode.OK).json({ result: true, message: "추천취소"}) 
+    }catch(err){
+        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", err})
+    }
+}
+
+//추천누른 술 불러오기
+const recommendlist = async (req: Request, res: Response) => {
+    const { userId } = res.locals.user
+    console.log({userId})
+    try {
+        let mydrinks= await Drinks.find({ recommend_list: userId})
+        res.status(HttpStatusCode.OK).json({result: true, message: "success", mydrinks})
+    }catch(err){
+        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", err})
+    }
+}
 
 //술냉장고에 술 추가하기
 const addDrink = async (req: Request, res: Response) => {
@@ -100,7 +164,6 @@ const getMydrinks = async (req: Request, res: Response) => {
         }
         let Mydrinks = ""
         let temp: IDrink | null;
-        let drink_image:string[] = []
         let drink_info:{image:string,id:string}[]=[];
         for (let i = 0; i < user.Drink_refrigerator.length; i++) {
             Mydrinks = user.Drink_refrigerator[i]
@@ -108,15 +171,12 @@ const getMydrinks = async (req: Request, res: Response) => {
             if(!(temp!._id)){
                 return false
             }else{
-                //drink_image.push({temp!.image, (temp!._id).toString()})
                 drink_info.push({image:temp!.image,id:(temp!._id.toString())})
             }
         }
-        //console.log(drink_image)
         console.log(drink_info)
         if(user){
             res.status(HttpStatusCode.OK).json({result: true, message:"success", drink_info: drink_info})
-            //res.status(HttpStatusCode.OK).json({result: true, message:"success", image: drink_image})
         }else{
             return res.status(HttpStatusCode.NOT_FOUND).json({result: false, message: "없는 술 입니다."})
         }
@@ -132,5 +192,8 @@ export default {
     getDrinksByCategory,
     addDrink,
     deleteDrink,
-    getMydrinks
+    getMydrinks,
+    recommendDrink,
+    undoRecommend,
+    recommendlist
 };

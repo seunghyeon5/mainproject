@@ -10,4 +10,6 @@ export interface IDrink {
     country: string;
     image: string;
     categoryId: string;
+    recommend?: number;
+    recommend_list: Array<string>;
 }
