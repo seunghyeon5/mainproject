@@ -23,10 +23,10 @@ drinkRouter.delete("/list/:drinkId/delete", authMiddleware, drinkController.dele
 drinkRouter.get("/drinkimage", authMiddleware, drinkController.getMydrinks)
 
 // 술 추천누르기
-drinkRouter.post("/list/recommend/:drinkId", authMiddleware, drinkController.recommendDrink)
+drinkRouter.put("/list/recommend/:drinkId", authMiddleware, drinkController.recommendDrink)
 
 // 술 추천 취소하기
-drinkRouter.delete("/list/undorecommend/:drinkId", authMiddleware, drinkController.undoRecommend)
+drinkRouter.put("/list/undorecommend/:drinkId", authMiddleware, drinkController.undoRecommend)
 
 // 추천누른 술 불러오기
 drinkRouter.get("/recommendlist", authMiddleware, drinkController.recommendlist)
