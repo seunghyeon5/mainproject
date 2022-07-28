@@ -82,18 +82,18 @@ const deletelike = async (req: Request, res: Response) => {
 };
 
 //내가 좋아요 누른 마이레시피 조회
-const getMyrecipe = async (req: Request, res: Response) => {
-    const { userId } = res.locals.user;
-    try {
-        const getMyrecipe: Array<IFavorite> = await Favorite.find({ userId, category: "myrecipe" });
+// const getMyrecipe = async (req: Request, res: Response) => {
+//     const { userId } = res.locals.user;
+//     try {
+//         const getMyrecipe: Array<IFavorite> = await Favorite.find({ userId, category: "myrecipe" });
 
-        res.status(HttpStatusCode.OK).json({ result: true, message: "success", getMyrecipe });
-    } catch (err) {
-        console.log(err);
-        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 접근" });
-        return;
-    }
-};
+//         res.status(HttpStatusCode.OK).json({ result: true, message: "success", getMyrecipe });
+//     } catch (err) {
+//         console.log(err);
+//         res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 접근" });
+//         return;
+//     }
+// };
 
 // Mystore
 // 마이스토어 좋아요 누르기
@@ -182,7 +182,7 @@ export default {
     postlike,
     getAlluser,
     deletelike,
-    getMyrecipe,
+    // getMyrecipe,
     postStorelike,
     getAllstoreuser,
     deleteStorelike,

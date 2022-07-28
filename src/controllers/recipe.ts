@@ -171,6 +171,26 @@ const searchRecipes = async (req: Request, res: Response) => {
   }
 };
 
+//추천 누른 레시피 조회
+const getMyrecipe = async (req: Request, res: Response) => {
+  const { user } = res.locals;
+  const user_id = (user._id).toHexString(); 
+  
+  try {
+      let myrecipes= await Recipes.find({ recommender_list: user_id})
+      res.status(HttpStatusCode.OK).json({result: true, 
+        message: "success", 
+        myrecipes: myrecipes.map((e) => ({
+          image: e.image,
+          title: e.title,
+          brief_description: e.brief_description
+        }))
+      });
+  }catch(err){
+      res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", err})
+  }
+}
+
 export default {
   getRecipes,
   getRecipe,
@@ -178,4 +198,5 @@ export default {
   recommendRecipe,
   undoRecommend,  
   searchRecipes,
+  getMyrecipe,
 };
