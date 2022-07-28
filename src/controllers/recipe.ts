@@ -7,8 +7,17 @@ import HttpStatusCode from "../common/httpStatusCode";
 // 전체 리스트 출력하기
 const getRecipes = async (req: Request, res: Response) => {
   try {
-    const recipes = await Recipes.find().exec();
-    return res.json({ result: true, message: "success", recipes });
+    const findAllRecipes = await Recipes.find().exec();
+    return res.json({
+      result: true,
+      message: "success",
+      recipes: findAllRecipes.map((a) => ({
+        image: a.image,
+        title: a.title,
+        brief_description: a.brief_description,
+        recommends: a.recommends,
+      }))
+    });
   } catch (error) {
     res
       .status(HttpStatusCode.BAD_REQUEST)
@@ -16,10 +25,20 @@ const getRecipes = async (req: Request, res: Response) => {
   }
 };
 
+// 레피시 추천 상위 5 
 const getMostRecommendedRecipes = async (req: Request, res: Response) => {
   try {
     const recipes = await Recipes.find().sort({ recommends: "desc" }).limit(5);
-    return res.json({ result: true, message: "success", recipes });
+    return res.json({
+      result: true,
+      message: "success",
+      recipes: recipes.map((a) => ({
+        image: a.image,
+        title: a.title,
+        brief_description: a.brief_description,
+        recommends: a.recommends,
+      }))
+    });
   } catch (error) {
     res
       .status(HttpStatusCode.BAD_REQUEST)
@@ -30,13 +49,14 @@ const getMostRecommendedRecipes = async (req: Request, res: Response) => {
 // 레시피 상세조회
 const getRecipe = async (req: Request, res: Response) => {
   try {
-    const { recipeId } = req.params;
-    const { user } = res.locals;
-    const user_id = (user._id).toHexString(); 
-    
+    const { recipeId } = req.params;    
+    const { userId } = res.locals.user;
+
     let recipe = await Recipes.findById(recipeId).exec();
     let recommend:boolean = false;
-    if(recipe!.recommender_list!.find(e => e === user_id)){
+
+    //이전 추천 여부 확인
+    if(recipe!.recommender_list!.find(e => e === userId)){
       recommend = true;
     }else{
       recommend = false;
@@ -75,8 +95,7 @@ const getRecipe = async (req: Request, res: Response) => {
 //추천하기
 const recommendRecipe = async (req: Request, res: Response) => {
   try {
-    const { user } = res.locals;
-    const user_id = user._id.toHexString();
+    const { userId } = res.locals.user;    
     const { recipeId } = req.params;
     const recipe = await Recipes.findById(recipeId).exec();
 
@@ -84,7 +103,7 @@ const recommendRecipe = async (req: Request, res: Response) => {
 
     await Recipes.updateMany(
       { _id: { $in: recipeId } },
-      { $set: { recommends: cnt + 1 }, $push: { recommender_list: user_id } }
+      { $set: { recommends: cnt + 1 }, $push: { recommender_list: userId } }
     ).exec();
     return res
       .status(HttpStatusCode.CREATED)
@@ -99,8 +118,7 @@ const recommendRecipe = async (req: Request, res: Response) => {
 //추천 취소하기
 const undoRecommend = async (req: Request, res: Response) => {
   try {
-    const { user } = res.locals;
-    const user_id = user._id.toHexString();
+    const { userId } = res.locals.user;    
     const { recipeId } = req.params;
     const recipe = await Recipes.findById(recipeId).exec();
 
@@ -108,7 +126,7 @@ const undoRecommend = async (req: Request, res: Response) => {
 
     await Recipes.updateMany(
       { _id: { $in: recipeId } },
-      { $set: { recommends: cnt - 1 }, $pull: { recommender_list: user_id } }
+      { $set: { recommends: cnt - 1 }, $pull: { recommender_list: userId } }
     ).exec();
     return res
       .status(HttpStatusCode.CREATED)
