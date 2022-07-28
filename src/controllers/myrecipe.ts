@@ -56,61 +56,63 @@ const postrecipe = async (req: Request, res: Response) => {
 
 //레시피 전체목록조회
 const getAllrecipe = async (req: Request, res: Response) => {
-    try {
-        const myrecipes = await MyRecipe.find().sort({ createdAt: "desc" });
-        return res.json({ result: true, message: "success",  
+  try {
+    const myrecipes = await MyRecipe.find().sort({ createdAt: "desc" });
+    return res.json({
+      result: true,
+      message: "success",
 
-        myrecipes: myrecipes.map((a) => ({
-            image: a.image,
-            title: a.title,
-            brief_description: a.brief_description,
-            favorite_count: a.favorite_count,
-            nickname:a.nickname,
-            userId: a.userId,
-            createdAt: a.createdAt?.toLocaleDateString('ko-KR'),
-          }))
+      myrecipes: myrecipes.map((a) => ({
+        image: a.image,
+        title: a.title,
+        brief_description: a.brief_description,
+        favorite_count: a.favorite_count,
+        nickname: a.nickname,
+        userId: a.userId,
+        _id: a._id, //myrecipe id
+        createdAt: a.createdAt?.toLocaleDateString("ko-KR"),
+      })),
     });
-    } catch (error) {
-        res
-          .status(HttpStatusCode.BAD_REQUEST)
-          .send({ result: false, message: "잘못된 요청", error });
-    }
+  } catch (error) {
+    res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .send({ result: false, message: "잘못된 요청", error });
+  }
 };
 
 //레시피 상세조회
 const detailrecipe = async (req: Request, res: Response) => {
-    try {
-        const { myrecipeId } = req.params;        
-        const existsRecipe = await MyRecipe.findById(myrecipeId);
-        
-        let ingredient = "";
-        let temp: IIngredient | null;
-        let ingredient_images: Array<string> = [];
-    
-        for (let i = 0; i < existsRecipe!.ingredients.length; i++) {
-        //  [ingredient] = recipe!.ingredients[i].split("/");
-          ingredient = existsRecipe!.ingredients[i];
-          temp = await ingredients.findOne({ title: ingredient }).exec();
-          ingredient_images.push(temp!.image);
-        }
-        if (existsRecipe) {
-            return res.json({
-              result: true,
-              message: "success",
-              images: ingredient_images,        
-              myrecipe: [existsRecipe]             
-            });
-          } else {
-            return res
-              .status(HttpStatusCode.NOT_FOUND)
-              .json({ result: false, message: "no exist myrecipe" });
-          }
-        
-    } catch (error) {
-        res
-          .status(HttpStatusCode.BAD_REQUEST)
-          .send({ result: false, message: "잘못된 요청", error });
+  try {
+    const { myrecipeId } = req.params;
+    const existsRecipe = await MyRecipe.findById(myrecipeId);
+
+    let ingredient = "";
+    let temp: IIngredient | null;
+    let ingredient_images: Array<string> = [];
+
+    for (let i = 0; i < existsRecipe!.ingredients.length; i++) {
+     
+      ingredient = existsRecipe!.ingredients[i];
+      temp = await ingredients.findOne({ title: ingredient }).exec();
+      ingredient_images.push(temp!.image);
     }
+    if (existsRecipe) {
+      return res.json({
+        result: true,
+        message: "success",
+        images: ingredient_images,
+        myrecipe: [existsRecipe],
+      });
+    } else {
+      return res
+        .status(HttpStatusCode.NOT_FOUND)
+        .json({ result: false, message: "no exist myrecipe" });
+    }
+  } catch (error) {
+    res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .send({ result: false, message: "잘못된 요청", error });
+  }
 };
 
 //내가 쓴 레시피 조회
