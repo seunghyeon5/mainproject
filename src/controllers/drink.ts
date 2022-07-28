@@ -73,7 +73,7 @@ const recommendDrink = async (req: Request, res: Response) => {
 
         await Drinks.updateMany(
             { _id: { $in: drinkId}},
-            { $set: {recommend: cnt + 1}, $push: {recommend_list: userId}}
+            { $set: {recommend: cnt + 1}, $push: {recommend_list: user_id}}
         ).exec()
         return res.status(HttpStatusCode.CREATED).json({ result: true, message: "추천"})
     }catch(err){
