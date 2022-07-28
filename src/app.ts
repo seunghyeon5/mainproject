@@ -1,15 +1,4 @@
-import express, { Application, Request, Response, NextFunction } from "express";
-//import bodyParser from 'body-parser';
-//import logging from './config/logging';
-
-//importing InitRouters
-/*
-import { initCategoryRouter } from "./initData/category";
-import { initDrinksRouter } from "./initData/drinks";
-import { initDrinkRecipeRouter } from "./initData/recipe";
-import { initIngredientsRouter } from "./initData/ingredient";
-*/
-
+import express from "express";
 import config from "./config/config";
 import { connect } from "./models";
 import { userRouter } from "./routes/user";
@@ -20,34 +9,41 @@ import { recipeRouter } from "./routes/recipe";
 import { favoriteRouter } from "./routes/favorite";
 import { mystoreRouter } from "./routes/store";
 import { commentRouter } from "./routes/comment";
-
 import cors from "cors";
+
+/** importing InitRouters */
+/*
+import { initCategoryRouter } from "./initData/category";
+import { initDrinksRouter } from "./initData/drinks";
+import { initDrinkRecipeRouter } from "./initData/recipe";
+import { initIngredientsRouter } from "./initData/ingredient";
+*/
 
 const router = express();
 
-// DB
+/** connect DB */
 connect();
 
-//passport
+/** passport for social login */
 import { kakaoPassport } from "./passport/kakao";
-
 kakaoPassport();
 
 /** Log the request */
+/*
 router.use((req, res, next) => {
-    /** Log the req */
+    
     //logging.info(NAMESPACE, `METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}]`);
     res.json({ message: "success" });
 
     res.on("finish", () => {
-        /** Log the res */
+       
         // logging.info(NAMESPACE, `METHOD: [${req.method}] - URL: [${req.url}] - STATUS: [${res.statusCode}] - IP: [${req.socket.remoteAddress}]`);
         res.json({ message: "fail" });
     });
 
     next();
 });
-
+*/
 const port = config.server.port;
 
 const app = express();
@@ -65,10 +61,9 @@ const options: cors.CorsOptions = {
 };
 
 app.use(cors(options));
-
 app.use(express.urlencoded({ extended: true }));
-
 app.use(express.json());
+
 //Initializing DBdata
 /*
 app.use("/api/init/category", [initCategoryRouter]);
