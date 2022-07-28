@@ -30,6 +30,14 @@ const DrinkSchema: Schema = new Schema({
         type: String,
         ref: "DrinkCategories",
         required: true
+    },
+    recommend: {
+        type: Number,
+        default: 0
+    },
+    recommend_list: {
+        type: Array,
+        default: []
     }
 });
 

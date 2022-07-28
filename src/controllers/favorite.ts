@@ -178,71 +178,6 @@ const getMystore = async (req: Request, res: Response) => {
     }
 };
 
-//술에 좋아요 누르기
-const drinklike = async (req: Request, res: Response) => {
-    const { userId } = res.locals.user;
-    const { nickname } = res.locals.user;
-    const { drinkId } = req.params;
-    try {
-        const existLike = await Favorite.findOne({ $and: [{ userId: userId }, { drinkId: drinkId }, { category: "drink" }] });
-        const drinks: IDrink | null = await Drinks.findById({ _id: drinkId });
-        if (!drinks) {
-            return res.status(HttpStatusCode.NO_CONTENT).json({ result: false, message: "술 정보가 올바르지 않습니다." });
-        }
-        if (existLike) {
-            return res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "이미 좋아요를 누르셨습니다." });
-        } else {
-            const favorite = await Favorite.create({
-                drinks,
-                userId,
-                nickname,
-                category: "drink"
-            });
-            return res.status(HttpStatusCode.CREATED).json({ result: true, message: "success", favorite });
-        }
-    } catch (err) {
-        console.log(err);
-        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청" });
-        return;
-    }
-};
-
-//술 좋아요 취소
-const deletedrink = async (req: Request, res: Response) => {
-    const { drinkId } = req.params;
-    const { userId } = res.locals.user;
-    try {
-        const findUser = await Favorite.findOne({ $and: [{ userId: userId }, { drinkId: drinkId }, { category: "drink" }] });
-        const drinks = await Drinks.findById({ _id: drinkId });
-        if (!drinks) {
-            res.status(HttpStatusCode.NO_CONTENT).json({ result: false, msg: "술 정보가 올바르지 않습니다." });
-            return;
-        }
-        if (!findUser) {
-            return res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, msg: "좋아요를 누르지 않았습니다." });
-        } else {
-            await Favorite.findByIdAndDelete(findUser);
-            return res.status(HttpStatusCode.OK).json({ result: true });
-        }
-    } catch (err) {
-        console.log(err);
-        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false });
-        return;
-    }
-};
-
-//내가 좋아요 누른 술 조회
-const getdrinks = async (req: Request, res: Response) => {
-    const { userId } = res.locals.user;
-    try {
-        const getMydrink: Array<IFavorite> = await Favorite.find({ userId, category: "drink" });
-        res.status(HttpStatusCode.OK).json({ result: true, message: "success", getMydrink });
-    } catch (err) {
-        console.log(err);
-        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, messsage: "잘못된 접근" });
-    }
-};
-
 export default {
     postlike,
     getAlluser,
@@ -252,7 +187,4 @@ export default {
     getAllstoreuser,
     deleteStorelike,
     getMystore,
-    drinklike,
-    deletedrink,
-    getdrinks
 };

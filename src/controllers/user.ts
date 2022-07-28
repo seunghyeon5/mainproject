@@ -141,25 +141,6 @@ const kakaoCallback = async (
   })(req, res, next);
 };
 
-//네이버 콜백
-const naverCallback = (req: Request, res: Response, next: NextFunction) => {
-  passport.authenticate(
-    "naver",
-    {
-      failureRedirect: "/",
-    },
-    (err, user, info) => {
-      if (err) return next(err);
-      const token = jwt.sign(
-        { user: user._id },
-        config.jwt.secretKey as jwt.Secret,
-        { expiresIn: "1d" }
-      );     
-      res.redirect(`http://www.b-tender.com/oauth/token=${token}`);
-    }
-  )(req, res, next);
-};
-
 //닉네임 변경하기
 const changeNickname = async (req: Request, res: Response) => {
   const { nickname } = req.body;
@@ -238,6 +219,5 @@ export default {
   withdrawal,
   changeNickname,
   changePassword,
-  naverCallback,
   getmypage,
 };
