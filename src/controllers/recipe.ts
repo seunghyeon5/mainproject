@@ -143,7 +143,8 @@ const undoRecommend = async (req: Request, res: Response) => {
 //레시피 검색기능
 const searchRecipes = async (req: Request, res: Response) => {
   try {
-    const { search } = req.params;
+    let { search } = req.params;
+    search = search.toLowerCase();
 
     const findAllRecipes = await Recipes.find({
       $or: [
