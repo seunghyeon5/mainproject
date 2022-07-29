@@ -193,6 +193,35 @@ const getMyrecipe = async (req: Request, res: Response) => {
   }
 }
 
+//
+const getRelatedRecipes = async (req: Request, res: Response) => { 
+  try {
+    const { drink } = req.params;
+
+    const findAllRecipes = await Recipes.find({
+      $or: [       
+        { keywords: { $regex: drink, $options: "i" } }       
+      ],
+    }).exec();
+
+    return res.json({
+      result: true,
+      message: "success",
+      recipes: findAllRecipes.map((a) => ({
+        image: a.image,
+        title: a.title,
+        brief_description: a.brief_description,
+        recommends: a.recommends,
+        _id: a._id,
+      }))
+    });
+
+     
+  }catch(error){
+      res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", error})
+  }
+}
+
 export default {
   getRecipes,
   getRecipe,
@@ -201,4 +230,5 @@ export default {
   undoRecommend,  
   searchRecipes,
   getMyrecipe,
+  getRelatedRecipes,
 };
