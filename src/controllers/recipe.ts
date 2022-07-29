@@ -173,27 +173,29 @@ const searchRecipes = async (req: Request, res: Response) => {
 
 //추천 누른 레시피 조회
 const getMyrecipe = async (req: Request, res: Response) => {
-  const { user } = res.locals;
-  const user_id = (user._id).toHexString(); 
-  
   try {
-      let myrecipes= await Recipes.find({ recommender_list: user_id})
-      res.status(HttpStatusCode.OK).json({result: true, 
-        message: "success", 
-        myrecipes: myrecipes.map((e) => ({
-          image: e.image,
-          title: e.title,
-          brief_description: e.brief_description,
-          recommends: e.recommends,
-          _id: e._id
-        }))
-      });
-  }catch(err){
-      res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", err})
-  }
-}
+    const { userId } = res.locals.user;
 
-//
+    const myrecipes = await Recipes.find({ recommender_list: userId }).exec();
+    res.status(HttpStatusCode.OK).json({
+      result: true,
+      message: "success",
+      myrecipes: myrecipes.map((e) => ({
+        image: e.image,
+        title: e.title,
+        brief_description: e.brief_description,
+        recommends: e.recommends,
+        _id: e._id,
+      })),
+    });
+  } catch (error) {
+    res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .json({ result: false, message: "잘못된 요청", error });
+  }
+};
+
+//술과 관련된 레시피 조회
 const getRelatedRecipes = async (req: Request, res: Response) => { 
   try {
     const { drink } = req.params;
