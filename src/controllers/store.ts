@@ -3,7 +3,7 @@ import Mystore from "../models/store";
 import User from "../models/user";
 import { IUser } from "../interfaces/user";
 import { IStore } from "../interfaces/store";
-
+import Favorite from "../models/favorite"
 import config from "../config/config";
 import AWS from "aws-sdk";
 import HttpStatusCode from "../common/httpStatusCode";
@@ -137,6 +137,7 @@ const deletestore = async (req: Request, res: Response) => {
           return;
       } else {
           await Mystore.findByIdAndDelete(mystoreId);
+          await Favorite.deleteMany({MystoreId: mystoreId})
           let num: number = user.createdposts_store;
           await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts_store: --num } });
           return res.json({ result: true });

@@ -8,6 +8,7 @@ import { IUser } from "../interfaces/user";
 import { IIngredient } from "../interfaces/ingredient"
 import ingredients from "../models/ingredient";
 import HttpStatusCode from "../common/httpStatusCode";
+import Favorite from "../models/favorite"
 
 AWS.config.update({
     accessKeyId: config.aws.access_key_id,
@@ -174,6 +175,7 @@ const deleteRecipe = async (req: Request, res: Response) => {
             .json({ result: false, message: "no exist user" });
         } else {
             await MyRecipe.findByIdAndDelete(myrecipeId);
+            await Favorite.deleteMany({myrecipeId: myrecipeId})
             let num: number = user.createdposts;
             await User.findOneAndUpdate({ _id: userId }, { $set: { createdposts: --num } });
             return res.json({ result: true, message: "success"});
