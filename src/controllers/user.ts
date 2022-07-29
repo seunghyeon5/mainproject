@@ -12,7 +12,6 @@ import favorite from "../models/favorite";
 import recipe from "../models/recipe"
 import drink from "../models/drink"
 
-
 //회원가입
 const signup = async (req: Request, res: Response) => {
   let { email, nickname, password, confirmpassword } = req.body;
@@ -169,6 +168,25 @@ const changeNickname = async (req: Request, res: Response) => {
   }
 };
 
+//비밀번호 변경 소셜로그인 여부확인
+const checkSocial = async (req: Request, res: Response) => {
+  try {
+  const { userId } = res.locals.user; 
+  const existUser = await User.findById({_id:userId});
+ 
+  if(existUser?.provider==="b_tender"){
+    return res.json({ result: true, message: "success" });
+  }else{
+    return res.json({ result: false, message: "success" });
+  }    
+ 
+  } catch (error) {
+    res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .json({ result: false, message: "잘못된 요청", error });
+  }
+};
+
 //비밀번호 변경하기
 const changePassword = async (req: Request, res: Response) => {
   const { user } = res.locals;
@@ -222,6 +240,7 @@ export default {
   kakaoCallback,
   withdrawal,
   changeNickname,
+  checkSocial,
   changePassword,
   getmypage,
 };
