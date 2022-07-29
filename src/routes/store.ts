@@ -8,7 +8,6 @@ const mystoreRouter = express.Router();
 // 스토어 전체 조회
 mystoreRouter.get("/post/list", storeContoller.getAllstore);
 
-
 // 내가 쓴 스토어 목록
 mystoreRouter.get("/post/getallmystore", authMiddleware, storeContoller.getAllmystore);
 

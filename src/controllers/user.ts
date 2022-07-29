@@ -9,6 +9,8 @@ import myrecipe from "../models/myrecipe"
 import comment from "../models/comment"
 import store from "../models/store";
 import favorite from "../models/favorite";
+import recipe from "../models/recipe"
+import drink from "../models/drink"
 
 
 //회원가입
@@ -114,6 +116,8 @@ const withdrawal = async (req: Request, res: Response) => {
     await store.deleteMany({ userId: userId })
     await favorite.deleteMany({ userId: userId })
     await comment.deleteMany({ userId: userId })
+    await drink.updateMany({$pull: {recommend_list: userId}})
+    await recipe.updateMany({$pull: {recommender_list: userId}})
     await User.findByIdAndDelete(userId);
     return res.json({ result: true, message: "success" });
   } catch (error) {

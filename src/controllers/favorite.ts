@@ -4,9 +4,7 @@ import { IFavorite } from "../interfaces/favorite";
 import myrecipe from "../models/myrecipe";
 import Mystore from "../models/store";
 import { IStore } from "../interfaces/store";
-import Drinks from "../models/drink";
 import HttpStatusCode from "../common/httpStatusCode";
-import { IDrink } from "../interfaces/drink";
 
 //마이레시피에 좋아요 누르기
 const postlike = async (req: Request, res: Response) => {
@@ -17,10 +15,10 @@ const postlike = async (req: Request, res: Response) => {
         const existLike = await Favorite.findOne({ $and: [{ userId: userId }, { myrecipeId: myrecipeId }, { category: "myrecipe" }] });
         const Myrecipe = await myrecipe.findById({ _id: myrecipeId });
         if (!Myrecipe) {
-            return res.status(HttpStatusCode.NO_CONTENT).json({ result: false, msg: "존재하지 않는 값입니다." });
+            return res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "존재하지 않는 값입니다." });
         }
         if (existLike) {
-            return res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, msg: "이미 좋아요를 누르셨습니다." });
+            return res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "이미 좋아요를 누르셨습니다." });
         } else {
             const favorite = await Favorite.create({
                 userId,
@@ -31,12 +29,10 @@ const postlike = async (req: Request, res: Response) => {
             });
             let num: number = Myrecipe.favorite_count;
             await myrecipe.findOneAndUpdate({ _id: myrecipeId }, { $set: { favorite_count: ++num } });
-            return res.status(HttpStatusCode.CREATED).json({ result: true, favorite });
+            return res.status(HttpStatusCode.CREATED).json({ result: true, message: "success", favorite });
         }
-    } catch (err) {
-        console.log(err);
-        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 접근" });
-        return;
+    } catch (error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", error });
     }
 };
 
@@ -45,12 +41,10 @@ const getAlluser = async (req: Request, res: Response) => {
     const { myrecipeId } = req.params;
     try {
         const getUser: Array<IFavorite> = await Favorite.find({ myrecipeId });
-        res.status(HttpStatusCode.OK).json({ result: true, message: "success", getUser });
+        res.json({ result: true, message: "success", getUser });
         return;
-    } catch (err) {
-        console.log(err);
-        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 접근" });
-        return;
+    } catch (error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", error });
     }
 };
 
@@ -63,7 +57,7 @@ const deletelike = async (req: Request, res: Response) => {
         const findUser = await Favorite.findOne({ userId, myrecipeId, nickname });
         const Myrecipe = await myrecipe.findById({ _id: myrecipeId });
         if (!Myrecipe) {
-            res.status(HttpStatusCode.NO_CONTENT).json({ result: false, msg: "존재하지 않는 값입니다." });
+            res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, msg: "레시피아이디값이 올바르지 않습니다." });
             return;
         }
         if (!findUser) {
@@ -72,12 +66,10 @@ const deletelike = async (req: Request, res: Response) => {
             await Favorite.findByIdAndDelete(findUser);
             let num: number = Myrecipe.favorite_count;
             await myrecipe.findOneAndUpdate({ _id: myrecipeId }, { $set: { favorite_count: --num } });
-            return res.status(HttpStatusCode.OK).json({ result: true, message: "success" });
+            return res.json({ result: true, message: "success" });
         }
-    } catch (err) {
-        console.log(err);
-        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 접근" });
-        return;
+    } catch (error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", error });
     }
 };
 
@@ -91,11 +83,11 @@ const postStorelike = async (req: Request, res: Response) => {
         const existLike = await Favorite.findOne({ $and: [{ userId: userId }, { MystoreId: MystoreId }, { category: "mystore" }] });
         const Store: IStore | null = await Mystore.findById({ _id: MystoreId });
         if (!Store) {
-            res.status(HttpStatusCode.NO_CONTENT).json({ result: false, msg: "존재하지 않는 값입니다." });
+            res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "스토어아이디값이 올바르지 않습니다." });
             return;
         }
         if (existLike) {
-            return res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, msg: "이미 좋아요를 누르셨습니다." });
+            return res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "이미 좋아요를 누르셨습니다." });
         } else {
             const favorite = await Favorite.create({
                 userId,
@@ -108,10 +100,8 @@ const postStorelike = async (req: Request, res: Response) => {
             await Mystore.findOneAndUpdate({ _id: MystoreId }, { $set: { favorite_count: ++num } });
             return res.status(HttpStatusCode.CREATED).json({ result: true, message: "success", favorite });
         }
-    } catch (err) {
-        console.log(err);
-        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 접근" });
-        return;
+    } catch (error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", error });
     }
 };
 
@@ -120,10 +110,9 @@ const getAllstoreuser = async (req: Request, res: Response) => {
     const { MystoreId } = req.params;
     try {
         const getUser: Array<IFavorite> = await Favorite.find({ MystoreId });
-        res.status(HttpStatusCode.OK).json({ result: true, message: "success", getUser });
-    } catch (err) {
-        console.log(err);
-        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 접근" });
+        res.json({ result: true, message: "success", getUser });
+    } catch (error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", error });
     }
 };
 
@@ -144,11 +133,10 @@ const deleteStorelike = async (req: Request, res: Response) => {
             await Favorite.findByIdAndDelete(findUser);
             let num: number = Store.favorite_count;
             await Mystore.findOneAndUpdate({ _id: MystoreId }, { $set: { favorite_count: --num } });
-            return res.status(HttpStatusCode.OK).json({ result: true, message: "success" });
+            return res.json({ result: true, message: "success" });
         }
-    } catch (err) {
-        console.log(err);
-        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 접근" });
+    } catch (error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", error });
     }
 };
 
@@ -157,10 +145,9 @@ const getMystore = async (req: Request, res: Response) => {
     const { userId } = res.locals.user;
     try {
         const getMystore: Array<IFavorite> = await Favorite.find({ userId, category: "mystore" });
-        res.status(HttpStatusCode.OK).json({ result: true, message: "success", getMystore });
-    } catch (err) {
-        console.log(err);
-        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 접근" });
+        res.json({ result: true, message: "success", getMystore });
+    } catch (error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", error });
     }
 };
 
