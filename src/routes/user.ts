@@ -12,6 +12,7 @@ userRouter.post("/login", userController.login);
 userRouter.get("/me", authMiddleware, userController.checkuser);
 userRouter.delete("/", authMiddleware, userController.withdrawal);
 userRouter.put("/changenick", bodyValidator(CreateUserDto), authMiddleware, userController.changeNickname);
+userRouter.get("/checksocial",authMiddleware, userController.checkSocial);
 userRouter.put("/changepassword", bodyValidator(CreateUserDto), authMiddleware, userController.changePassword);
 
 //마이페이지
