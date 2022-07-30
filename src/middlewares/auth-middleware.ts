@@ -5,7 +5,6 @@ import config from "../config/config";
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const authorization = String(req.headers.authorization);
-    // console.log(authorization);
     const [tokentype, tokenvalue] = authorization.split(" ");
     if (tokenvalue == "null") {
         res.locals.users = null;
@@ -21,7 +20,6 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     try {
         const user: jwt.JwtPayload | string = jwt.verify(tokenvalue, config.jwt.secretKey as jwt.Secret);
         User.findById((user as jwt.JwtPayload).user).then((user) => {
-            // console.log(user);
             res.locals = { user }
             return next();
         });

@@ -3,6 +3,7 @@ import Recipes from "../models/recipe";
 import ingredients from "../models/ingredient";
 import { IIngredient } from "../interfaces/ingredient";
 import HttpStatusCode from "../common/httpStatusCode";
+import favorite from "../models/favorite";
 
 // 전체 리스트 출력하기
 const getRecipes = async (req: Request, res: Response) => {
@@ -160,11 +161,15 @@ const getMyrecipe = async (req: Request, res: Response) => {
     try {
         const { userId } = res.locals.user;
 
-        const myrecipes = await Recipes.find({ recommender_list: userId }).exec();
+        const recipes = await Recipes.find({ recommender_list: userId }).exec();
+        const myrecipe = await favorite.find({ userId: userId, category: "myrecipe"}).exec()
         res.json({
             result: true,
             message: "success",
-            myrecipes: myrecipes.map((e) => ({
+            myrecipe: myrecipe.map((a) => ({
+                Myrecipe: a.Myrecipe
+            })),
+            recipes: recipes.map((e) => ({
                 image: e.image,
                 title: e.title,
                 brief_description: e.brief_description,

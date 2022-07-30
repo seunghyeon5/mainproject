@@ -5,9 +5,7 @@ export interface IFavorite {
     nickname: string;
     myrecipeId: string;
     MystoreId:string;
-    drinkId:string;
     category:string;
-    drinks:Array<string>;
     Myrecipe:Array<string>;
     Store:Array<string>;
     userId:string;
