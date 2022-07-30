@@ -161,7 +161,7 @@ const getMyrecipe = async (req: Request, res: Response) => {
     try {
         const { userId } = res.locals.user;
 
-        const recipes = await Recipes.find({ recommender_list: userId }).exec();
+        const myrecipes = await Recipes.find({ recommender_list: userId }).exec();
         // const myrecipe = await favorite.find({ userId: userId, category: "myrecipe"}).exec()
         res.json({
             result: true,
@@ -169,7 +169,7 @@ const getMyrecipe = async (req: Request, res: Response) => {
             // myrecipe: myrecipe.map((a) => ({
             //     Myrecipe: a.Myrecipe
             // })),
-            recipes: recipes.map((e) => ({
+            myrecipes: myrecipes.map((e) => ({
                 image: e.image,
                 title: e.title,
                 brief_description: e.brief_description,
