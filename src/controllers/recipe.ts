@@ -159,16 +159,53 @@ const searchRecipes = async (req: Request, res: Response) => {
 //추천 누른 레시피 조회
 const getMyrecipe = async (req: Request, res: Response) => {
     try {
+            /* 제공된 레시피 + 유저가 만든 레시피  FE와 얘기해서 상세로 넘어가는 api 분할 후 사용가능
+            //변수 이름과 코드들 리팩토링 반드시 필요 
+            
+            const { userId } = res.locals.user;
+
+            const recipes = await Recipes.find({
+              recommender_list: userId,
+            }).exec();
+            const myrecipe = await favorite
+              .find({ userId: userId, category: "myrecipe" })
+              .exec();
+
+            const temp = myrecipe.map((a) => a.Myrecipe[0]);
+
+            let result = [];
+            result = recipes.map((e) => ({
+              image: e.image,
+              title: e.title,
+              brief_description: e.brief_description,
+              recommends: e.recommends,
+              _id: e._id,
+              label: "given",
+            }));
+            let save = [];
+            save = temp.map((e: any) => ({
+              image: e.image,
+              title: e.title,
+              brief_description: e.brief_description,
+              recommends: e.favorite_count,
+              _id: e._id,
+              label: "custom",
+            }));
+            result = result.concat(save);
+            //console.log(result)
+            res.json({
+              result: true,
+              message: "success",
+              myrecipes: result,
+            });
+            */
         const { userId } = res.locals.user;
 
         const myrecipes = await Recipes.find({ recommender_list: userId }).exec();
-        // const myrecipe = await favorite.find({ userId: userId, category: "myrecipe"}).exec()
+        
         res.json({
             result: true,
-            message: "success",
-            // myrecipe: myrecipe.map((a) => ({
-            //     Myrecipe: a.Myrecipe
-            // })),
+            message: "success",           
             myrecipes: myrecipes.map((e) => ({
                 image: e.image,
                 title: e.title,
