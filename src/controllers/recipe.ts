@@ -4,7 +4,7 @@ import ingredients from "../models/ingredient";
 import { IIngredient } from "../interfaces/ingredient";
 import HttpStatusCode from "../common/httpStatusCode";
 import favorite from "../models/favorite";
-import MyRecipe from "../models/myrecipe";
+// import MyRecipe from "../models/myrecipe";
 // 전체 리스트 출력하기
 const getRecipes = async (req: Request, res: Response) => {
     try {
@@ -163,7 +163,6 @@ const getMyrecipe = async (req: Request, res: Response) => {
             //변수 이름과 코드들 리팩토링 반드시 필요 
 
             //version #1
-            /*
             const { userId } = res.locals.user;
 
             const recipes = await Recipes.find({
@@ -201,7 +200,7 @@ const getMyrecipe = async (req: Request, res: Response) => {
               message: "success",
               myrecipes: result,
             });
-            */
+            
             
             //version #2
             /*
@@ -251,7 +250,8 @@ const getMyrecipe = async (req: Request, res: Response) => {
             });
             */
 
-       //origin code       
+       //origin code
+       /*       
         const { userId } = res.locals.user;
 
         const myrecipes = await Recipes.find({ recommender_list: userId }).exec();
@@ -267,7 +267,7 @@ const getMyrecipe = async (req: Request, res: Response) => {
                 _id: e._id
             }))
         });
-        
+        */
     } catch (error) {
         res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", error });
     }
