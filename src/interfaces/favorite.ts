@@ -6,5 +6,5 @@ export interface IFavorite {
     myfavoritesId: string; 
     userId:string; 
     category:string;
-    myfavoritesInfo:string;   
+    myfavoritesInfo:object;   
 }
