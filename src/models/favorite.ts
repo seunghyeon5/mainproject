@@ -15,7 +15,7 @@ const favoriteSchema: Schema = new Schema({
         type: String
     },
     myfavoritesInfo: {
-        type: String
+        type: Object
     },   
 });
 
