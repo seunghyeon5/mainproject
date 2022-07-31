@@ -15,7 +15,6 @@ AWS.config.update({
 });
 const s3 = new AWS.S3();
 
-// import { getRegExp } from "korean-regexp"; //스토어 검색 기능
 const postStore = async (req: Request, res: Response) => {
     try {
         const { title, address, review } = req.body;
@@ -26,7 +25,6 @@ const postStore = async (req: Request, res: Response) => {
 
         for (let i = 0; i < (req.files as Express.MulterS3.File[]).length; i++) {
             images.push((req.files as Express.MulterS3.File[])[i].location);
-            //keys.push((req.files as Express.MulterS3.File[])[i].key);
             const [temp, key] = (req.files as Express.MulterS3.File[])[i].location.split("com/");
             keys.push(key);
         }
