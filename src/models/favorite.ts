@@ -5,24 +5,18 @@ const favoriteSchema: Schema = new Schema({
     nickname: {
         type: String
     },
-    myrecipeId: {
+    myfavoritesId: {
         type: String
     },
     userId: {
         type: String
-    },
-    MystoreId:{
-        type: String
-    },
+    },    
     category:{
         type: String
     },
-    Store: {
-        type: Array
-    },
-    Myrecipe:{
-        type: Array
-    }
+    myfavoritesInfo: {
+        type: String
+    },   
 });
 
 export default mongoose.model<IFavorite & Document>("favorite", favoriteSchema);

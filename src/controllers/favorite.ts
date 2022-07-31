@@ -12,7 +12,7 @@ const postlike = async (req: Request, res: Response) => {
     const { nickname } = res.locals.user;
     const { myrecipeId } = req.params;
     try {
-        const existLike = await Favorite.findOne({ $and: [{ userId: userId }, { myrecipeId: myrecipeId }, { category: "myrecipe" }] });
+        const existLike = await Favorite.findOne({ $and: [{ userId: userId }, { myfavoritesId: myrecipeId }, { category: "myrecipe" }] });
         const Myrecipe = await myrecipe.findById({ _id: myrecipeId });
         if (!Myrecipe) {
             return res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "존재하지 않는 값입니다." });
@@ -21,11 +21,11 @@ const postlike = async (req: Request, res: Response) => {
             return res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "이미 좋아요를 누르셨습니다." });
         } else {
             const favorite = await Favorite.create({
-                userId,
-                Myrecipe,
-                myrecipeId,
                 nickname,
-                category: "myrecipe"
+                myfavoritesId: myrecipeId,
+                userId,
+                category: "myrecipe",
+                myfavoritesInfo: Myrecipe,                 
             });
             let num: number = Myrecipe.favorite_count;
             await myrecipe.findOneAndUpdate({ _id: myrecipeId }, { $set: { favorite_count: ++num } });
@@ -54,7 +54,7 @@ const deletelike = async (req: Request, res: Response) => {
     const { userId } = res.locals.user;
     const { nickname } = res.locals.user;
     try {
-        const findUser = await Favorite.findOne({ userId, myrecipeId, nickname });
+        const findUser = await Favorite.findOne({ userId, myfavoritesId:myrecipeId, nickname });
         const Myrecipe = await myrecipe.findById({ _id: myrecipeId });
         if (!Myrecipe) {
             res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, msg: "레시피아이디값이 올바르지 않습니다." });
@@ -90,11 +90,11 @@ const postStorelike = async (req: Request, res: Response) => {
             return res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "이미 좋아요를 누르셨습니다." });
         } else {
             const favorite = await Favorite.create({
-                userId,
-                MystoreId,
-                Store,
                 nickname,
-                category: "mystore"
+                myfavoritesId: MystoreId,
+                userId,
+                category: "mystore",
+                myfavoritesInfo: Store,   
             });
             let num: number = Store.favorite_count;
             await Mystore.findOneAndUpdate({ _id: MystoreId }, { $set: { favorite_count: ++num } });
@@ -121,7 +121,7 @@ const deleteStorelike = async (req: Request, res: Response) => {
     const { MystoreId } = req.params;
     const { userId } = res.locals.user;
     try {
-        const findUser = await Favorite.findOne({ $and: [{ userId: userId }, { MystoreId: MystoreId }, { category: "mystore" }] });
+        const findUser = await Favorite.findOne({ $and: [{ userId: userId }, { myfavoritesId: MystoreId }, { category: "mystore" }] });
         const Store = await Mystore.findById({ _id: MystoreId });
         if (!Store) {
             res.status(HttpStatusCode.NO_CONTENT).json({ result: false, msg: "존재하지 않는 값입니다." });
