@@ -80,7 +80,7 @@ const postStorelike = async (req: Request, res: Response) => {
     const { nickname } = res.locals.user;
     const { MystoreId } = req.params;
     try {
-        const existLike = await Favorite.findOne({ $and: [{ userId: userId }, { MystoreId: MystoreId }, { category: "mystore" }] });
+        const existLike = await Favorite.findOne({ $and: [{ userId: userId }, { myfavoritesId: MystoreId }, { category: "mystore" }] });
         const Store: IStore | null = await Mystore.findById({ _id: MystoreId });
         if (!Store) {
             res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "스토어아이디값이 올바르지 않습니다." });
@@ -144,8 +144,19 @@ const deleteStorelike = async (req: Request, res: Response) => {
 const getMystore = async (req: Request, res: Response) => {
     const { userId } = res.locals.user;
     try {
-        const getMystore: Array<IFavorite> = await Favorite.find({ userId, category: "mystore" });
-        res.json({ result: true, message: "success", getMystore });
+        const getMystore = await Favorite.find({ userId, category: "mystore" });
+        const temp = getMystore.map((a) => a.myfavoritesInfo)
+        let stores = []
+        stores = temp.map((e:any) => ({
+            title: e.title,
+            nickname: e.nickname,
+            image: e.images[0],
+            address: e.address,
+            review: e.review,
+            time: e.createdAt.toLocaleDateString("ko-KR"),
+            _id: e._id,
+        }))
+        res.json({ result: true, message: "success", stores });
     } catch (error) {
         res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", error });
     }
