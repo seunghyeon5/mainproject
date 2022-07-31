@@ -4,7 +4,7 @@ import ingredients from "../models/ingredient";
 import { IIngredient } from "../interfaces/ingredient";
 import HttpStatusCode from "../common/httpStatusCode";
 import favorite from "../models/favorite";
-
+import MyRecipe from "../models/myrecipe";
 // 전체 리스트 출력하기
 const getRecipes = async (req: Request, res: Response) => {
     try {
@@ -159,9 +159,11 @@ const searchRecipes = async (req: Request, res: Response) => {
 //추천 누른 레시피 조회
 const getMyrecipe = async (req: Request, res: Response) => {
     try {
-            /* 제공된 레시피 + 유저가 만든 레시피  FE와 얘기해서 상세로 넘어가는 api 분할 후 사용가능
+            // 제공된 레시피 + 유저가 만든 레시피  FE와 얘기해서 상세로 넘어가는 api 분할 후 사용가능
             //변수 이름과 코드들 리팩토링 반드시 필요 
-            
+
+            //version #1
+            /*
             const { userId } = res.locals.user;
 
             const recipes = await Recipes.find({
@@ -171,7 +173,7 @@ const getMyrecipe = async (req: Request, res: Response) => {
               .find({ userId: userId, category: "myrecipe" })
               .exec();
 
-            const temp = myrecipe.map((a) => a.Myrecipe[0]);
+            const temp = myrecipe.map((a) => a.myfavoritesInfo);
 
             let result = [];
             result = recipes.map((e) => ({
@@ -190,15 +192,66 @@ const getMyrecipe = async (req: Request, res: Response) => {
               recommends: e.favorite_count,
               _id: e._id,
               label: "custom",
+              time: e.createdAt,
             }));
             result = result.concat(save);
-            //console.log(result)
+           
             res.json({
               result: true,
               message: "success",
               myrecipes: result,
             });
             */
+            
+            //version #2
+            /*
+            const { userId } = res.locals.user;
+
+            const recipes = await Recipes.find({
+              recommender_list: userId,
+            }).exec();
+
+            let result = [];
+            result = recipes.map((e) => ({
+              image: e.image,
+              title: e.title,
+              brief_description: e.brief_description,
+              recommends: e.recommends,
+              _id: e._id,
+              label: "given",
+            }));
+
+            const myrecipe: any = await favorite
+              .find({ userId: userId, category: "myrecipe" })
+              .select({ myfavoritesId: 1, _id: 0 })
+              .exec();
+
+            let save = [];
+            for (let i = 0; i < myrecipe.length; i++) {
+              const temp = await MyRecipe.findOne({
+                _id: myrecipe.myfavoritesId,
+              });
+              save.push(temp);
+            }
+
+            save = save.map((e: any) => ({
+              image: e.image,
+              title: e.title,
+              brief_description: e.brief_description,
+              recommends: e.favorite_count,
+              _id: e._id,
+              label: "custom",
+            }));
+            result = result.concat(save);
+
+            res.json({
+              result: true,
+              message: "success",
+              myrecipes: result,
+            });
+            */
+
+       //origin code       
         const { userId } = res.locals.user;
 
         const myrecipes = await Recipes.find({ recommender_list: userId }).exec();
@@ -214,6 +267,7 @@ const getMyrecipe = async (req: Request, res: Response) => {
                 _id: e._id
             }))
         });
+        
     } catch (error) {
         res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", error });
     }
