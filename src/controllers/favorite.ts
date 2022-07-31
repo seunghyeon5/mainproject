@@ -40,7 +40,7 @@ const postlike = async (req: Request, res: Response) => {
 const getAlluser = async (req: Request, res: Response) => {
     const { myrecipeId } = req.params;
     try {
-        const getUser: Array<IFavorite> = await Favorite.find({ myrecipeId });
+        const getUser: Array<IFavorite> = await Favorite.find({ myfavoritesId: myrecipeId });
         res.json({ result: true, message: "success", getUser });
         return;
     } catch (error) {
@@ -109,7 +109,7 @@ const postStorelike = async (req: Request, res: Response) => {
 const getAllstoreuser = async (req: Request, res: Response) => {
     const { MystoreId } = req.params;
     try {
-        const getUser: Array<IFavorite> = await Favorite.find({ MystoreId });
+        const getUser: Array<IFavorite> = await Favorite.find({ myfavoritesId: MystoreId });
         res.json({ result: true, message: "success", getUser });
     } catch (error) {
         res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", error });
