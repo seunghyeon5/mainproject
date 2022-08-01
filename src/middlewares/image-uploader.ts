@@ -16,6 +16,21 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
+const fileFilter = (req:any, file:any, cb:any) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg" 
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+    return cb(new Error("Only .png, .jpg and .jpeg format allowed!")); 
+  }
+};
+
+const limits = { fileSize: 10 * 1024 * 1024 };
+
 export const imageuploader = multer({
   storage: multerS3({
     s3: <any>s3,
@@ -30,20 +45,8 @@ export const imageuploader = multer({
       cb(null, `custom/${Date.now()}${path.basename(file.originalname)}`);
     },
   }),
-  fileFilter: (req, file, cb) => {
-    if (
-      file.mimetype === "image/png" ||
-      file.mimetype === "image/jpg" ||
-      file.mimetype === "image/jpeg" ||
-      file.mimetype === "application/pdf"
-    ) {
-      cb(null, true);
-    } else {
-      cb(null, false);
-      return cb(new Error("Only .png, .jpg, .mp4 and .jpeg format allowed!")); //나중에 체크 mp4
-    }
-  },
-  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: fileFilter,
+  limits: limits,
 });
 
 export const multiimageuploader = multer({
@@ -60,18 +63,6 @@ export const multiimageuploader = multer({
       cb(null, `store/${Date.now()}${path.basename(file.originalname)}`);
     },
   }),
-  fileFilter: (req, file, cb) => {
-    if (
-      file.mimetype === "image/png" ||
-      file.mimetype === "image/jpg" ||
-      file.mimetype === "image/jpeg" ||
-      file.mimetype === "application/pdf"
-    ) {
-      cb(null, true);
-    } else {
-      cb(null, false);
-      return cb(new Error("Only .png, .jpg, .mp4 and .jpeg format allowed!")); //나중에 체크 mp4
-    }
-  },
-  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: fileFilter,
+  limits: limits,
 });
