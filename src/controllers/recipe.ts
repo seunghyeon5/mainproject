@@ -5,7 +5,6 @@ import { IIngredient } from "../interfaces/ingredient";
 import HttpStatusCode from "../common/httpStatusCode";
 import favorite from "../models/favorite";
 import MyRecipe from "../models/myrecipe";
-// import MyRecipe from "../models/myrecipe";
 // 전체 리스트 출력하기
 const getRecipes = async (req: Request, res: Response) => {
     try {
@@ -29,62 +28,79 @@ const getRecipes = async (req: Request, res: Response) => {
 // 레피시 추천 상위 5
 const getMostRecommendedRecipes = async (req: Request, res: Response) => {
     try {
-        const recipes = await Recipes.find().sort({ recommends: "desc" }).limit(5);
-        return res.json({
-            result: true,
-            message: "success",
-            recipes: recipes.map((a) => ({
-                image: a.image,
-                title: a.title,
-                brief_description: a.brief_description,
-                recommends: a.recommends,
-                _id: a._id
-            }))
-        });
+      const recipes = await Recipes.find().sort({ recommends: "desc" }).limit(5);
+      return res.json({
+        result: true,
+        message: "success",
+        recipes: recipes.map((a) => ({
+          image: a.image,
+          title: a.title,
+          brief_description: a.brief_description,
+          recommends: a.recommends,
+          _id: a._id,
+        })),
+      });
     } catch (error) {
-        res.status(HttpStatusCode.BAD_REQUEST).send({ result: false, message: "잘못된 요청", error });
+      res
+        .status(HttpStatusCode.BAD_REQUEST)
+        .send({ result: false, message: "잘못된 요청", error });
     }
 };
 
 // 레시피 상세조회
 const getRecipe = async (req: Request, res: Response) => {
     try {
-        const { recipeId } = req.params;
-        const { userId } = res.locals.user;
+      const { recipeId } = req.params;
+      const { userId } = res.locals.user;
 
-        let recipe = await Recipes.findById(recipeId).exec();
-        let recommend: boolean = false;
+      const existsRecipe = await Recipes.findById(recipeId).exec();
+      let recommend: boolean = false;
 
-        //이전 추천 여부 확인
-        if (recipe!.recommender_list!.find((e) => e === userId)) {
-            recommend = true;
-        } else {
-            recommend = false;
+      //이전 추천 여부 확인
+      if (existsRecipe!.recommender_list!.find((e) => e === userId)) {
+        recommend = true;
+      } else {
+        recommend = false;
+      }
+
+      if (existsRecipe) {
+        let imageAddress: IIngredient | null;
+        let drink_info: { recipeImages: string, recipeIngredients: string }[] = [];
+
+        for (let i = 0; i < existsRecipe!.ingredients.length; i++) {
+          const [ingredientsName] = existsRecipe!.ingredients[i].split("/"); // shape of recipe ingredient  재료명/50ml
+          imageAddress = await ingredients
+            .findOne({ title: ingredientsName })
+            .exec();
+          drink_info.push({ recipeImages: imageAddress!.image, recipeIngredients: existsRecipe!.ingredients[i] });
         }
 
-        let [ingredient] = "";
-        let temp: IIngredient | null;
-        let ingredient_images: Array<string> = [];
-
-        for (let i = 0; i < recipe!.ingredients.length; i++) {
-            [ingredient] = recipe!.ingredients[i].split("/");
-            temp = await ingredients.findOne({ title: ingredient }).exec();
-            ingredient_images.push(temp!.image);
-        }
-
-        if (recipe) {
-            return res.json({
-                result: true,
-                message: "success",
-                images: ingredient_images,
-                recipe: [recipe],
-                recommend
-            });
-        } else {
-            return res.status(HttpStatusCode.NOT_FOUND).json({ result: false, message: "no exist recipe" });
-        }
+        return res.json({
+          result: true,
+          message: "success",
+          recipeInfo: [
+            {
+              _id: existsRecipe._id,
+              title: existsRecipe.title,
+              image: existsRecipe.image,
+              drink_info,
+              steps: existsRecipe.steps,
+              alc: existsRecipe.alc,
+              recommends: existsRecipe.recommends,
+              categoryId: existsRecipe.categoryId,
+            },
+          ],
+          recommend,
+        });
+      } else {
+        return res
+          .status(HttpStatusCode.NOT_FOUND)
+          .json({ result: false, message: "no exist recipe" });
+      }
     } catch (error) {
-        res.status(HttpStatusCode.BAD_REQUEST).send({ result: false, message: "잘못된 요청", error });
+      res
+        .status(HttpStatusCode.BAD_REQUEST)
+        .send({ result: false, message: "잘못된 요청", error });
     }
 };
 
@@ -194,8 +210,7 @@ const getMyrecipe = async (req: Request, res: Response) => {
             //   label: "custom",
             //   time: e.createdAt,
             // }));
-            // result = result.concat(save);
-           
+            // result = result.concat(save);    
             // res.json({
             //   result: true,
             //   message: "success",
@@ -211,8 +226,7 @@ const getMyrecipe = async (req: Request, res: Response) => {
               recommender_list: userId,
             }).exec();
 
-            let result = [];
-            result = recipes.map((e) => ({
+            const givenRecipe = recipes.map((e) => ({
               image: e.image,
               title: e.title,
               brief_description: e.brief_description,
@@ -221,20 +235,15 @@ const getMyrecipe = async (req: Request, res: Response) => {
               label: "given",
             }));
 
-            const myrecipe: any = await favorite
-              .find({ userId: userId, category: "myrecipe" })
-              .select({ myfavoritesId: 1, _id: 0 })
-              .exec();
+            const myrecipe: any = await favorite.find({ userId: userId, category: "myrecipe" }).select({ myfavoritesId: 1, _id: 0 }).exec();
 
-            let save = [];
+            let customRecipe = [];
             for (let i = 0; i < myrecipe.length; i++) {
-              const temp = await MyRecipe.findOne({
-                _id: myrecipe.myfavoritesId,
-              });
-              save.push(temp);
+              const temp = await MyRecipe.findOne({_id: myrecipe.myfavoritesId});
+              customRecipe.push(temp);
             }
 
-            save = save.map((e: any) => ({
+            customRecipe = customRecipe.map((e: any) => ({
               image: e.image,
               title: e.title,
               brief_description: e.brief_description,
@@ -242,7 +251,8 @@ const getMyrecipe = async (req: Request, res: Response) => {
               _id: e._id,
               label: "custom",
             }));
-            result = result.concat(save);
+            
+            const result = givenRecipe.concat(customRecipe);
 
             res.json({
               result: true,

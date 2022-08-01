@@ -1,6 +1,16 @@
 # Btender
 ![KakaoTalk_Photo_2022-07-29-15-42-48 001](https://user-images.githubusercontent.com/105096793/181819625-cf6a98dd-8482-4aee-ba58-77ff1c2c1d81.jpeg)
+## 기획의도
+혼자서 소주, 맥주는 무겁고 조금 더 가볍고 맛있는 술을 마시고싶은 사람들을 위한 사이트 여러 블로그, 사이트를 찾아보지 않고 바로바로 찾아볼 수 있고 나만의 레시피를 공유보기위한 플렛폼입니다.
 
+## 팀소개
+|팀원|주특기|github|
+|------|---|---|
+|임준수|React|https://github.com/junsu0121|
+|변희재|React|https://github.com/qusgmlwo|
+|진태인|Nodejs|https://github.com/jthebat|
+|최봉규|Nodejs|https://github.com/choibonggyu|
+|홍승현|Nodejs|https://github.com/seunghyeon5?tab=repositories|
 
 ## Environment
 <img src="https://img.shields.io/badge/-Amazon AWS-232F3E?style=flat&logo=Amazon AWS&logoColor=white"/>
@@ -17,15 +27,15 @@ DATABASE는 MongoDB를 활용 중이며 ec2 인스턴스에서만 접근 할 수
 </div>
 
 TYPESCRIPT, NODEJS, EXPRESS, MongoDB를 활용합니다.
+## 트러블슈팅
+### ❓Heap out of memory 
+1. 문제발생 : 깃허브에 푸쉬 후 서버를 다시 실행시킬때 서버가 다운되는 현상이 발생했다.
 
-## Prerequisite
-<div float: left; >
-  <img src="https://img.shields.io/badge/-Node.js-339933?style=flat&logo=Node.js&logoColor=white"/>
-  <img src="https://img.shields.io/badge/-Mongodb-47A248?style=flat&logo=Mongodb&logoColor=white"/>
-</div>
- 
-- Node.js - Node.js 및 npm 패키지 관리자를 [다운로드 및 설치합니다](https://nodejs.org/en/download/) . 문제가 발생하면 이 GitHub Gist 를 사용하여 Node.js를 설치할 수도 있습니다.
-- MongoDB - MongoDB 를 [다운로드 및 설치](http://mongodb.org/) 하고 기본 포트(27017)에서 실행 중인지 확인합니다.
+2. 원인: Typescript 파일 컴파일 과정에서 heap 메모리가 부족한 문제가 발생하여 메모리의 누수 여부를 확인하였고 사용하는 AWS EC2 프리티어로 제공되는 서버 컴퓨터의 스펙이 너무 낮기 때문에 감당하지 못하는 결과라고 판단하였다.  
+
+3. 해결방안: 더 큰 메모리를 제공하는 서버를 이용하기 전에 SWAP 메모리를 이용해서 해결해보고자 하였으나 SWAP메모리를 사용하면 하드드라이브 I/O작업을 하는 것이기 때문에 속도에 대한 문제가 있기 때문에 더 큰 용량을 제공하는 인스턴스를 선택하는 방법으로 문제를 해결하였다. 기존 node.js의 기본 heap 영역의 제약이 500MiB인데 기존의 1GiB의 리눅스 서버 메모리를 8GiB의 용량으로 늘려주면서 heap 영역에 대한 제약도 4GiB로 변경해주었다. 
+## 아키텍쳐 
+![%E1%84%8E%E1%85%AC%E1%84%8C%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%A1%E1%84%8F%E1%85%B5%E1%84%90%E1%85%A6%E1%86%A8%E1%84%8E%E1%85%A7](https://user-images.githubusercontent.com/105096793/182070604-8ee3fed3-5123-455c-86e4-49ecc8e115bf.png)
 
 ## ERD
 ![5C020002-4D85-4F5B-B54C-CBBFC465D48A](https://user-images.githubusercontent.com/105096793/181819286-7e236548-307b-44b8-ad20-6b9f0653013d.jpeg)
