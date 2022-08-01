@@ -100,6 +100,7 @@ const detailRecipe = async (req: Request, res: Response) => {
             _id: existsRecipe._id,
             title: existsRecipe.title,
             image: existsRecipe.image,
+            brief_description: existsRecipe.brief_description,
             drink_info,
             steps: existsRecipe.steps,           
             recommends: existsRecipe.favorite_count,
