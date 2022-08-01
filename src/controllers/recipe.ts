@@ -4,6 +4,7 @@ import ingredients from "../models/ingredient";
 import { IIngredient } from "../interfaces/ingredient";
 import HttpStatusCode from "../common/httpStatusCode";
 import favorite from "../models/favorite";
+import MyRecipe from "../models/myrecipe";
 // import MyRecipe from "../models/myrecipe";
 // 전체 리스트 출력하기
 const getRecipes = async (req: Request, res: Response) => {
@@ -163,47 +164,47 @@ const getMyrecipe = async (req: Request, res: Response) => {
             //변수 이름과 코드들 리팩토링 반드시 필요 
 
             //version #1
-            const { userId } = res.locals.user;
+            // const { userId } = res.locals.user;
 
-            const recipes = await Recipes.find({
-              recommender_list: userId,
-            }).exec();
-            const myrecipe = await favorite
-              .find({ userId: userId, category: "myrecipe" })
-              .exec();
+            // const recipes = await Recipes.find({
+            //   recommender_list: userId,
+            // }).exec();
+            // const myrecipe = await favorite
+            //   .find({ userId: userId, category: "myrecipe" })
+            //   .exec();
 
-            const temp = myrecipe.map((a) => a.myfavoritesInfo);
+            // const temp = myrecipe.map((a) => a.myfavoritesInfo);
 
-            let result = [];
-            result = recipes.map((e) => ({
-              image: e.image,
-              title: e.title,
-              brief_description: e.brief_description,
-              recommends: e.recommends,
-              _id: e._id,
-              label: "given",
-            }));
-            let save = [];
-            save = temp.map((e: any) => ({
-              image: e.image,
-              title: e.title,
-              brief_description: e.brief_description,
-              recommends: e.favorite_count,
-              _id: e._id,
-              label: "custom",
-              time: e.createdAt,
-            }));
-            result = result.concat(save);
+            // let result = [];
+            // result = recipes.map((e) => ({
+            //   image: e.image,
+            //   title: e.title,
+            //   brief_description: e.brief_description,
+            //   recommends: e.recommends,
+            //   _id: e._id,
+            //   label: "given",
+            // }));
+            // let save = [];
+            // save = temp.map((e: any) => ({
+            //   image: e.image,
+            //   title: e.title,
+            //   brief_description: e.brief_description,
+            //   recommends: e.favorite_count,
+            //   _id: e._id,
+            //   label: "custom",
+            //   time: e.createdAt,
+            // }));
+            // result = result.concat(save);
            
-            res.json({
-              result: true,
-              message: "success",
-              myrecipes: result,
-            });
+            // res.json({
+            //   result: true,
+            //   message: "success",
+            //   myrecipes: result,
+            // });
             
             
             //version #2
-            /*
+            
             const { userId } = res.locals.user;
 
             const recipes = await Recipes.find({
@@ -248,7 +249,7 @@ const getMyrecipe = async (req: Request, res: Response) => {
               message: "success",
               myrecipes: result,
             });
-            */
+            
 
        //origin code
        /*       
