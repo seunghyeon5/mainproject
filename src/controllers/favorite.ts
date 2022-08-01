@@ -25,7 +25,13 @@ const postlike = async (req: Request, res: Response) => {
                 myfavoritesId: myrecipeId,
                 userId,
                 category: "myrecipe",
-                myfavoritesInfo: Myrecipe,                 
+                myfavoritesInfo: {
+                    _id: Myrecipe._id,
+                    title: Myrecipe.title,
+                    image: Myrecipe.image,
+                    brief_description: Myrecipe.brief_description,
+                    favorite_count: Myrecipe.favorite_count
+                },                 
             });
             let num: number = Myrecipe.favorite_count;
             await myrecipe.findOneAndUpdate({ _id: myrecipeId }, { $set: { favorite_count: ++num } });
