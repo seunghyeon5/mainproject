@@ -239,7 +239,7 @@ const getMyrecipe = async (req: Request, res: Response) => {
 
             let customRecipe = [];
             for (let i = 0; i < myrecipe.length; i++) {
-              const temp = await MyRecipe.findOne({_id: myrecipe.myfavoritesId});
+              const temp = await MyRecipe.findOne({_id: myrecipe[i].myfavoritesId});
               customRecipe.push(temp);
             }
 
@@ -259,26 +259,7 @@ const getMyrecipe = async (req: Request, res: Response) => {
               message: "success",
               myrecipes: result,
             });
-            
-
-       //origin code
-       /*       
-        const { userId } = res.locals.user;
-
-        const myrecipes = await Recipes.find({ recommender_list: userId }).exec();
-        
-        res.json({
-            result: true,
-            message: "success",           
-            myrecipes: myrecipes.map((e) => ({
-                image: e.image,
-                title: e.title,
-                brief_description: e.brief_description,
-                recommends: e.recommends,
-                _id: e._id
-            }))
-        });
-        */
+   
     } catch (error) {
         res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", error });
     }
