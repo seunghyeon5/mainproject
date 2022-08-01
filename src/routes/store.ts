@@ -14,7 +14,7 @@ mystoreRouter.get("/post/getallmystore", authMiddleware, storeContoller.getAllmy
 // 스토어 상세조회
 mystoreRouter.get("/post/:mystoreId", authMiddleware, storeContoller.detailstore);
 
-// 스토어 이미지 작성
+// 스토어 게시글 작성
 mystoreRouter.post("/post/images", authMiddleware, multiimageuploader.array("images",5), storeContoller.postStore);
 
 // 스토어 삭제하기
