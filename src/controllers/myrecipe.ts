@@ -82,22 +82,31 @@ const detailRecipe = async (req: Request, res: Response) => {
     const { myrecipeId } = req.params;
     const existsRecipe = await MyRecipe.findById(myrecipeId);
     
-    let ingredient = "";
-    let temp: IIngredient | null;
-    let ingredient_images: Array<string> = [];
-
-    for (let i = 0; i < existsRecipe!.ingredients.length; i++) {
-        
-      ingredient = existsRecipe!.ingredients[i];      
-      temp = await ingredients.findOne({ title: ingredient }).exec();     
-      ingredient_images.push(temp!.image);
-    }
     if (existsRecipe) {
+    let imageAddress: IIngredient | null;
+    let drink_info:{recipeImages:string,recipeIngredients:string}[]=[];
+
+    for (let i = 0; i < existsRecipe!.ingredients.length; i++) {        
+      const ingredientsName = existsRecipe!.ingredients[i];      
+      imageAddress = await ingredients.findOne({ title: ingredientsName }).exec();     
+      drink_info.push({recipeImages:imageAddress!.image,recipeIngredients:existsRecipe!.ingredients[i]})  
+    }
+   
       return res.json({
         result: true,
-        message: "success",
-        images: ingredient_images,
-        myrecipe: [existsRecipe],
+        message: "success",       
+        recipeInfo: [
+          {
+            _id: existsRecipe._id,
+            title: existsRecipe.title,
+            image: existsRecipe.image,
+            drink_info,
+            steps: existsRecipe.steps,           
+            recommends: existsRecipe.favorite_count,
+            nickname: existsRecipe.nickname,
+            createdAt: existsRecipe.createdAt?.toLocaleDateString("ko-KR")
+          }
+        ],
       });
     } else {
       return res
