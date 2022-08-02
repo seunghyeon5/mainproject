@@ -1,5 +1,6 @@
 import express from "express";
 import config from "./config/config";
+import helmet from "helmet";
 import { connect } from "./config";
 import { userRouter } from "./routes/user";
 import { categoryRouter } from "./routes/category";
@@ -48,6 +49,22 @@ app.use(cors(options));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// setup helmet, secure headers
+app.use(helmet());
+app.use(helmet.contentSecurityPolicy()); //Content-Security-Policy header 
+app.use(helmet.xssFilter()); //X-XSS-Protection header 0 ,XSS 공격 스크립트를 비활성화 header set prevent from XSS  injection
+app.use(helmet.noSniff());
+//app.use(helmet.dnsPrefetchControl());
+app.use(helmet.expectCt());
+app.use(helmet.hidePoweredBy());
+//app.use(helmet.permittedCrossDomainPolicies());
+app.use(helmet.referrerPolicy());
+app.use(
+  helmet.frameguard({     // prevent from clickjacking
+    action: "deny",
+  })
+);
+
 //Initializing DBdata
 /*
 app.use("/api/init/category", [initCategoryRouter]);
@@ -89,3 +106,7 @@ app.listen(port, (): void => {
 // 자동으로 사용되는 인자 값들, 바로 뒤에 값이 적용되는 경우는 바로 타입이 명시되기 때문이다.
 
 export default app;
+
+
+
+
