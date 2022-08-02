@@ -25,10 +25,11 @@ DATABASE는 MongoDB를 활용 중이며 ec2 인스턴스에서만 접근 할 수
   <img src="https://img.shields.io/badge/-Mongodb-47A248?style=flat&logo=Mongodb&logoColor=white"/>
   <img src="https://img.shields.io/badge/-Visual Studio Code-007ACC?style=flat&logo=Visual Studio Code&logoColor=white"/>
 </div>
+TYPESCRIPT, NODEJS, EXPRESS, MongoDB를 활용합니다.
 
 ## 라이브 러리|Library
-|기술 스택|Appliance|Version|
 |------|---|---|
+|기술 스택|Appliance|Version|
 |Express|Node.JS|4.18.1|
 |Typescript|전체 코드 타입스크립트 적용|4.7.4|
 |Mongoose|변동성 많은 DB.NoSQL|6.4.1|
@@ -47,7 +48,6 @@ DATABASE는 MongoDB를 활용 중이며 ec2 인스턴스에서만 접근 할 수
 |supertest|테스트 코드|6.2.4|
 
 
-TYPESCRIPT, NODEJS, EXPRESS, MongoDB를 활용합니다.
 ## 트러블슈팅
 ### ❓Heap out of memory 
 1. 문제발생 : 깃허브에 푸쉬 후 서버를 다시 실행시킬때 서버가 다운되는 현상이 발생했다.
