@@ -1,5 +1,4 @@
 import { Request } from "express";
-
 import config from "../config/config";
 import path from "path";
 import multerS3 from "multer-s3";
@@ -34,7 +33,7 @@ const limits = { fileSize: 10 * 1024 * 1024 };
 export const imageuploader = multer({
   storage: multerS3({
     s3: <any>s3,
-    bucket: <any>config.aws.bucket,
+    bucket: (config.aws.bucket)!,
     contentType: multerS3.AUTO_CONTENT_TYPE, //객체 url 선택시 자동다운로드를 방지해준다
     acl: "public-read",
     key: function (
@@ -52,7 +51,7 @@ export const imageuploader = multer({
 export const multiimageuploader = multer({
   storage: multerS3({
     s3: <any>s3,
-    bucket: <any>config.aws.bucket,
+    bucket: (config.aws.bucket)!,
     contentType: multerS3.AUTO_CONTENT_TYPE, //객체 url 선택시 자동다운로드를 방지해준다
     acl: "public-read",
     key: function (
