@@ -46,6 +46,7 @@ TYPESCRIPT, NODEJS, EXPRESS, MongoDB를 활용합니다.
 |prettier|코드 포맷팅|2.7.1|
 |jest|테스트 코드|28.1.3|
 |supertest|테스트 코드|6.2.4|
+|helmet|외부로부터 보안 세팅|5.1.1|
 
 
 ## 트러블슈팅
