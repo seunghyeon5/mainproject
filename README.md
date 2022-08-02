@@ -27,8 +27,8 @@ DATABASE는 MongoDB를 활용 중이며 ec2 인스턴스에서만 접근 할 수
 </div>
 
 ## 라이브 러리|Library
-|기술 스택|Appliance|Version|
 |------|---|---|
+|기술 스택|Appliance|Version|
 |Express|Node.JS|4.18.1|
 |Typescript|전체 코드 타입스크립트 적용|4.7.4|
 |Mongoose|변동성 많은 DB.NoSQL|6.4.1|
@@ -37,7 +37,7 @@ DATABASE는 MongoDB를 활용 중이며 ec2 인스턴스에서만 접근 할 수
 |JWT(BEARER)|사용자 인증, Bearer토큰|8.5.1|
 |Passport|소셜 로그인|0.6.0|
 |passport-kakao|카카오 로그인 모듈|1.0.1
-|class-validatorl|유효성 검사|0.13.2|
+|class-validator|유효성 검사|0.13.2|
 |multer|이미지 데이터 처리|1.4.5-lts.1|
 |multer-S3|사진 파일 업로드|2.10.0|
 |aws-sdk|S3 접근|2.1167.0|
