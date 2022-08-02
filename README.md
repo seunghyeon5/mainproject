@@ -28,6 +28,7 @@ DATABASE는 MongoDB를 활용 중이며 ec2 인스턴스에서만 접근 할 수
 
 ## 라이브 러리|Library
 |기술 스택|Appliance|Version|
+|------|---|---|
 |Express|Node.JS|4.18.1|
 |Typescript|전체 코드 타입스크립트 적용|4.7.4|
 |Mongoose|변동성 많은 DB.NoSQL|6.4.1|
