@@ -26,6 +26,26 @@ DATABASE는 MongoDB를 활용 중이며 ec2 인스턴스에서만 접근 할 수
   <img src="https://img.shields.io/badge/-Visual Studio Code-007ACC?style=flat&logo=Visual Studio Code&logoColor=white"/>
 </div>
 
+## 라이브 러리|Library
+|기술 스택|Appliance|Version|
+|Express|Node.JS|4.18.1|
+|Typescript|전체 코드 타입스크립트 적용|4.7.4|
+|Mongoose|변동성 많은 DB.NoSQL|6.4.1|
+|CORS|Request resource 제한|2.8.5|
+|dotenv|보안 토큰, 키 관련보안화|16.0.1|
+|JWT(BEARER)|사용자 인증, Bearer토큰|8.5.1|
+|Passport|소셜 로그인|0.6.0|
+|passport-kakao|카카오 로그인 모듈|1.0.1
+|class-validatorl|유효성 검사|0.13.2|
+|multer|이미지 데이터 처리|1.4.5-lts.1|
+|multer-S3|사진 파일 업로드|2.10.0|
+|aws-sdk|S3 접근|2.1167.0|
+|bcrypt|비밀번호 암호화|5.0.1|
+|prettier|코드 포맷팅|2.7.1|
+|jest|테스트 코드|28.1.3|
+|supertest|테스트 코드|6.2.4|
+
+
 TYPESCRIPT, NODEJS, EXPRESS, MongoDB를 활용합니다.
 ## 트러블슈팅
 ### ❓Heap out of memory 
