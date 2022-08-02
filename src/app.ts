@@ -1,6 +1,6 @@
 import express from "express";
 import config from "./config/config";
-import { connect } from "./models";
+import { connect } from "./config";
 import { userRouter } from "./routes/user";
 import { categoryRouter } from "./routes/category";
 import { myrecipeRouter } from "./routes/myrecipe";
@@ -28,22 +28,6 @@ connect();
 import { kakaoPassport } from "./passport/kakao";
 kakaoPassport();
 
-/** Log the request */
-/*
-router.use((req, res, next) => {
-    
-    //logging.info(NAMESPACE, `METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}]`);
-    res.json({ message: "success" });
-
-    res.on("finish", () => {
-       
-        // logging.info(NAMESPACE, `METHOD: [${req.method}] - URL: [${req.url}] - STATUS: [${res.statusCode}] - IP: [${req.socket.remoteAddress}]`);
-        res.json({ message: "fail" });
-    });
-
-    next();
-});
-*/
 const port = config.server.port;
 
 const app = express();
@@ -59,8 +43,8 @@ const options: cors.CorsOptions = {
   origin: allowedOrigins,
   credentials: true, // 사용자 인증이 필요한 리소스(쿠키 ..등) 접근
 };
-
 app.use(cors(options));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -72,21 +56,6 @@ app.use("/api/init/recipes", [initDrinkRecipeRouter]);
 app.use("/api/init/ingredients", [initIngredientsRouter]);
 */
 
-/** Rules of our API */
-// router.use((req, res, next) => {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-
-//     if (req.method == "OPTIONS") {
-//         res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-//         return res.status(201).json({});
-//     }
-
-//     next();
-// });
-
-/** Routes go here */
-router.use("/user", userRouter);
 
 /** Error handling */
 router.use((req, res, next) => {
@@ -115,7 +84,6 @@ app.get("/", (req, res) => {
 app.listen(port, (): void => {
     console.log("Server is running");
 });
-
 
 // 굳이 모든 타입을 명시해 줄 필요가 없다.
 // 자동으로 사용되는 인자 값들, 바로 뒤에 값이 적용되는 경우는 바로 타입이 명시되기 때문이다.
