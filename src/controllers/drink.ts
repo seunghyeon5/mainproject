@@ -150,7 +150,7 @@ const deleteDrink = async (req:Request, res:Response) => {
             return res.status(HttpStatusCode.UNAUTHORIZED).json({ result: false, message: "유저정보가 올바르지 않습니다." });
         } else {
             await User.findOneAndUpdate({ _id: userId }, { $pull: { Drink_refrigerator: drink.title_kor } });
-            return res.status(HttpStatusCode.OK).json({ result: true });
+            return res.status(HttpStatusCode.OK).json({ result: true, message: "success" });
         }
     } catch (err) {
         res.status(HttpStatusCode.BAD_REQUEST).send({ result: false, message: "잘못된 요청" });

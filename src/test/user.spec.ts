@@ -2,6 +2,7 @@ import app from "../app";
 import request from "supertest";
 import mongoose from "mongoose";
 import config from "../config/config";
+import testdata from "./testdata"
 
 let token = ""
 
@@ -19,19 +20,19 @@ afterAll((done) => {
 
 describe("Signup test", () => {
     test("회원가입 성공시 success띄우기", async () => {
-        const response = await request(app).post("/api/user/signup").send({ email: "jest@test.com", nickname: "jest", password: "jest123@", confirmpassword: "jest123@" });
+        const response = await request(app).post("/api/user/signup").send({ email: testdata.Email, nickname: testdata.Nick, password: testdata.Pw, confirmpassword: testdata.Pwcheck });
 
         expect(response.body.message).toBe("success");
     });
 
     test("회원가입시 중복된 이메일인 경우 msg:중복된 이메일", async () => {
-        const response = await request(app).post("/api/user/signup").send({ email: "jest@test.com", nickname: "jest", password: "jest123@", confirmpassword: "jest123@" });
+        const response = await request(app).post("/api/user/signup").send({ email: testdata.Email, nickname: testdata.Nick, password: testdata.Pw, confirmpassword: testdata.Pwcheck });
 
         expect(response.body.message).toBe("중복된 이메일");
     });
 
     test("회원가입시 비밀번호확인란 다른경우 msg:비밀번호 불일치", async () => {
-        const response = await request(app).post("/api/user/signup").send({ email: "jest@test.com", nickname: "jest", password: "jest123@", confirmpassword: "jest123" });
+        const response = await request(app).post("/api/user/signup").send({ email: testdata.Email, nickname: testdata.Nick, password: testdata.Pw, confirmpassword: testdata.wrongPw });
 
         expect(response.body.message).toBe("비밀번호 불일치");
     });
@@ -39,7 +40,7 @@ describe("Signup test", () => {
 
 describe("Login test", () => {
     test("로그인 성공시 success", async () => {
-        const response = await request(app).post("/api/user/login").send({ email: "jest@test.com", password: "jest123@" });
+        const response = await request(app).post("/api/user/login").send({ email: testdata.Email, password: testdata.Pw });
 
         token = response.body.token;
 
@@ -48,13 +49,13 @@ describe("Login test", () => {
     });
 
     test("로그인시 이메일정보가 없는 경우 msg:이메일 없음", async () => {
-        const response = await request(app).post("/api/user/login").send({ email: "wrong", password: "jest123@" });
+        const response = await request(app).post("/api/user/login").send({ email: testdata.wrongEmail, password: testdata.Pw });
 
         expect(response.body.message).toBe("이메일 없음");
     });
 
     test("로그인시 비밀번호가 일치하지 않는경우 msg:비밀번호 불일치", async () => {
-        const response = await request(app).post("/api/user/login").send({ email: "jest@test.com", password: "wrong" });
+        const response = await request(app).post("/api/user/login").send({ email: testdata.Email, password: testdata.wrongPw });
 
         expect(response.body.message).toBe("비밀번호 불일치");
     });
@@ -77,7 +78,7 @@ describe("Login test", () => {
     });
 
     test("회원탈퇴 성공시 success", async () => {
-        const response = await request(app).delete("/api/user/").auth("jest@test.com", "jest123@").set("authorization", `Bearer ${token}`);
+        const response = await request(app).delete("/api/user/").auth(testdata.Email, testdata.Pw).set("authorization", `Bearer ${token}`);
 
         expect(response.body.message).toBe("success")
     });
