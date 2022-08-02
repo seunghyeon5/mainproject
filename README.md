@@ -36,7 +36,7 @@ DATABASE는 MongoDB를 활용 중이며 ec2 인스턴스에서만 접근 할 수
 |dotenv|보안 토큰, 키 관련보안화|16.0.1|
 |JWT(BEARER)|사용자 인증, Bearer토큰|8.5.1|
 |Passport|소셜 로그인|0.6.0|
-|passport-kakao|카카오 로그인 모듈|1.0.1
+|passport-kakao|카카오 로그인 모듈|1.0.1|
 |class-validator|유효성 검사|0.13.2|
 |multer|이미지 데이터 처리|1.4.5-lts.1|
 |multer-S3|사진 파일 업로드|2.10.0|
