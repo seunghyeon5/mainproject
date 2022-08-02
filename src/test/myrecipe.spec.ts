@@ -2,6 +2,7 @@ import app from "../app";
 import request from "supertest";
 import mongoose from "mongoose";
 import config from "../config/config";
+import testdata from "./testdata"
 
 let token = ""
 
@@ -16,20 +17,18 @@ afterAll(async () => {
     await mongoose.connection.close();
 });
 
-describe("[POST] Myrecipe", () => {
-    test("회원가입 안되어있는 경우 회원가입 시키기", async () => {
-        const response = await request(app).post("/api/user/signup").send({ email: "jest@test.com", nickname: "jest", password: "jest123@", confirmpassword: "jest123@" });
-
-        expect(response.body.message).toBe("success");
-    })
-    test("토큰값가져오기", async() => {
-        const response = await request(app).post("/api/user/login").send({ email: "jest@test.com", password: "jest123@" });
+describe("[POST] 로그인", () => {
+    test("로그인 성공시 success", async () => {
+        const response = await request(app).post("/api/user/login").send({ email: testdata.email, password: testdata.pw });
 
         token = response.body.token;
 
         expect(response.body.message).toBe("success");
         expect(response.body.token).toBe(`${token}`);
-    })
+    });
+})
+
+describe("[POST] Myrecipe", () => {
     // test("게시글 올리는 것에 성공할경우 success", async () => {
     //     const response = await request(app).post("/api/myreipce/post").set("authorization", `Bearer ${token}`).send({
     //         title: "jest test",
@@ -49,7 +48,7 @@ describe("[GET] Myrecipe", () => {
     })
 
     test("레시피 상세조회 성공시 success", async () => {
-        const response = await request(app).get("/api/myrecipe/post/62dad72a54df2f1eab050765").set("authorization", `Bearer ${token}`).send()
+        const response = await request(app).get("/api/myrecipe/post/" + testdata.mockmyrecipeId ).set("authorization", `Bearer ${token}`).send()
 
         expect(response.body.message).toBe("success")
     })
@@ -60,9 +59,3 @@ describe("[GET] Myrecipe", () => {
     //     expect(response.body.message).toBe("success")
     // })
 })
-
-test("유저 데이터 삭제", async () => {
-    const response = await request(app).delete("/api/user/").auth("jest@test.com", "jest123@").set("authorization", `Bearer ${token}`);
-
-    expect(response.body.message).toBe("success")
-});
