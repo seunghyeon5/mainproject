@@ -163,6 +163,7 @@ const searchRecipes = async (req: Request, res: Response) => {
             result: true,
             message: "success",
             newfindAllRecipes: findAllRecipes.map((e) => ({
+                _id: e._id,
                 image: e.image,
                 title: e.title,
                 brief_description: e.brief_description,
@@ -211,7 +212,7 @@ const getMyrecipe = async (req: Request, res: Response) => {
               label: "custom",
               time: e.createdAt,
             }));
-            
+
             const result = givenRecipe.concat(customRecipe);    
             res.json({
               result: true,
