@@ -5,6 +5,9 @@ import config from "../config/config";
 import testdata from "./testdata"
 
 let token = ""
+let myreipceId = ""
+let formData = { append: jest.fn() };
+let file = { image: "someimage", }
 
 beforeAll(async () => {
     await mongoose.connect(config.mongo.url, {
@@ -29,28 +32,28 @@ describe("[POST] 로그인", () => {
 })
 
 describe("[POST] Myrecipe", () => {
-    // test("게시글 올리는 것에 성공할경우 success", async () => {
-    //     const response = await request(app).post("/api/myreipce/post").set("authorization", `Bearer ${token}`).send({
-    //         title: "jest test",
-    //         ingredients: "jest test",
-    //         brief_description:"jest test"
-    //     })
+    test("게시글 올리는 것에 성공할경우 success", async () => {
+        const response = await request(app).post("/api/myreipce/post").set("authorization", `Bearer ${token}`).send({
+            title: "jest test",
+            ingredients: "jest test",
+            brief_description:"jest test"
+        })
 
-    //     expect(response.body.message).toBe("success")
-    // })
+        expect(response.body.message).toBe("success")
+    })
 })
 
 describe("[GET] Myrecipe", () => {
-    test("레시피 전체목록 조회 성공시 success", async () => {
+    test("레시피 전체목록 조회", async () => {
         const response = await request(app).get("/api/myrecipe/post/list").set("authorization", `Bearer ${token}`).send()
         
-        expect(response.body.message).toBe("success")
+        expect(response.statusCode).toBe(200)
     })
 
-    test("레시피 상세조회 성공시 success", async () => {
-        const response = await request(app).get("/api/myrecipe/post/" + testdata.mockmyrecipeId ).set("authorization", `Bearer ${token}`).send()
+    test("레시피 상세조회", async () => {
+        const response = await request(app).get("/api/myrecipe/post/" + testdata.myrecipeId ).set("authorization", `Bearer ${token}`).send()
 
-        expect(response.body.message).toBe("success")
+        expect(response.statusCode).toBe(200)
     })
 
     // test("내가 쓴 레시피 조회 성공시 success", async () => {

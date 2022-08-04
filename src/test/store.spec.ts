@@ -48,7 +48,7 @@ describe("[GET] store", () => {
     })
 
     test("스토어 상세조회 성공시 success", async () => {
-        const response = await request(app).get("/api/myrecipe/post/" + testdata.mockstoreId).set("authorization", `Bearer ${token}`).send()
+        const response = await request(app).get("/api/myrecipe/post/" + testdata.storeId).set("authorization", `Bearer ${token}`).send()
 
         expect(response.body.message).toBe("success")
     })
