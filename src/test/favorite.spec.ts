@@ -19,9 +19,7 @@ afterAll(async () => {
 
 describe("[POST] 로그인", () => {
     test("로그인 성공시 success", async () => {
-        const response = await request(app)
-            .post("/api/user/login")
-            .send({ email: testdata.email, password: testdata.pw });
+        const response = await request(app).post("/api/user/login").send({ email: testdata.email, password: testdata.pw });
 
         token = response.body.token;
 
@@ -46,7 +44,7 @@ describe("[POST] Favorite", () => {
             .send();
 
         expect(response.body.message).toBe("이미 좋아요를 누르셨습니다.");
-    })
+    });
 });
 
 describe("[GET] Favorite", () => {
@@ -59,10 +57,7 @@ describe("[GET] Favorite", () => {
         expect(response.statusCode).toBe(200);
     });
     test("내가 좋아요누른 게시글 조회", async () => {
-        const response = await request(app)
-            .get("/api/favorite/store/getmystore")
-            .set("authorization", `Bearer ${token}`)
-            .send();
+        const response = await request(app).get("/api/favorite/store/getmystore").set("authorization", `Bearer ${token}`).send();
 
         expect(response.statusCode).toBe(200);
     });
@@ -77,7 +72,7 @@ describe("[DELETE] Favorite", () => {
             .send();
 
         expect(response.body.message).toBe("좋아요를 누르지 않았습니다.");
-    })
+    });
     test("좋아요 취소하기", async () => {
         const response = await request(app)
             .delete("/api/favorite/store/" + testdata.storeId + "/delete")

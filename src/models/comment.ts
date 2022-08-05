@@ -11,10 +11,10 @@ const commentSchema: Schema = new Schema(
             type: String
         },
         comment: {
-            type: String,
+            type: String
         },
         userId: {
-            type: String,
+            type: String
         }
     },
     {

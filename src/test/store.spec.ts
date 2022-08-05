@@ -2,9 +2,9 @@ import app from "../app";
 import request from "supertest";
 import mongoose from "mongoose";
 import config from "../config/config";
-import testdata from "./testdata"
+import testdata from "./testdata";
 
-let token = ""
+let token = "";
 
 beforeAll(async () => {
     await mongoose.connect(config.mongo.url, {
@@ -26,36 +26,39 @@ describe("[POST] 로그인", () => {
         expect(response.body.message).toBe("success");
         expect(response.body.token).toBe(`${token}`);
     });
-})
+});
 
-describe("[POST] store", () => {
-    // test("게시글 올리는 것에 성공할경우 success", async () => {
-    //     const response = await request(app).post("/api/myreipce/post").set("authorization", `Bearer ${token}`).send({
-    //         title: "jest test",
-    //         ingredients: "jest test",
-    //         brief_description:"jest test"
-    //     })
+// describe("[POST] store", () => { //수정중
+// test("게시글 올리는 것에 성공할경우 success", async () => {
+//     const response = await request(app).post("/api/myreipce/post").set("authorization", `Bearer ${token}`).send({
+//         title: "jest test",
+//         ingredients: "jest test",
+//         brief_description:"jest test"
+//     })
 
-    //     expect(response.body.message).toBe("success")
-    // })
-})
+//     expect(response.body.message).toBe("success")
+// })
+// })
 
 describe("[GET] store", () => {
     test("스토어 전체목록 조회", async () => {
-        const response = await request(app).get("/api/mystore/post/list").set("authorization", `Bearer ${token}`).send()
-        
-        expect(response.statusCode).toBe(200)
-    })
+        const response = await request(app).get("/api/mystore/post/list").set("authorization", `Bearer ${token}`).send();
+
+        expect(response.statusCode).toBe(200);
+    });
 
     test("스토어 상세조회 성공시 success", async () => {
-        const response = await request(app).get("/api/myrecipe/post/" + testdata.storeId).set("authorization", `Bearer ${token}`).send()
+        const response = await request(app)
+            .get("/api/myrecipe/post/" + testdata.storeId)
+            .set("authorization", `Bearer ${token}`)
+            .send();
 
-        expect(response.body.message).toBe("success")
-    })
+        expect(response.body.message).toBe("success");
+    });
 
     // test("내가 쓴 레시피 조회 성공시 success", async () => {
     //     const response = await request(app).get("/api/myrecipe/post").set("authorization", `Bearer ${token}`).send()
 
     //     expect(response.body.message).toBe("success")
     // })
-})
+});

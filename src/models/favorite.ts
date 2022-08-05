@@ -10,13 +10,13 @@ const favoriteSchema: Schema = new Schema({
     },
     userId: {
         type: String
-    },    
-    category:{
+    },
+    category: {
         type: String
     },
     myfavoritesInfo: {
         type: Object
-    },   
+    }
 });
 
 export default mongoose.model<IFavorite & Document>("favorite", favoriteSchema);

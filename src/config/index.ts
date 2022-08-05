@@ -8,7 +8,7 @@ const connect = (): void => {
             ignoreUndefined: true
         })
         .then((result) => {
-            console.log('Mongo Connected');
+            console.log("Mongo Connected");
         })
         .catch((err) => {
             console.log(err);
@@ -20,6 +20,3 @@ mongoose.connection.on("error", (err): void => {
 });
 
 export { connect };
-
-
-

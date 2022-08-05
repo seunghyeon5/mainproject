@@ -21,9 +21,9 @@ const MyrecipeSchema: Schema = new Schema(
         },
         steps: {
             type: Array,
-            default: [],
-          },
-        favorite_count:{
+            default: []
+        },
+        favorite_count: {
             type: Number,
             default: 0
         },

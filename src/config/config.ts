@@ -11,12 +11,12 @@ const MONGO = {
     url: `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}/${MONGO_DB}?retryWrites=true&w=majority`
 };
 
-const SERVER = {    
-    local : process.env.LOCAL,
-    host1 : process.env.SERVER_HOST1,
-    host2 : process.env.SERVER_HOST2,
-    host3 : process.env.SERVER_HOST3,
-    host4 : process.env.SERVER_HOST4,
+const SERVER = {
+    local: process.env.LOCAL,
+    host1: process.env.SERVER_HOST1,
+    host2: process.env.SERVER_HOST2,
+    host3: process.env.SERVER_HOST3,
+    host4: process.env.SERVER_HOST4,
     port: process.env.SERVER_PORT
 };
 
@@ -27,7 +27,7 @@ const SOCIAL = {
 
     kakao_id: process.env.KAKAO_ID,
     kakao_url: process.env.KAKAO_URL
-}
+};
 
 const AWS = {
     access_key_id: process.env.AWS_ACCESS_KEY_ID,
