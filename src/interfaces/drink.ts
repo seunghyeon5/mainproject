@@ -11,5 +11,5 @@ export interface IDrink {
     image: string;
     categoryId: string;
     recommend?: number;
-    recommend_list: Array<string>;
+    recommend_list?: Array<string>;
 }
