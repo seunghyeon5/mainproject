@@ -1,16 +1,24 @@
-# Btender
+# 🍹 Btender
 ![KakaoTalk_Photo_2022-07-29-15-42-48 001](https://user-images.githubusercontent.com/105096793/181819625-cf6a98dd-8482-4aee-ba58-77ff1c2c1d81.jpeg)
 ## 기획의도
 혼자서 소주, 맥주는 무겁고 조금 더 가볍고 맛있는 술을 마시고싶은 사람들을 위한 사이트 여러 블로그, 사이트를 찾아보지 않고 바로바로 찾아볼 수 있고 나만의 레시피를 공유보기위한 플렛폼입니다.
 
-## 팀소개
-|팀원|주특기|github|
-|------|---|---|
-|임준수|React|https://github.com/junsu0121|
-|변희재|React|https://github.com/qusgmlwo|
-|진태인|Nodejs|https://github.com/jthebat|
-|최봉규|Nodejs|https://github.com/choibonggyu|
-|홍승현|Nodejs|https://github.com/seunghyeon5?tab=repositories|
+## 프론트엔드 주소
+<details>
+<summary>Github</summary>
+<div markdown="1">       
+
+https://github.com/junsu0121/finalFE
+
+</div>
+</details>
+
+## 백엔드 팀원소개
+|팀원|깃허브|역할분담|
+|-----|---|---|
+|진태인🔰|[Github](https://github.com/jthebat)|DB 테이블설계, HTTPS 보안 서버 구축, S3이미지 업로드, 초기데이터 관리, 전반적인 CRUD API |
+|최봉규|[Github](https://github.com/choibonggyu)|store 페이지 CRUD , 소셜로그인|
+|홍승현|[Github](https://github.com/seunghyeon5)|CI/CD, 서버 담당, 로그인 회원가입,좋아요,술창고 불러오기,넣기CRUD, test코드(일부 미완) |
 
 ## Environment
 <img src="https://img.shields.io/badge/-Amazon AWS-232F3E?style=flat&logo=Amazon AWS&logoColor=white"/>
@@ -48,9 +56,8 @@ TYPESCRIPT, NODEJS, EXPRESS, MongoDB를 활용합니다.
 |supertest|테스트 코드|6.2.4|
 |helmet|외부로부터 보안 세팅|5.1.1|
 
-
 ## 트러블슈팅
-### ❓Heap out of memory 
+### Heap out of memory 
 1. 문제발생 : 깃허브에 푸쉬 후 서버를 다시 실행시킬때 서버가 다운되는 현상이 발생했다.
 
 2. 문제 원인: Typescript 파일 컴파일 과정에서 heap 메모리가 부족한 문제가 발생하여 메모리의 누수 여부를 확인하였고 사용하는 AWS EC2 프리티어로 제공되는 서버 컴퓨터의 스펙이 너무 낮기 때문에 감당하지 못하는 결과라고 판단하였다.  
