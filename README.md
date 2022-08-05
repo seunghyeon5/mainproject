@@ -75,5 +75,6 @@ TYPESCRIPT, NODEJS, EXPRESS, MongoDB를 활용합니다.
 ![%E1%84%8E%E1%85%AC%E1%84%8C%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%A1%E1%84%8F%E1%85%B5%E1%84%90%E1%85%A6%E1%86%A8%E1%84%8E%E1%85%A7](https://user-images.githubusercontent.com/105096793/182070604-8ee3fed3-5123-455c-86e4-49ecc8e115bf.png)
 
 ## ERD
-![KakaoTalk_Photo_2022-08-02-10-40-04](https://user-images.githubusercontent.com/105096793/182273394-c6d65575-ed6a-4cbd-8428-01fbcba35f8e.png)
+![erd11](https://user-images.githubusercontent.com/105096793/183009881-f80edea4-b30c-4faa-928e-9c31a7dc43e2.png)
+
 
