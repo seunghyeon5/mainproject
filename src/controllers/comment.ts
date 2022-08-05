@@ -4,12 +4,12 @@ import HttpStatusCode from "../common/httpStatusCode";
 
 //스토어에 댓글달기
 const addComment = async (req: Request, res: Response) => {
-    const {nickname, userId} = res.locals.user
+    const { nickname, userId } = res.locals.user;
     const { comment } = req.body;
     const { mystoreId } = req.params;
     try {
-        if(!userId){
-            return res.status(HttpStatusCode.BAD_REQUEST).json({result:false, message:"유저정보가 올바르지 않습니다."})
+        if (!userId) {
+            return res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "유저정보가 올바르지 않습니다." });
         }
         if (!mystoreId) {
             return res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 접근" });
@@ -39,13 +39,13 @@ const getComments = async (req: Request, res: Response) => {
         const getAllcomment = await Comment.find({ mystoreId }).sort({ createdAt: "desc" });
         return res.json({ result: true, getAllcomment });
     } catch (error) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false ,message: "잘못된 요청", error});
+        res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", error });
     }
 };
 
 //댓글 삭제
 const deleteCommeent = async (req: Request, res: Response) => {
-    const { userId } = res.locals.user
+    const { userId } = res.locals.user;
     const { commentId } = req.params;
     try {
         const existUser = await Comment.findById({ _id: commentId });
@@ -63,5 +63,5 @@ const deleteCommeent = async (req: Request, res: Response) => {
 export default {
     addComment,
     getComments,
-    deleteCommeent,
+    deleteCommeent
 };

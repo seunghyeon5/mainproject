@@ -23,11 +23,11 @@ const postStore = async (req: Request, res: Response) => {
         const images: Array<string> = [];
         const keys: Array<string> = [];
 
-        (req.files as Express.MulterS3.File[]).map((e)=>{
+        (req.files as Express.MulterS3.File[]).map((e) => {
             images.push(e.location);
             const key = e.location.split("com/")[1];
             keys.push(key);
-        })
+        });
 
         await Mystore.create({
             title,

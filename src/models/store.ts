@@ -5,17 +5,17 @@ const MyStoreSchema: Schema = new Schema(
     {
         title: {
             type: String
-        },       
+        },
         images: {
             type: Array,
-            default: [],
+            default: []
         },
         keys: {
             type: Array,
-            default: [],
+            default: []
         },
         address: {
-            type: String,
+            type: String
         },
         review: {
             type: String
@@ -26,8 +26,8 @@ const MyStoreSchema: Schema = new Schema(
         nickname: {
             type: String
         },
-        favorite_count:{
-            type:Number,
+        favorite_count: {
+            type: Number,
             default: 0
         }
     },

@@ -19,9 +19,7 @@ afterAll(async () => {
 
 describe("[POST] 로그인", () => {
     test("로그인 성공시 success", async () => {
-        const response = await request(app)
-            .post("/api/user/login")
-            .send({ email: testdata.email, password: testdata.pw });
+        const response = await request(app).post("/api/user/login").send({ email: testdata.email, password: testdata.pw });
 
         token = response.body.token;
 
@@ -64,6 +62,6 @@ describe("[DELETE] Comment", () => {
             .delete("/api/comment/" + testdata.storeId + "/delete")
             .send();
 
-        expect(response.statusCode).toBe(200)
+        expect(response.statusCode).toBe(200);
     });
 });

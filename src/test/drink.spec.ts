@@ -20,9 +20,7 @@ afterAll(async () => {
 
 describe("[POST] 로그인", () => {
     test("로그인 성공시 success", async () => {
-        const response = await request(app)
-            .post("/api/user/login")
-            .send({ email: testdata.email, password: testdata.pw });
+        const response = await request(app).post("/api/user/login").send({ email: testdata.email, password: testdata.pw });
 
         token = response.body.token;
 
@@ -33,10 +31,7 @@ describe("[POST] 로그인", () => {
 
 describe("Drink", () => {
     test("술 리스트 불러오기", async () => {
-        const response = await request(app)
-            .get("/api/drink/list/all")
-            .set("authorization", `Bearer ${token}`)
-            .send();
+        const response = await request(app).get("/api/drink/list/all").set("authorization", `Bearer ${token}`).send();
 
         expect(response.statusCode).toBe(200);
     });
@@ -81,21 +76,15 @@ describe("Drink", () => {
         expect(response.body.message).toBe("이미 추천을 누르셨습니다.");
     });
     test("추천누른 술 리스트 불러오기", async () => {
-        const response = await request(app)
-            .get("/api/drink/recommendlist")
-            .set("authorization", `Bearer ${token}`)
-            .send();
+        const response = await request(app).get("/api/drink/recommendlist").set("authorization", `Bearer ${token}`).send();
 
         expect(response.statusCode).toBe(200);
     });
     test("유저정보가 올바르지 않은경우", async () => {
-        const response = await request(app)
-            .get("/api/drink/recommendlist")
-            .set("authorization", `Bearer`)
-            .send()
+        const response = await request(app).get("/api/drink/recommendlist").set("authorization", `Bearer`).send();
 
-        expect(response.statusCode).toBe(401)
-    })
+        expect(response.statusCode).toBe(401);
+    });
     test("술 추천 취소하기", async () => {
         const response = await request(app)
             .put("/api/drink/list/undorecommend/" + testdata.drinkId)
@@ -113,10 +102,7 @@ describe("Drink", () => {
         expect(response.statusCode).toBe(201);
     });
     test("술냉장고에서 이미지 불러오기", async () => {
-        const response = await request(app)
-            .get("/api/drink/drinkimage")
-            .set("authorization", `Bearer ${token}`)
-            .send();
+        const response = await request(app).get("/api/drink/drinkimage").set("authorization", `Bearer ${token}`).send();
 
         expect(response.statusCode).toBe(200);
     });

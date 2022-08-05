@@ -11,9 +11,9 @@ const UserSchema: Schema = new Schema({
         type: String,
         required: true
     },
-    provider:{
-        type:String,
-        default:"b_tender"
+    provider: {
+        type: String,
+        default: "b_tender"
     },
     password: {
         type: String
@@ -22,11 +22,11 @@ const UserSchema: Schema = new Schema({
         type: Number,
         default: 0
     },
-    createdposts_store:{
+    createdposts_store: {
         type: Number,
         default: 0
     },
-    Drink_refrigerator:{
+    Drink_refrigerator: {
         type: Array
     }
 });

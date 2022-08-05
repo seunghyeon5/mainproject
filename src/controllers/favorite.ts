@@ -29,8 +29,8 @@ const postlike = async (req: Request, res: Response) => {
                     _id: Myrecipe._id,
                     title: Myrecipe.title,
                     image: Myrecipe.image,
-                    brief_description: Myrecipe.brief_description                  
-                }               
+                    brief_description: Myrecipe.brief_description
+                }
             });
             let num: number = Myrecipe.favorite_count;
             await myrecipe.findOneAndUpdate({ _id: myrecipeId }, { $set: { favorite_count: ++num } });
@@ -59,7 +59,7 @@ const deletelike = async (req: Request, res: Response) => {
     const { userId } = res.locals.user;
     const { nickname } = res.locals.user;
     try {
-        const findUser = await Favorite.findOne({ userId, myfavoritesId:myrecipeId, nickname });
+        const findUser = await Favorite.findOne({ userId, myfavoritesId: myrecipeId, nickname });
         const Myrecipe = await myrecipe.findById({ _id: myrecipeId });
         if (!Myrecipe) {
             res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, msg: "레시피아이디값이 올바르지 않습니다." });
@@ -99,7 +99,7 @@ const postStorelike = async (req: Request, res: Response) => {
                 myfavoritesId: MystoreId,
                 userId,
                 category: "mystore",
-                myfavoritesInfo: Store,   
+                myfavoritesInfo: Store
             });
             let num: number = Store.favorite_count;
             await Mystore.findOneAndUpdate({ _id: MystoreId }, { $set: { favorite_count: ++num } });
@@ -150,17 +150,17 @@ const getMystore = async (req: Request, res: Response) => {
     const { userId } = res.locals.user;
     try {
         const getMystore = await Favorite.find({ userId, category: "mystore" });
-        const temp = getMystore.map((a) => a.myfavoritesInfo)
-        let stores = []
-        stores = temp.map((e:any) => ({
+        const temp = getMystore.map((a) => a.myfavoritesInfo);
+        let stores = [];
+        stores = temp.map((e: any) => ({
             title: e.title,
             nickname: e.nickname,
             image: e.images[0],
             address: e.address,
             review: e.review,
             time: e.createdAt.toLocaleDateString("ko-KR"),
-            _id: e._id,
-        }))
+            _id: e._id
+        }));
         res.json({ result: true, message: "success", stores });
     } catch (error) {
         res.status(HttpStatusCode.BAD_REQUEST).json({ result: false, message: "잘못된 요청", error });
@@ -174,5 +174,5 @@ export default {
     postStorelike,
     getAllstoreuser,
     deleteStorelike,
-    getMystore,
+    getMystore
 };

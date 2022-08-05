@@ -20,7 +20,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     try {
         const user: jwt.JwtPayload | string = jwt.verify(tokenvalue, config.jwt.secretKey as jwt.Secret);
         User.findById((user as jwt.JwtPayload).user).then((user) => {
-            res.locals = { user }
+            res.locals = { user };
             return next();
         });
     } catch (err) {
@@ -32,4 +32,4 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     }
 };
 
-export default authMiddleware
+export default authMiddleware;
