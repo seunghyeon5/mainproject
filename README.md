@@ -2,6 +2,7 @@
 ![KakaoTalk_Photo_2022-07-29-15-42-48 001](https://user-images.githubusercontent.com/105096793/181819625-cf6a98dd-8482-4aee-ba58-77ff1c2c1d81.jpeg)
 ## 기획의도
 혼자서 소주, 맥주는 무겁고 조금 더 가볍고 맛있는 술을 마시고싶은 사람들을 위한 사이트 여러 블로그, 사이트를 찾아보지 않고 바로바로 찾아볼 수 있고 나만의 레시피를 공유보기위한 플렛폼입니다.
+## 시연영샹
 
 ## 프론트엔드 주소
 <details>
@@ -34,6 +35,15 @@ DATABASE는 MongoDB를 활용 중이며 ec2 인스턴스에서만 접근 할 수
   <img src="https://img.shields.io/badge/-Visual Studio Code-007ACC?style=flat&logo=Visual Studio Code&logoColor=white"/>
 </div>
 TYPESCRIPT, NODEJS, EXPRESS, MongoDB를 활용합니다.
+
+### 기술선정이유
+1. TypeScript
+ - 타입스크립트는 인터페이스나 제너럴 같은 강력한 객체지향 프로그래밍을 지원함으로써 자바스크립트에서 일어날 수 있는 오류를 잡아줄 수 있고 안정성또한 높습니다. 이에 대한 에러메세지도 명확해서 보다 쉽게 에러메세지를 찾아낼수있습니다. 또한 타입스크립트의 경우 자바스크립트 기반으로 만들어졌기때문에 진입장벽또한 낮기때문에 선택했습니다.
+2. MongoDB
+ - MySQL과 같은 관계형 데이터베이스가 데이터끼리의 조인하는 과정은 편할 수 있으나 이번프로젝트에서는 비관계형 데이터베이스인 MongoDB의 사용이 더 적절하다고 판단했습니다. 비관계형 데이터베이스인 몽고디비의 경우 데이터테이블의 유연성이 뛰어나고 대용량의 데이터가 저장이 가능합니다 그리고 쉽고 개발이 편리하다는 장점이 있어서 사용했습니다.
+3. Class-vaildator
+ - Class-validator는 TS버전으로 데코레이터를 이용해 편리하게 객체의 프로퍼티를 검증할수있는 라이브러리임으로 TS에 더 잘어울린다고 판단하여 사용했습니다.
+ 
 
 ## 라이브 러리|Library
 |기술 스택|Appliance|Version|
@@ -71,6 +81,8 @@ TYPESCRIPT, NODEJS, EXPRESS, MongoDB를 활용합니다.
 
 2. 해결방안: 좋아요를 누른 recipe, store의 숫자 또는 전체 recipe, store 수가 늘어나면 이러한 이중 반복의 구조가 api 속도에 영향을 미칠것이라 생각해서 id 값으로 찾아내야하는 정보를 필요한 데이터만 정제하여 미리 좋아요 정보에 담아 이중반복문과 비슷한 탐색의 상황을 피하였다. 
 데이터의 수가 얼마 없는 환경에서 테스트 했음에도 유의미한 속도 차이를 확인 하여 기존의 테이블에 field 하나를 추가해 API 속도를 조금 개선하였다.
+![00948438-73A3-401B-B819-20441976DE98](https://user-images.githubusercontent.com/105096793/183228840-bbd1ec26-e970-46a6-94d3-5733833f55de.jpeg)
+
 ## 아키텍쳐 
 ![%E1%84%8E%E1%85%AC%E1%84%8C%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%A1%E1%84%8F%E1%85%B5%E1%84%90%E1%85%A6%E1%86%A8%E1%84%8E%E1%85%A7](https://user-images.githubusercontent.com/105096793/182070604-8ee3fed3-5123-455c-86e4-49ecc8e115bf.png)
 
